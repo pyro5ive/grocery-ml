@@ -1,0 +1,5 @@
+QTY\s*\d+\s*
+
+
+\R(?=You save)
+
