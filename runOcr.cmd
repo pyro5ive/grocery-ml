@@ -1,7 +1,8 @@
 
 
 setlocal enabledelayedexpansion
-set "source=C:\Users\steve\OneDrive - NOLA Business IT\source\repos\grocery-ml\dec"
+REM set "source=C:\Users\steve\OneDrive - NOLA Business IT\source\repos\grocery-ml\dec"
+set "source=./"
 set "params="
 set "format= --output-format "${capture}${linebreak}${linebreak}${linebreak}####${linebreak}${linebreak}${linebreak} ""
 set "outfile= -o ocrtext.txt --output-file-append"

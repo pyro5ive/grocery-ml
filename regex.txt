@@ -1,5 +1,28 @@
 QTY\s*\d+\s*
 
 
-\R(?=You save)
+^.*You Save.*\r?\n
+^.*Subtotal.*\r?\n
+^.*rewards savings.*\r?\n
+^.*APPROVAL CODE.*\r?\n
+^.*AID.*\r?\n
+
+^.*Every 100 points.*\r?\n
+
+^\r?\n
+
+^.*May not include pending.*\r?\n
+
+^.*Terms apply.*\r?\n
+
+^.*Winn-Dixie rewards.*\r?\n
+
+
+^.*Worth.*\r?\n
+
+
+^.*4425103.*\r?\n
+
+
+
 
