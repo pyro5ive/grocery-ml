@@ -1,0 +1,63 @@
+    20:08                                                eal! LTE
+
+<                   10/03/2025 at 6:41PM
+                    10/03/25   6:41pm    1412 001   98
+                         Store Manager: PAUL
+                         Your Cashier:   EMILY
+
+
+
+
+               44251003141200101019551009800000
+
+
+
+
+                                             Reg          You Pay
+        Fanta Soda                           $9.99           $5.99   B
+        You save ($4.00)
+        Fanta Soda                           $9.99           $5.99   B
+        You save ($4.00)
+        CocaCola Soda                        $9.99           $5.99   B
+        You save ($4.00)
+        SE Grocers Foil                      $2.89           $2.89   T
+        SE Grocers Pasta                     $1.79           $1.00   B
+        You save ($0.79)
+        k&l Pasta Sauce                      $1.99           $1.99   B
+        SpaghettiOs Pasta                    $1.69           $1.69   B
+        Nutella Snack Pack                   $8.29           $5.99   B
+        You save ($2.30)
+        D&W Cheese                           $6.65           $6.65   B
+        D&W Turkey                          $13.25           $7.13   B
+        1.02 lbs @ $6.99/lb
+        You save ($6.12)
+        Pork Shoulder                        $9.35           $9.35   B
+        Pork Shoulder                        $8.57           $0.00   B
+        You save ($8.57)
+        SE Grocers Bread                     $2.79           $2.49   B
+        You save    ($0.30)
+        Cilantro                             $0.99           $0.99   B
+wr      Asparagus                            $4.54           $3.63 B
+        0.91 lbs @ $3.99/lb
+        You save ($0.91)
+        Peter Pan Crnch Pe                   $7.29           $6.49   B
+        You save ($0.80)
+Total number of items sold = 16
+         Subtotal                                           $68.26
+         Tax                                                 $2.57
+         Total due                                          $70.83
+
+
+         Debit total                                        $70.83
+DEBIT teewseeenee+7394
+APPROVAL CODE 209362 SEQ #: 13729
+AID A0000000980840
+         Change                                              $0.00
+
+
+
+               Add items to shopping list
+
+
+                      ee
+
