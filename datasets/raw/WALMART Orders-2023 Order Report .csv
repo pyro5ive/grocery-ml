@@ -1,0 +1,41 @@
+
+Platform ,WALMART
+Period ,2023 Order Report,
+Total Orders,27
+Grand Total ,1418.39,
+Total Shipments,27
+Total Items Ordered,234
+Check Export 2 (Product Data) for Individual Items,
+
+
+Order Type,Order ID,Order Date,No. of Shipment,No. of Items,Payment Methods,Currency,Sub Total,Promotion,Coupon,Gift Card,Additional Fees,Shipping & Handling,Total Before Tax,VAT (TAX),Grand Total,Refund Total,Invoice URL,Order URL,Shipping Address
+Regular,'98177175868389107503,"Nov 19, 2023",1,7,null-OTHER Card ending in 5293,,80.32,0,0,0,0,0,80.32,7.39,87.71,0,,https://www.walmart.com/orders/98177175868389107503,
+Regular,'98455825599099211170,"Oct 12, 2023",1,5,null-OTHER Card ending in 5293,,67.79,0,0,0,0,0,67.79,6.24,74.03,0,,https://www.walmart.com/orders/98455825599099211170,
+Regular,'32512471210804754698,"Oct 09, 2023",1,4,null-CASH Cash; null-OTHER Card ending in 5293,,61.91,0,0,0,0,0,61.91,5.7,67.61,0,,https://www.walmart.com/orders/32512471210804754698,
+Regular,'80555346539097224150,"Oct 06, 2023",1,3,null-OTHER Card ending in 5293,,21.94,0,0,0,0,0,21.94,0.9,22.84,0,,https://www.walmart.com/orders/80555346539097224150,
+Regular,'16020279021613817436,"Oct 06, 2023",1,16,null-OTHER Card ending in 5293,,23.52,0,0,0,0,0,23.52,0.82,24.34,0,,https://www.walmart.com/orders/16020279021613817436,
+Regular,'2534170384056124735,"Sep 16, 2023",1,1,null-OTHER Card ending in 5293,,32.97,0,0,0,0,0,32.97,0,32.97,0,,https://www.walmart.com/orders/2534170384056124735,
+Regular,'76031229102435616294,"Jul 27, 2023",1,2,null-OTHER Card ending in 5293,,13.96,0,0,0,0,0,13.96,1.28,15.24,0,,https://www.walmart.com/orders/76031229102435616294,
+Regular,'23288992879564383975,"Jul 27, 2023",1,9,null-OTHER Card ending in 5293,,46.92,0,0,0,0,0,46.92,4.32,51.24,0,,https://www.walmart.com/orders/23288992879564383975,
+Regular,'892916093826941511789,"Jul 13, 2023",1,29,null-OTHER Card ending in 5293,,151.47,0,0,0,0,0,151.47,10.19,161.66,0,,https://www.walmart.com/orders/892916093826941511789,
+Regular,'90055928373994800379,"Jul 08, 2023",1,13,null-OTHER Card ending in 5293,,87.26,0,0,0,0,0,87.26,7.71,94.97,0,,https://www.walmart.com/orders/90055928373994800379,
+Regular,'48712073414005388410,"Jul 08, 2023",1,19,null-GOVERNMENT Government Card ending in 6078; null-OTHER Card ending in 5293,,80.23,0,0,0,0,0,80.23,4.73,84.96,0,,https://www.walmart.com/orders/48712073414005388410,
+Regular,'9121777416802747678,"Jul 06, 2023",1,13,null-OTHER Card ending in 5293,,45.47,0,0,0,0,0,45.47,2.65,48.12,0,,https://www.walmart.com/orders/9121777416802747678,
+Regular,'042351778013437656244,"Jun 09, 2023",1,25,null-OTHER Card ending in 5293,,138.97,0,0,0,0,0,138.97,10.49,149.46,0,,https://www.walmart.com/orders/042351778013437656244,
+Regular,'63677840970381136543,"Jun 08, 2023",1,11,null-OTHER Card ending in 5293,,42.11,0,0,0,0,0,42.11,3.87,45.98,0,,https://www.walmart.com/orders/63677840970381136543,
+Regular,'48531058021437667224,"May 27, 2023",1,2,null-OTHER Card ending in 5293,,37.42,0,0,0,0,0,37.42,3.44,40.86,0,,https://www.walmart.com/orders/48531058021437667224,
+Regular,'6034721066258419032,"Apr 07, 2023",1,1,null-OTHER Card ending in 5293,,1.98,0,0,0,0,0,1.98,0.18,2.16,0,,https://www.walmart.com/orders/6034721066258419032,
+Regular,'67320362477613853486,"Apr 07, 2023",1,11,null-OTHER Card ending in 5293,,44.52,0,0,0,0,0,44.52,4.02,48.54,0,,https://www.walmart.com/orders/67320362477613853486,
+Regular,'86555541105090220150,"Mar 17, 2023",1,1,null-OTHER Card ending in 5293,,20.96,0,0,0,0,0,20.96,1.93,22.89,0,,https://www.walmart.com/orders/86555541105090220150,
+Regular,'07412057690800767688,"Mar 09, 2023",1,5,null-OTHER Card ending in 5293,,17.62,0,0,0,0,0,17.62,1.41,19.03,0,,https://www.walmart.com/orders/07412057690800767688,
+Regular,'0696145313170055331,"Mar 09, 2023",1,20,null-OTHER Other; null-OTHER Card ending in 5293,,47.51,0,0,0,0,0,47.51,2.67,50.18,0,,https://www.walmart.com/orders/0696145313170055331,
+Regular,'56388802966568322905,"Mar 04, 2023",1,14,null-OTHER Card ending in 5293,,82.34,0,0,0,0,0,82.34,4.18,86.52,0,,https://www.walmart.com/orders/56388802966568322905,
+Regular,'27888900954662246756,"Mar 02, 2023",1,4,null-OTHER Other; null-OTHER Card ending in 5293,,27.04,0,0,0,0,0,27.04,2.41,29.45,0,,https://www.walmart.com/orders/27888900954662246756,
+Regular,'74420293400618846436,"Mar 01, 2023",1,2,null-OTHER Card ending in 5293,,3.74,0,0,0,0,0,3.74,0.34,4.08,0,,https://www.walmart.com/orders/74420293400618846436,
+Regular,'36412454653804713658,"Mar 01, 2023",1,4,MASTERCARD-CREDITCARD Mastercard; null-OTHER Other; null-OTHER Other; null-OTHER Other; null-OTHER Other; null-OTHER Other; null-OTHER Card ending in 5293,,15.2,0,0,0,0,0,15.2,1.21,16.41,0,,https://www.walmart.com/orders/36412454653804713658,
+Regular,'70769585337177065331,"Feb 17, 2023",1,1,null-OTHER Card ending in 5293,,27.96,0,0,0,0,0,27.96,2.57,30.53,0,,https://www.walmart.com/orders/70769585337177065331,
+Regular,'00896560746940563779,"Jan 25, 2023",1,3,null-OTHER Card ending in 5293,,9.68,0,0,0,0,0,9.68,0.57,10.25,0,,https://www.walmart.com/orders/00896560746940563779,
+Regular,'33431104281437637274,"Jan 13, 2023",1,9,WMRTC-GIFTCARD Ending in 6434; null-OTHER Card ending in 5293,,88.24,0,0,0,0,0,88.24,8.12,96.36,0,,https://www.walmart.com/orders/33431104281437637274,
+
+Total Orders,,,Total Shipments,Total Items Shipped,,Currency,Sub Total,Promotion Total,Coupon Total,Gift Card Total,Additional Fee Total,Shipping/Handling Total,Total Before Tax Total,Tax Total,Grand Total,Refund Total,,,
+27,,,27,234,,,1319.0500000000002,0,0,0,0,0,1319.0500000000002,99.33999999999999,1418.39,0,,,
