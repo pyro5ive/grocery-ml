@@ -1,0 +1,11 @@
+{
+  "loss": "mse",
+  "optimizer": "adam",
+  "learning_rate": 0.0005,
+  "metrics": [
+    "mae"
+  ],
+  "epochs": 10,
+  "batch_size": 32,
+  "validation_split": 0.1
+}

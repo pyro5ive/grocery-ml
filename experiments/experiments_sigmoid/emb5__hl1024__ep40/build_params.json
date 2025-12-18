@@ -1,0 +1,7 @@
+{
+  "embedding_dim": 5,
+  "hiddenLayers": [
+    1024
+  ],
+  "output_activation": "sigmoid"
+}

@@ -1,5 +1,0 @@
-{
-    "epochs": 315,
-    "batch_size": 32,
-    "learning_rate": 0.001
-}
