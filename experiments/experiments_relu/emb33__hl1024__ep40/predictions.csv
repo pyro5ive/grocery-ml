@@ -1,0 +1,791 @@
+,itemId,item,due_intensity
+0,604,milk,44.1638
+1,455,bread,42.425087
+2,742,sparkling-ice-wtr,41.993355
+3,520,gatorade-beverage,40.618137
+4,483,coke,39.082905
+5,467,cheese,38.8829
+6,723,seg-sprklng-water,35.141163
+7,511,fanta-soda,33.963028
+8,646,peter-pan-pnt-bttr,33.917786
+9,486,crystal-light-mix,33.796253
+10,576,kraft-mac-and-cheese,33.779346
+11,679,se-grocers-olives,33.77087
+12,680,se-grocers-pasta,33.770863
+13,501,dr-pepper-12pk,33.768116
+14,491,dandw-turkey,33.71846
+15,722,seg-sour-cream,33.717873
+16,431,armour-crunchers,33.698673
+17,568,kgl-corn,33.683353
+18,432,armour-lunchmakers,33.68134
+19,504,edwards-pies,33.540775
+20,669,sargento-cheese,33.532825
+21,650,pork-chops,33.51047
+22,653,powerade-drink,33.47788
+23,512,fbrz-air-ocean,32.454826
+24,560,kandl-ricotta-cheese,32.424156
+25,734,smuckers-jelly,32.42275
+26,690,seg-boil-n-bag,32.42216
+27,684,se-grocers-soup,32.419067
+28,494,dewafelbakkr-pncks,32.407856
+29,566,kellogg-raisin-bra,32.38554
+30,583,little-hug-drink,32.38293
+31,532,ground-beef-rnd,32.3786
+32,668,rosina-meatballs,32.373257
+33,714,seg-pasta,32.37235
+34,557,kandl-pasta-sauce,32.364716
+35,531,ground-beef,32.36369
+36,542,hugbi-pies,32.36175
+37,569,kgl-kidney-beans,32.35754
+38,683,se-grocers-pizza,32.355793
+39,591,manda-sausage,32.351814
+40,1,-blue-runner-beans,32.350075
+41,775,wht-thns-sndrd-tmt,32.345074
+42,487,cupcakes-6ct,32.338234
+43,595,maruchan-ramen-sup,32.33775
+44,693,seg-crm-chs-spread,32.33508
+45,461,cascade-lemon-9ct,32.321125
+46,599,mc-taco-seasoning,32.31943
+47,422,aandh-frsh-boost,32.314884
+48,611,mission-tortillas,32.309086
+49,725,seg-sthrn-hmstyle,32.30042
+50,506,egglands-best-eggs,32.29537
+51,440,bb-mini-swirl-cone,32.293655
+52,475,chisesi-ham,32.28912
+53,470,chef-boyardee-psta,32.287315
+54,226,"Large White Eggs, 12 Count",32.248604
+55,789,zatarains-mix,32.24085
+56,544,jiffy-foil-pan,32.239704
+57,781,wr-jumbo-yellow-onion,32.223515
+58,678,se-grocers-oats,32.20824
+59,224,"Kraft Original Mac N Cheese Dinner, 7.25 oz Box, Shelf-Stable",32.20737
+60,606,mini-carnation,32.205303
+61,786,yellow-corn,32.199284
+62,539,hs-regular-bacon,32.19653
+63,61,"Classic Olive Oil, 17 fl oz",32.19556
+64,547,jonny-cat-liners,32.188046
+65,356,"Softsoap Limited Edition Liquid Hand Soap, Red Apple Scent, 6.25 fl oz Pump Bottle",32.182854
+66,586,lotus-cookie-buttr,32.18146
+67,735,smuckers-spread,32.17973
+68,589,lunchables-snack,32.17922
+69,465,celery,32.1784
+70,648,pictsweet-vegetble,32.178257
+71,313,"Prima Della Oven Roasted Turkey Breast, Deli Sliced",32.17584
+72,492,danimals-smoothie,32.174686
+73,552,kandl-corn,32.172703
+74,38,"Blue Runner Creole Cream Style Red Beans, 27 oz Can, Heat and Serve",32.172623
+75,190,"Hillshire Farm Smoked Sausage, 14 oz, Fully Cooked",32.17252
+76,615,monster-energy,32.172512
+77,7,12cookiecake,32.171913
+78,158,"Gatorade Zero Sports Drinks, Berry/Glacier Cherry/Glacier Freeze Variety Pack, 12 fl oz, 18 Count",32.170483
+79,509,fabuloso-cleaner,32.17023
+80,312,"Prima Della Fully Cooked off-the-Bone Ham, Deli Sliced",32.16867
+81,731,si-starburst-straw,32.167355
+82,133,"Fresh Cauliflower, Each",32.167023
+83,616,monster-enrgy-drnk,32.166393
+84,724,seg-sthr-hmst-stik,32.161686
+85,571,kinder-bueno,32.16128
+86,721,seg-soup-stock,32.160583
+87,398,"Vanilla Flavor Wafer Cookies, 8 oz",32.15908
+88,642,pam-cooking-spray,32.158386
+89,396,"Tyson White Meat Chicken Nuggets, 29 oz (Frozen, Fully Cooked)",32.157444
+90,603,mids-sausage-piz2z,32.157303
+91,232,"Light Red Kidney Beans, 15.5 oz",32.15562
+92,497,dole-can-pineapple,32.154705
+93,424,aandh-scent-boosters,32.15384
+94,525,golden-flake-skins,32.153095
+95,538,hormel-pepperoni,32.14972
+96,729,seg-whipped-toppng,32.148853
+97,728,seg-water-enhancer,32.148846
+98,644,pearl-millng-syrup,32.144455
+99,587,lss-toothpaste,32.144352
+100,761,topcare-liquid-r1f,32.143238
+101,788,yogurt,32.1427
+102,537,home-select-foil,32.142063
+103,210,"Kellogg's Cocoa Krispies Breakfast Cereal, Kids Snacks, Family Breakfast, Family Size, Chocolatey Flavor, 19oz Box (1 Box)",32.141758
+104,108,"Equate Children's Multi-Symptom Cold Liquid, Very Berry Flavor, Ages 4 to 12 Years, 4 fl oz, Compare to Children's Mucinex Multi-Symptom Cold Active Ingredients",32.141632
+105,139,"Fresh Red Seedless Grapes from California, Bag (2.25 lbs/Bag Est.)",32.140987
+106,625,nutella-biscuits,32.14016
+107,570,kgl-peanuts,32.138767
+108,782,wr-russet-potato,32.138588
+109,703,seg-ham,32.137833
+110,579,libbys-peas,32.137287
+111,697,seg-eraser-pads,32.13634
+112,672,scent-boosters,32.13273
+113,567,kevins-thai-style,32.13041
+114,449,blue-runner-beans,32.129436
+115,698,seg-fruit-punch,32.12789
+116,95,"Dr Teal's Body Wash Relax and Relief with Eucalyptus Spearmint, 24 fl oz",32.12554
+117,575,kool-aid-drinks,32.109417
+118,732,sliced-strwberries,32.099316
+119,187,"Hershey's Milk Chocolate Candy, Bar 1.55 oz",30.955343
+120,215,"Kinder Bueno Milk Chocolate and Hazelnut Cream, 2 Individually Wrapped Chocolate Bars, 1.5 oz",30.888914
+121,302,"Philadelphia No Bake Original Cheesecake Filling, 24.3 oz Tub",30.848726
+122,16,"90% Lean / 10% Fat Ground Beef Sirloin, 1 lb Tray, Fresh, All Natural*",30.845963
+123,110,"Equate Elastics, Assorted Colors, for Ponytail, Braids, or Buns (72 Count)",30.83089
+124,726,seg-turkey,30.830559
+125,115,"Equate No Drip Severe Congestion Nasal Mist Oxymetazoline HCl 0.05% Decongestant, 12 Hour Relief, 1 fl oz, Compare to Afrin",30.828556
+126,452,bodyarmor-160z-fru,30.822838
+127,26,"American Greetings 10.38 in. Christmas Lunch Bag, Chevron Striped (1-Count)",30.822342
+128,261,"Multi-Color Winter Blush Self-Adhesive Christmas Gift Bows, 40 Count, by Holiday Time",30.821814
+129,498,dole-shred-lettuce,30.819664
+130,79,"Dial Spring Water Body Wash, Refresh & Renew, Gentle on All Skin Types, 3 fl oz",30.819115
+131,699,seg-fudge-bar,30.81838
+132,245,M&M's Minis Milk Chocolate Mega Christmas Tube - 1.77 oz,30.815582
+133,469,cheez-it-crackers,30.81541
+134,266,"My Life As Laundry Room Play Set for 18"" Dolls, 6 Pieces Included",30.814592
+135,733,slim-jim-jerky,30.814342
+136,596,master-of-mixes-mx,30.81093
+137,129,"Frankford SpongeBob SquarePants Krabby Patties Original Flavor Gummy Candy Tube, Christmas, 1.6 oz",30.810287
+138,319,"Push Pop Easter Candy Lollipop with Toy Topper, Assorted Fruit Flavors, 1 Count",30.810038
+139,201,"Italian-Style Petite Diced Tomatoes with Basil, Garlic and Oregano, 14.5 oz",30.808714
+140,147,"Fresh Whole Sweet Onion, Each",30.808538
+141,414,"Wheat Thins Original Snacks, Whole Grain Wheat Crackers, Snack Crackers, 8.5 oz",30.807858
+142,578,lght-n-flffy-ndle,30.803328
+143,352,"Sliced Black Olives, 2.25 oz",30.801786
+144,306,Pink 5-Piece Hairbrush Set,30.801718
+145,181,"Heavy Duty Aluminum Foil, 50 Sq ft",30.801472
+146,162,,30.800772
+147,535,hersheys-candy,30.800344
+148,330,"Reduced Sodium Brown Gravy Mix, 0.87 oz",30.80031
+149,388,"Tomato Basil Garlic Pasta Sauce, 24 oz",30.8
+150,382,"Thames & Kosmos I Dig It! Dino - Egg Excavation Kit, Stem Science Toy for Elementary School Kids Ages 5+",30.798458
+151,170,"HERSHEY'S KISSES Milk Chocolate, Valentine's, Candy Bag, 10.1 oz",30.798271
+152,307,"Pirouline Chocolate Hazelnut Creme Filled Wafer Cookies, 3.5oz Tin. Holiday Gifts.",30.798016
+153,423,aandh-frsh-escp,30.797537
+154,260,"Multi-Color Joyful Holidays Reversible Christmas Gift Wrap, 130 sq ft, 3 Count, by Holiday Time",30.797417
+155,9,18ct-variety-mix,30.797354
+156,597,mayfield-icecream,30.797213
+157,387,Time and Tru Women's Faux Leather Mary Jane Flats,30.796766
+158,751,tastykake-pie,30.796463
+159,17,"93% Lean / 7% Fat Lean Ground Beef, 1 lb Tray, Fresh, All Natural*",30.796371
+160,121,Expert Gardener 8-Pattern Rear Trigger Watering Nozzle,30.795677
+161,719,seg-seasoning-mix,30.795546
+162,434,arrid-deodorant,30.794952
+163,153,"Fruity King Mini Soda, Pineapple, 5.75 Fl Oz",30.794615
+164,24,"All Natural Sour Cream, 8 oz",30.794432
+165,372,"Strawberry Lemonade, 16 fl oz",30.794325
+166,243,"M&M'S Milk Chocolate Candy Pouch, Sharing Size, 3.14 oz",30.793985
+167,706,seg-ice-cream,30.793726
+168,52,"Cheez-It Original Cheese Crackers, Baked Snack Crackers, 12 Count",30.792677
+169,592,mandarins,30.79244
+170,184,"Herbal Essences Rose Hips Smooth Conditioner, Travel Size, 3.38 fl oz",30.792355
+171,244,"M&M'S Valentines Day Milk Chocolate Candies, MINIS Candy Valentine Tube - 1.77oz",30.792221
+172,376,"Sweet Mini Peppers, Each",30.792173
+173,458,bushs-best-beans,30.791471
+174,521,gevalia-kaffe-kcup,30.791454
+175,341,"Sara Lee Premium Meats Gluten Free Honey Roasted Turkey Breast, Deli Sliced",30.791399
+176,784,wr-tomatoes,30.791088
+177,206,"Johnson's Baby Bedtime Cream, No Added Parabens, 8 oz",30.791027
+178,745,strbucks-frppccino,30.790749
+179,473,chicken,30.79063
+180,157,,30.790272
+181,718,seg-sauce,30.789852
+182,80,"Diet Dr Pepper Soda Pop, 20 fl oz, Bottle",30.789663
+183,368,Star Wars Mandalorian Baby Yoda Unisex Children's LCD Watch in Green - MNL4124WM,30.789606
+184,318,"Purified Drinking Water, 16.9 fl oz, 24 Count",30.789574
+185,459,butterball-turkey,30.789017
+186,638,op-produce-dept-key,30.788261
+187,203,"Jimmy Dean Cinnamon French Toast & Sausage on a Stick, 30 oz, 12 Ct (Frozen)",30.787638
+188,392,"Triple Chocolate Cake, Made with Hershey's, Chocolate Icing, Serves 12, 35oz (Refrigerated Dessert)",30.787394
+189,235,"Little Debbie Glazed Mini Donuts, 10.5 oz",30.787367
+190,418,"Wonder Nation ""Unicorn"" Childrens LCD Watch with Flashlight in Purple (WN4272WM)",30.7871
+191,65,"Crest Premium Plus Deep Clean Toothpaste, Foaming Mint, 5.2 oz",30.786863
+192,582,little-debbie-snck,30.786663
+193,682,se-grocers-pickles,30.78662
+194,759,top-sirloin-steak,30.786533
+195,507,essentials-cookies,30.786064
+196,772,wd-10pc-dark,30.785017
+197,406,"Way To Celebrate Easter Fidge Notebook, Marble Rainbow",30.784786
+198,359,"SpaghettiOs Super Mario Bros Canned Pasta with Meatballs, 15.6 oz Can",30.784498
+199,116,"Equate Sport Broad Spectrum Sunscreen Spray, SPF 50, 5.5 oz",30.784492
+200,85,"Disney Lilo and Stitch Girl's 17"" Backpack - Blue",30.784283
+201,451,body-armor-drink,30.784262
+202,0,"- Deep Dish Cheese Pizza with Zesty Tomato Sauce, 2 Count, 11.2oz (Frozen) Allergens: milk, wheat, and soy.",30.783476
+203,173,Hallmark Assorted Multicolored 5-Pack Christmas 11.42 In. Gift Box Bundle (Merry Fun),30.783388
+204,275,"No Sugar Added Fruit Cocktail in Water, 14.5 oz",30.783373
+205,659,pwrde-sports-drink,30.782314
+206,179,"Healthy Choice Caf Steamers Chicken Margherita With Balsamic, Frozen Meal, 9.5 oz. Bowl",30.782095
+207,710,seg-marshmallows,30.78204
+208,574,know-and-love-herb-c,30.781057
+209,415,"White Sandwich Bread, 20 oz",30.780996
+210,707,seg-ice-cream-cone,30.780867
+211,626,nutella-snack-pack,30.780775
+212,593,mandms-candies,30.78077
+213,123,"Fanta Orange Soda Pop, 20 fl oz Bottle",30.780767
+214,444,bernards-hny-bear,30.780558
+215,149,"Fresh-Cut Mixed Carnations Flower Bunch, Minimum 8 Stems, Colors Vary",30.780497
+216,40,"Bodycology Hawaiian Beach Fizzy Bath Set, 4 Pieces",30.780344
+217,217,"Kinetic Sand, SquishMotion Playset with 1lb Play Sand, Stamper & 5 Tools",30.779387
+218,456,broccoli-florets,30.778933
+219,711,seg-mixed-grapes,30.778913
+220,246,"M&M's Peanut Butter Milk Chocolate Candy, Share Size - 2.83 oz Bag",30.77875
+221,481,cocoa-krispies-crl,30.778624
+222,474,chips-ahoy-cookies,30.778608
+223,33,"Baby Yoda Use The Force Kids Throw, 46 x 60, Microfiber, Blue, Star Wars",30.778252
+224,384,The First Years Disney Mickey Mouse Toddler Forks and Spoon Set 3 Dishwasher Safe Utensils,30.778128
+225,83,"Disney Encanto Isabela 3 inch Small Doll, Includes Accessory, for Children Ages 3+",30.778051
+226,331,Reg Gasoline Unleaded,30.777542
+227,353,"Slim Jim Smoked Meat Sticks, Mild Flavor, 6g Protein Per Serving, Snack Size, Stocking Stuffer, 0.28 oz. (14 Count)",30.777527
+228,72,"Dallies Ombre Tie Dye Birthday Candles, 12ct",30.777517
+229,760,topcare-acid-rdcr,30.77734
+230,131,"Fresh Banana, Each",30.777292
+231,656,psf-skillet-vgtbls,30.777267
+232,180,"Healthy Choice Caf Steamers Sweet Sesame Chicken, Frozen Meal, 9.75 oz. Bowl",30.776766
+233,27,"Au Jus Gravy Mix, 1 oz",30.776388
+234,737,snack-pack-pudding,30.776361
+235,453,bomb-pop-popsicles,30.77611
+236,643,pasta-roni-pasta,30.775978
+237,41,"Bodycology Winter Plum Shea Sugar Scrub, 5.29 oz",30.77574
+238,744,strawberries,30.775665
+239,28,,30.775621
+240,765,turkey-creek-snack,30.775454
+241,746,suave-sweet-pea-bw,30.775085
+242,308,"Play Day Bubble Blower Fan, Blue, Battery Operated Bubble Maker",30.77506
+243,445,"bettergoods Chocolate Cake Pops, 5.4 oz",30.77478
+244,523,gm-wffl-tst-crnc,30.774744
+245,526,good2grow-100-jce,30.774626
+246,105,"Equate Arthritis Pain Reliever Gel 1% Diclofenac Sodium, 3.53 oz, Compare to Voltaren Arthritis Pain Active Ingredient",30.7746
+247,551,kandl-cf-egg-dzn,30.774519
+248,476,chix-breast-tender,30.774443
+249,404,"WOW String 2.5oz, Royal Blue",30.774187
+250,185,"Herbal Essences Rose Hips Smooth Shampoo, All Hair Types, 3.38 fl oz Travel Size",30.774149
+251,300,"Pearl Milling Company Butter Light Syrup Dispenser, 24oz, Single Bottle, 24 Servings Per Container",30.774
+252,773,wheat-thins-crackr,30.773584
+253,202,"Jif Creamy Peanut Butter, 16-Ounce Jar",30.773405
+254,468,cheetos,30.773329
+255,188,"Hi Peach Layne Holiday 2024 World's Largest Bath Bomb Bar, One in a Melon Scent, 3.57 lbs",30.773247
+256,68,"Crunch Pak Minecraft Sliced Sweet Apples, Fruit Snacks, Turkey Bites, and Cheez-Its, 4.35oz Tray",30.773226
+257,297,"Parent's Choice Fragrance-Free Baby Wipes, 100 Count (Select for More Options)",30.773113
+258,42,"Bone-in Ham Steak, 1 Pack, Hardwood Smoked",30.772997
+259,218,"King's Hawaiian Original Hawaiian Sweet Mini Sub Rolls 6 Count, 12 oz, Shelf-Stable",30.772882
+260,303,"Philadelphia Original Cream Cheese, 8 oz Block",30.772757
+261,460,campbells-soup,30.772741
+262,51,Cheetos Puffs Cheese Flavored Snacks 2.5 Ounce Bag,30.772669
+263,727,seg-water,30.772667
+264,142,"Fresh Seal Double Zipper Storage Bags, Gallon, 20 Count",30.772516
+265,558,kandl-peas-and-carrots,30.772486
+266,255,Mini Brands Disney Store Series 2 Capsule Novelty and Gag Toy by ZURU,30.772429
+267,594,mars-chocolate,30.772333
+268,622,nissin-sf-f-kor-ch,30.772144
+269,344,"Scott 1000 Toilet Paper, 4 Rolls, 1,000 Sheets per Roll",30.772043
+270,757,top-care-nitetime,30.771894
+271,639,oreo-gldn-frsh-stk,30.771547
+272,730,si-starburst-cherr,30.77148
+273,343,"Scotch Magic Tape Dispenser, Clear, in. x 325 in., 3 Dispensers",30.771269
+274,47,"CRUNCH Candy Bar, Creamy Milk Chocolate with Crunchy Crisped Rice, 4 Piece Share Pack, 2.7 oz",30.771109
+275,165,"Goodnites Girls Nighttime Bedwetting Underwear, S/M (43-68 lbs), 14 Count (Select for More)",30.770638
+276,485,crab-leg-surimi,30.770554
+277,610,mission-chips,30.770412
+278,619,msg-brownie-bc,30.770311
+279,346,"Secret Invisible Solid Antiperspirant and Deodorant Stick, Powder Fresh, 0.5 oz",30.770298
+280,754,th-neapoltn-ic,30.77025
+281,716,seg-picante-sauce,30.77008
+282,484,corn,30.770063
+283,289,"Original Syrup, 24 oz",30.769976
+284,407,"Way To Celebrate Easter Pastel Mix Plastic Easter Grass, 3 oz",30.76984
+285,223,"Kool-Aid Jammers Tropical Punch Zero Sugar Kids Drink Juice Box Pouches, 10 Ct Box, 6 fl oz Pouches, Liquids",30.769705
+286,590,magazine,30.76961
+287,321,"Quaker Instant Oatmeal, Variety, 12.1 oz, 8 Count",30.769415
+288,122,"Extra Butter Flavored Microwave Popcorn, 2.55 oz, 3 Count",30.769388
+289,216,"Kinder Joy Chocolatey Egg & Surprise Toy, Fun Easter Basket & Egg Hunt, 0.7 oz",30.769384
+290,410,"Way to Celebrate! Bright Stripes Birthday Paper Luncheon Napkins, 6.5in, 16ct",30.769346
+291,780,wr-jumbo-sweet-onions,30.769075
+292,755,tic-tac-mints,30.768993
+293,607,mini-ss-tongs-2ct,30.768831
+294,499,dole-slcd-strwbry,30.768744
+295,365,"Squishmallow Girls Cotton Brief Character Underwear, 7-Pack, Size 4-8",30.768503
+296,298,,30.768377
+297,169,"HERSHEY'S KISSES Milk Chocolate Snoopy and Friends, Valentine's, Candy Bag, 9.5 oz",30.76819
+298,584,lnf-remix,30.767975
+299,160,"George Men's & Big Men's 9"" Eboard Shorts",30.76789
+300,347,"Sensory FX Sticks, Sold Separately, Styles May Vary, Kids Toys for Ages 4 up",30.76782
+301,213,"Kellogg's Variety Pack Sweet and Salty, Lunch Snacks, 20 Count",30.767803
+302,600,mccormick-seasonng,30.767744
+303,247,"Marketside Cookies & Cream Flavored Cake Pops, Ready to Eat, 2 Count per Pack",30.767466
+304,10,4-star-roast-beef,30.76738
+305,338,"Sam's Choice Stuffed Crust Supreme Frozen Pizza, 33.2 oz",30.767324
+306,36,"Black and White, 2-Ply Paper Towels, White, 88 Sheets",30.767263
+307,98,"Dunkaroos Whipped Soap, Vanilla Scent, 2.82 oz",30.767166
+308,374,Sun-Maid Strawberry & Vanilla Yogurt Covered Raisins 6-Pack/1oz Cartons,30.767004
+309,495,diet-bargs-rt-beer,30.766993
+310,296,"Parent's Choice Fragrance Free Baby Wipes, 80 Count (Select for More Options)",30.766949
+311,44,"Bunny Bread Old Fashioned, Enriched Sliced White Bread, 24 oz Loaf",30.76668
+312,12,6ct-buttercream-cu,30.766546
+313,671,sb-trpl-shot-rich,30.76652
+314,294,PEEPS Chicks Cello Bag Kit,30.76645
+315,430,arm-and-hammer-dtgnt,30.766405
+316,400,"Vibrant Life Heavy Duty Jumbo Drawstring Litter Pan Liners, 5 Count",30.766329
+317,37,"Blue Bonnet Original Vegetable Oil Spread Sticks, 16 oz (4 Sticks)",30.766304
+318,339,"Sam's Purified Drinking Water, 20 fl oz, 28 Count Bottles",30.766205
+319,55,Chobani Flip Low-Fat Greek Yogurt Chocolate Chip Cookie Dough 4.5 oz Cup,30.766172
+320,25,"Aluminum Foil, 25 sq ft",30.76586
+321,207,"Kaytee Forti-Diet All Natural Timothy Hay , 24 ounce",30.765486
+322,413,"Whatchamacallit Chocolate, Caramel and Peanut Flavored Crisps King Size Candy, Bar 2.6 oz",30.76545
+323,82,"Disinfecting Wipes, Fresh Scent, 75 Count",30.765347
+324,135,"Fresh Cucumber, Each",30.765331
+325,39,"Bluescape Blue 10 ft Family Inflatable Swimming Pool, Round, Age 6 & up, Unisex",30.765278
+326,554,kandl-edamame,30.76526
+327,412,What Do You Meme? Greeting Cards - Congratulations Card (Sheep),30.765112
+328,48,"Cascade Platinum Dishwasher Pods, Dishwasher Detergent, Dish Detergent Soap, Lemon, 12 Count",30.76507
+329,281,"OLLY Kids Chillax Gummy Supplement with Magnesium and L-Theanine, 50 Count",30.764965
+330,385,"Thomas' Everything Bagels, 6 count, 10g Protein, Kosher Bagels, 20 oz Bag",30.764893
+331,514,folgers-coffee,30.764704
+332,211,"Kellogg's Froot Loops Cold Breakfast Cereal Cup, Fruit Flavored, Breakfast Snacks with Vitamin C, Original, 1.5oz Cup (1 Cup)",30.76468
+333,62,"Colby Jack Finely Shredded Cheese, 8 oz Bag",30.764452
+334,237,"Little Debbie Single Serve Iced Honey Buns, 4 oz",30.764435
+335,6,"1/4 Sheet White Cake with Buttercream Frosting, 55 oz",30.764252
+336,285,"Oikos Pro 20g Protein, Strawberry Yogurt-Cultured Dairy Product, 5.3 oz",30.76415
+337,104,"Eos Lip Balm Set- Island Coconut & Vanilla Frappe, 0.14 oz, Pack of 2",30.76409
+338,241,"Lysol All Purpose Spray Cleaner for Sanitizing and Disinfecting, Lemon, 32 oz, 2 pack",30.764051
+339,288,"Original Ricotta Cheese, 15 oz Tub",30.763994
+340,516,fresh-strawberries,30.763973
+341,284,"Official Pop It! Pets Season 2 Mystery Bag with 5 Pets in Each Bag for Children Ages 3+, by Buffalo Games",30.763939
+342,175,"Halloween Purple and Black Web Plastic Table Cover, Partyware Tablecloth, 84 L x 54 W,, by Way To Celebrate",30.763742
+343,205,"Jimmy Dean Pancake & Sausage on a Stick, 12.5 oz, 5 Count (Frozen)",30.763735
+344,14,"80% Lean / 20% Fat Ground Beef Chuck, 2.25 lb Tray, Fresh, All Natural*",30.763643
+345,503,dr-pepper-soda,30.763288
+346,457,bros-nat-strawbs,30.76312
+347,220,"Kit Kat Milk Chocolate Wafer Snack Size Candy, Bars 0.49 oz, 5 Count",30.763056
+348,151,"Fruity King Mini Soda, Fruit Punch Flavor, 5.75 Fl Oz",30.763044
+349,420,"Your Zone 48"" x 20"" Ribbed Body Pillow with Removable Cover, Pink",30.76301
+350,166,"Goody Ouchless Satin Scrunchies, For All Hair Types, Neutral Assortment, 5 Ct",30.762888
+351,18,"ARM & HAMMER Naturals Clumping Cat Litter With Corn Fibers, Odor Control, Fresh Scent, 9 lbs",30.762857
+352,620,nabisco-mini-varty,30.762836
+353,685,se-grocers-syrup,30.762613
+354,103,"Elmer's Disappearing Purple School Glue Sticks, Washable, 0.21 Ounce Glue Sticks, 6 Count",30.762497
+355,291,"OxiClean Odor Blasters Odor and Laundry Stain Remover Liquid, 40.5 fl oz",30.762472
+356,150,"Fruit Cocktail in Juice, 15 oz",30.762426
+357,771,watermelon-slices,30.762396
+358,645,peter-pan-crnch-pe,30.762362
+359,57,"Cinnamon Toast Crunch Breakfast Cereal, Crispy Cinnamon Cereal, Family Size, 18.8 oz",30.762339
+360,390,"Tree Hut Coconut Lime Shea Butter Sugar Body Scrub, 18 oz",30.762306
+361,354,"Smucker's Squeeze Strawberry Fruit Spread, 20 oz",30.762156
+362,132,"Fresh Broccoli Crowns, Each",30.762121
+363,141,"Fresh Seal Double Zipper Sandwich Bags, 100 Count",30.762096
+364,146,"Fresh Whole Carrots, 1 lb Bag",30.762064
+365,124,"Febreze BATH Air Freshener, Odor-Fighting, Ocean Scent, 2 Count",30.761953
+366,111,"Equate Jock Itch Relief Powder Spray Miconazole Nitrate 2% Antifungal, 4.6 oz, Compare to Lotrimin AF Active Ingredient",30.761766
+367,764,tum-e-yummies-drnk,30.761745
+368,380,Terra & Sky Women's Plus Size V Neck T-Shirt with Short Sleeves,30.761683
+369,373,"Suave Professionals Micellar Infusion 2-in-1 Shampoo & Conditioner, Moisturizing, All Hair Types, 28 fl oz",30.761385
+370,240,"Lucky Charms Minis Cereal with Marshmallows, Kids Breakfast Cereal, Family Size, 18.6 oz",30.761385
+371,466,celsius-spklng-kiw,30.761265
+372,363,"Special Kitty Scoopable Tight Clumping Cat Litter, Fresh Scent, 20 lb",30.761063
+373,658,pure-life-6pk,30.761045
+374,323,"REESE'S Milk Chocolate Peanut Butter Egg, Easter Candy Pack, 1.2 oz",30.760958
+375,5,-yellow-corn,30.760887
+376,399,Vibrant Life 24L Cedar Wood Pet Bedding,30.760756
+377,154,"Gain Ultra Oxi Liquid Laundry Detergent, Waterfall Delight Scent, 88 fl oz, 61 Loads",30.76066
+378,194,"Hot & Ready-to-Eat Chicken Egg Roll, 2.82 oz",30.760498
+379,87,"Disney's Stitch Valentine' s Day Exchange Cards, Paper, Jumbo Stickers, Multi-Colored, 16 Count",30.760456
+380,127,"Frankford Hot Chocolate Color Bomb, Milk Chocolate, Green 1.23oz",30.760283
+381,164,"Glow Necklaces, Multicolored, 4 Count, by Way To Celebrate",30.760183
+382,763,tostitos-trtl-chps,30.760166
+383,630,old-ep-taco-kit,30.760118
+384,696,seg-distilled-watr,30.76007
+385,45,"Butter Flavor Flaky Jumbo Biscuits, 8 Count",30.760042
+386,518,fritos-dip,30.759888
+387,688,seg-aluminum-foil,30.75985
+388,145,Fresh Sweet Corn on the Cob (1 each),30.759733
+389,225,"Kraft Singles American Slices, 16 ct Pack",30.759703
+390,191,"Hillshire Farm Ultra Thin Honey Ham Lunchmeat, 9 oz Plastic Tub, Refrigerated",30.759624
+391,274,,30.759596
+392,186,"Hershey's Kisses Milk Chocolate Christmas Candy, Plastic Cane 2.24 oz",30.759531
+393,421,"Zatarain's No Artificial Flavors Blackened Chicken Alfredo Frozen Dinner, 10.5 oz Box",30.75953
+394,666,ritz-crackers,30.7595
+395,195,"Hot & Ready-to-Eat Fresh Corn, 4 oz",30.759487
+396,758,top-round-steak,30.759386
+397,320,"Q-tips Cotton Swabs, Hygiene Shield, For First Aid, Beauty and Baby, 100% Cotton, 300 Count",30.759178
+398,152,"Fruity King Mini Soda, Orange, 5.75 Fl Oz",30.759174
+399,136,"Fresh Green and Vibrant Cilantro, Bunch",30.759039
+400,54,"Chive & Onion Cream Cheese Spread, 8 oz Tub",30.75896
+401,214,"Kinder Bueno Milk Chocolate & Hazelnut Cream Candy Bar, 4 Individually Wrapped 0.75 oz Bars Per Pack, Perfect for Easter Gifting",30.758791
+402,701,seg-gravy-mix,30.758556
+403,299,"Pasta Roni Butter & Garlic Angel Hair Pasta, 4.7 oz Box",30.758457
+404,120,"Everyday Strong Paper Towels, Split Sheets, 2 Double Rolls, Compare to Sparkle",30.75845
+405,230,"Lemon Scent Disinfecting Wipes, 75 Count, 1 Lbs, 5.5 oz",30.757833
+406,370,Starburst Zero Sugar Singles-to-Go Powdered Drink Mix All Pink Strawberry 6 Count Packets,30.757793
+407,565,kellogg-apl-jck-gt,30.757727
+408,651,pork-shoulder,30.75769
+409,76,"DiGiorno Stuffed Crust Cheese, Veggie, and Meat Supreme Pizza, 26.4 oz (Frozen)",30.757671
+410,401,"Vibrant Life Pine Wood Pet Bedding for Small Pets & Chickens, 24 L Bag",30.75767
+411,15,"8CT 9"" FOIL DAISY",30.757608
+412,106,"Equate Beauty Charcoal Pore Strips for Nose and Face, 14 Count",30.757496
+413,155,"Garden Vegetable Cream Cheese Spread, 8 oz Tub",30.757488
+414,366,"Squishmallows Easter Mystery Squad 4\"" Capsule One Color Chosen at Random 1 Mystery Plush in Capsule",30.757343
+415,21,Airplus Fall Spa Aloe Llama Crew Sock Medium,30.757326
+416,472,chek-soda,30.757093
+417,712,seg-orange-cream,30.75697
+418,717,seg-pnck-pouch,30.756945
+419,559,kandl-potatoes,30.756895
+420,588,lttl-debbie-donuts,30.75686
+421,428,apple-jack-donut,30.756838
+422,663,reddi-wip,30.756662
+423,437,bacon-inst-grits,30.756636
+424,652,powerade-8pk,30.756634
+425,222,"Kitty Diggin's Fragrance-Free Cat Litter, 7 lbs",30.756433
+426,739,snuggle-sheets,30.75638
+427,562,kandl-sweet-peas,30.75638
+428,233,"Lipton Iced Tea And Lemonade Half & Half, 16.9 fl oz, 12 Count",30.756315
+429,549,kandl-canned-beans,30.756268
+430,524,gold-peak-tea,30.756247
+431,624,noosa-yogurt,30.75622
+432,251,"Marketside Ultimate Meat Traditional Crust Pizza, Marinara Sauce, Medium, 12 in, 32.1 oz (Fresh)",30.756138
+433,4,-sparkling-ice-wtr,30.756136
+434,674,se-grocers-broth,30.756128
+435,254,"Milo's Famous Sweet Iced Tea, 100% Natural, 128 fl oz",30.756105
+436,305,"Pine-Sol Multi-Surface Floor Cleaner, Lavender Clean, 24 Fluid Ounces",30.75607
+437,378,"Tartar Sauce, 12 fl oz",30.756008
+438,340,"Sanderson Farms Fresh Chicken Thighs, Family Pack, 22g Protein, 4oz 112g, 4.6 - 6.0 lb",30.755936
+439,100,"Easy@Home Marijuana Single Panel Drug Test, 12 Pack",30.755835
+440,377,"Taco Bell Soft Taco Cravings Kit with 10 Soft Tortillas, Taco Bell Mild Sauce & Seasoning, 14.8 oz Box",30.755695
+441,174,Hallmark Birthday Greeting Card,30.755413
+442,334,"Rice a Roni Rice Pasta Rice Pilaf, 7.2 oz",30.755379
+443,50,"Cheese Dip & Breadsticks Snacks, 1 oz, 5 Count",30.7553
+444,304,"Pictsweet Farms Steam'ables Edamame with Sea Salt, Farm Favorites, Frozen Vegetables, 10 oz.",30.755283
+445,282,"OREO Chocolate Sandwich Cookies, 13.29 oz",30.755266
+446,634,on-the-border-dip,30.755257
+447,242,Lysol Disinfecting Wipes - (1 Lemon + 1 Brand New Day Mango & Hibiscus + 1 Crisp Linen) 4/(3x35) count,30.755106
+448,762,topcare-nighttime,30.75507
+449,43,"Bruce's Canned Yams Cut Sweet Potatoes in Splenda, 40 oz",30.75464
+450,438,bagel-bites-chs-and,30.754553
+451,258,"Multi-Color Easter Confetti Eggs, 12 Count, by Way to Celebrate",30.754175
+452,708,seg-ice-cream-cup,30.754137
+453,250,"Marketside Iced Lemon Sliced Loaf Cake, 14.1 oz, 8 Count",30.754084
+454,253,"Milky Way Candy Milk Chocolate Bar, Share Size - 3.63 oz",30.754074
+455,416,"Wild Harvest Daily Blend for Cockatiels, Hookbills and Lovebirds, 2 lb",30.753935
+456,309,"Play Day Sidewalk Chalk, 20 Pieces, Assorted Colors.",30.753899
+457,543,ittibitz-cookeandcrm,30.753832
+458,561,kandl-sugar,30.753752
+459,787,yocrunch-yogurt,30.75363
+460,546,jimmy-dean-sausage,30.75356
+461,358,"SpaghettiOs Canned Pasta with Meatballs, 15.6 oz Can",30.753408
+462,328,"Ratio Protein Yogurt Cultured Dairy Snack, Strawberry Cheesecake, 25g Protein, 5.3 oz",30.753342
+463,248,"Marketside French Style Cheesecake Mousse, 5.25 oz",30.753342
+464,608,mini-valentine-2-t,30.753328
+465,53,"Cheez-It, Pringles & Rice Krispies Variety Pack Lunch Snacks, 30.1 oz, 30 Count",30.753075
+466,778,wr-bananas,30.753065
+467,99,"Easter Pink Paper Easter Grass, 2.25 oz, by Way To Celebrate",30.75292
+468,379,"Temptations Classic Seafood Medley Flavor Crunchy And Soft Treats For Cats, 3 Oz Pouch",30.752794
+469,167,"Guidry's Creole Seasoning, 16 oz",30.752787
+470,395,"Twix Caramel Cookie Milk Chocolate Candy Bars, Full Size - 1.79 oz Pack",30.75268
+471,489,daisy-sour-cream,30.752539
+472,257,"Monster Energy, Zero Ultra, Sugar Free Energy Drink, 16 Fl Oz",30.752426
+473,342,"Sargento Sliced Baby Swiss Natural Cheese, 11 slices",30.752377
+474,118,"Equate Sport Sunscreen Spray, SPF 30, 11 oz, 2 Count",30.752275
+475,20,"Air Wick Plug In Scented Oil Refill Lavender & Chamomile Air Freshener, 2 Count",30.752266
+476,292,"Ozark Trail Queen Air Mattress, Air Bed with Pump, 14 Inch Inflatable Air Mattress, Blow Up Bed",30.752245
+477,193,"Hopscotch Lane My Baby Dolls Plastic Travel Crib, Baby Doll Accessory, Children Ages 2+",30.75221
+478,78,"Dial Gold Antibacterial Deodorant Bar Soap, Advanced Clean Deep Cleanse Bar, 4 oz, 4 Bars",30.752178
+479,443,beef-cubed-steak,30.752062
+480,681,se-grocers-peanuts,30.751917
+481,349,"Sharpie Tank-Style Highlighters, Chisel Tip, Assorted, 4 Count",30.751915
+482,278,"Nutella & Go! Hazelnut Spread with Breadsticks, On-the-Go Snack Cups, Snack Packs, 1.8 oz",30.751774
+483,262,"Multicolor Dinosaur Roarsome Birthday Paper Gift Bag, 10"" x 12"", by Way To Celebrate",30.751755
+484,310,"Pork Center Cut Loin Chops Thin Boneless, 1.0 - 2.5 lb, Tray",30.751701
+485,102,Elmer Chocolate Assorted Chocolate Social Media Super Emoji Heart 2oz 5 Pieces,30.751472
+486,436,axe-bergamot-body,30.75136
+487,2,-dr-pepper-12pk,30.75134
+488,405,"Wahl Color Pro Plus Haircut Kit, Power-Drive , Corded - 79752T",30.751333
+489,269,"Nabisco Variety Pack, Barnum's Animal Crackers, Teddy Grahams & CHIPS AHOY! Cookies, 20 Snack Packs",30.751198
+490,327,"RUSSELL STOVER Easter Solid Milk Chocolate Easter Bunny, 7 oz.",30.751043
+491,196,"Hot & Ready-to-Eat Fried Chicken Leg, 1 Count",30.751005
+492,86,Disney Princess Beauty & the Beast Ballerina Belle Fashion Doll with Posable Arms and Legs,30.750761
+493,280,"Nutter Butter Peanut Butter Sandwich Cookies, 12 Packs (4 Cookies Per Pack)",30.750711
+494,767,twix-cookie-bars,30.750679
+495,482,coffee-mate-creamr,30.750576
+496,369,"Starbucks Frappuccino White Chocolate Mocha Coffee Drink, 13.7 fl oz.",30.750517
+497,550,kandl-canned-veggie,30.75042
+498,219,"Kit Kat Milk Chocolate Wafer King Size Candy, Bar 3 oz",30.750402
+499,748,sunmaid-raisins,30.750341
+500,84,Disney Lilo & Stitch Girls Comfort Slide Sandals,30.750313
+501,182,Hello Hobby Chenille M Pink Patch,30.750229
+502,519,gain-lq-hec-oxi-wd,30.750011
+503,163,"Glico Pocky Chocolate Covered Biscuit Sticks, 1.41 oz.",30.74992
+504,101,"Elbows, 16 oz",30.749859
+505,450,bluebonnet-margrne,30.749672
+506,371,"Stitch Girls Cotton Brief Character Underwear, 7-Pack, Size 4-8",30.749525
+507,8,15ct-oatmeal-raisi,30.74941
+508,276,"Nongshim Bowl Noodle Spicy Chicken Ramen Noodle Soup Bowl, 3.03oz X 1, Shelf-Stable",30.749279
+509,119,"Everyday Soft Facial Tissues, 1 Cube Carton, 80 Tissues per Cube, 2-Ply",30.749073
+510,375,Sun-Maid Vanilla Yogurt Covered Raisins 6-Pack/1oz Cartons,30.749071
+511,517,fried-ckn-8pc,30.749063
+512,623,nissin-sf-hon-chkn,30.748873
+513,555,kandl-green-beans,30.748714
+514,271,"Nestle Coffee Mate Non Dairy Zero Sugar Italian Sweet Creme Liquid Coffee Creamer Sugar Free, 32 fl oz Bottle",30.748669
+515,125,"Fingerlings Interactive Baby Monkey Charli, 70+ Sounds & Reactions, Heart Lights Up, Fuzzy Faux Fur, Reacts to Touch (Ages 5+)",30.748652
+516,75,"DiGiorno Rising Crust Supreme Meat Pizza with Cheese, Pepperoni, Beef, and Sausage, 29.3 oz (Frozen)",30.748583
+517,259,"Multi-Color Happy Birthday Pattern Yard Sign Set, by Way To Celebrate",30.74815
+518,409,Way to Celebrate Women's Lucky Mama Graphic T-Shirt,30.748085
+519,144,"Fresh Slicing Tomato, Each",30.74779
+520,637,"onn On-Ear Headphones, Pink",30.747633
+521,660,quaker-instnt-grts,30.747509
+522,161,"George Men's & Big Men's Cargo E-Board Shorts, 9"" Inseam, Size S-3XL",30.747484
+523,295,"Paper Plate, 8.5"", White, 50 Count",30.747416
+524,74,Dean's French Onion Dip 8 oz,30.747297
+525,134,"Fresh Celery Stalk, Each",30.74711
+526,209,"Keebler Sweet Treat Variety Pack, 12-Count Box, Includes Chips Deluxe, Funables, Fudge Stripes, and Mother's Circus Animal Cookies, 11.4 oz",30.747095
+527,442,be-sf-winter-blend,30.746967
+528,176,"Hamburger Buns, 11 oz, 8 Count",30.746937
+529,96,"Dudley's Stitch Jumbo Plastic Easter Egg Filled with Stickers and Temporary Tattoos, Egg Hunt",30.746815
+530,441,be-sf-slt-peppr-br,30.746485
+531,665,rght-grd-ddrnt,30.746386
+532,545,jimmy-dean-bacon,30.74635
+533,695,seg-cutlery,30.746298
+534,252,"Medium Soft Taco Flour Tortillas, 17.5 oz Bag, 10 Count (Shelf Stable)",30.746252
+535,156,"Garlic Powder, 3.4 oz",30.746183
+536,389,"Town House FlipSides Original Oven Baked Crackers, Lunch Snacks, 9.2 oz",30.746061
+537,265,"My Life As Fashion Assortment for 18-inch Doll, Child (Doll Not Included)",30.74605
+538,256,"Monopoly Disney Stitch Edition Board Game, Officially Licensed Disney Game, Holiday Gifts for Kids, Ages 8 and Up (Walmart Exclusive)",30.745712
+539,283,"Ocean Spray Diet Cran-Pineapple Cranberry Pineapple Juice Drink, 64 fl oz Bottle",30.745493
+540,204,"Jimmy Dean Original Pancakes & Sausage on a Stick, 30 oz, 12 Count (Frozen)",30.745483
+541,691,seg-breadsticks,30.745466
+542,140,"Fresh Roma Tomato, Each",30.745447
+543,429,arizona-tea,30.745428
+544,192,"Home Logic 1.8 Bushel Hip Grip Plastic Laundry Basket, Teal, Adult / Tween",30.74542
+545,386,Time And Tru Women's Elbow Sleeve T-Shirt,30.74513
+546,236,"Little Debbie Powdered Mini Donuts, 10 oz",30.744984
+547,508,essentials-plates,30.744913
+548,677,se-grocers-juice,30.74472
+549,621,nissin-noodle-soup,30.744665
+550,530,greens-bot,30.744593
+551,13,"80% Lean / 20% Fat Ground Beef Chuck, 1 lb Tray, Fresh, All Natural*",30.74455
+552,598,mayo,30.744547
+553,766,twister-punch,30.744383
+554,81,"Discovery Crystal Aquarium, Grow Your Own Crystal Model Science Kit",30.744307
+555,402,"Vibrant Life Small Animal Bedding, White Paper, 36 L Bag",30.744251
+556,785,wr-vine-ripe-tomato,30.744244
+557,541,hubba-bubba-gum,30.744167
+558,770,watermelon,30.744135
+559,528,goya-milk,30.743855
+560,605,milk-strw,30.743834
+561,143,"Fresh Seal Quart Storage Double Zipper Bags, 25 Count",30.74382
+562,629,oikos-remix,30.743574
+563,301,"PetAg Milk Replacer Liquid for Dogs and Puppies, 32 fl oz",30.743364
+564,208,"Keebler Fudge Stripes, Original Shortbread Cookies Coated in Keebler Fudge, Family Size 17.3 oz",30.743307
+565,636,"onn Fixed TV Wall Mount for 32"" to 86"" TVs, holds up to 120 lbs",30.743202
+566,92,"Dole 100% Juice Blend, Pineapple Orange Banana Flavored, 59 Fl Oz, Carton",30.742857
+567,67,"CritterCare Natural Paper Small Pet Bedding, Brown, 27L",30.74272
+568,776,wr-apples,30.7427
+569,287,"Oikos Triple Zero 15g Protein, 0g Added Sugar, Fat Free Vanilla Greek Yogurt Cup, 5.3 oz",30.742674
+570,750,tastykake-pastries,30.742594
+571,675,se-grocers-buns,30.742575
+572,383,"The First Years Disney Mickey Mouse Insulated Sippy Cup, 9 Oz 2 Pack",30.742537
+573,58,"Cinnamon Toast Crunch Breakfast Cereal, Crispy Cinnamon Cereal, Mega Size, 29.1 oz",30.742243
+574,657,puffs-tissues,30.742128
+575,199,"Irish Spring Original Deodorant Bar Soap for Men, With Flaxseed Oil, 3.7 oz Bar (4 Pack)",30.741823
+576,335,"River Road Blackened Seasoning, 4.25 oz Jar",30.741787
+577,177,Hanes Comfort Fit Scrubs Women's Scrub Joggers New Ebony M,30.741728
+578,427,annie-chuns-bowl,30.741714
+579,355,"Snickers NFL Football Chocolate Candy Bar, Full Size - 1.86 oz Bar (Packaging May Vary)",30.741673
+580,126,"Flex Seal Aerosol Liquid Rubber Sealant Coating, 14 oz, Gray",30.741661
+581,117,"Equate Sport Sunscreen Spray SPF 50, 9.1 oz",30.741596
+582,268,"Nabisco Sweet Treats Cookie Variety Pack OREO, OREO Golden & CHIPS AHOY!, 30 Snack Packs",30.741467
+583,670,sausage,30.741457
+584,272,New Orleans Famous Sno-Balls To Go! CHERRY 16 OZ PINT SNO-BALL,30.741364
+585,527,gortons-fsh-fillet,30.74131
+586,293,"PAAS Easter Egg Decorating and Dye Kit, Unicorn Color Whip, 1 Kit",30.741236
+587,326,"RM Palmer Cuddly Cuties Frog Milk Chocolate, 2.5oz Individual Bar",30.741224
+588,91,"Dixie Ultra Disposable Paper Bowls, 20 Ounce, 25 Count",30.741198
+589,403,Vitakraft Menu Premium Guinea Pig Food 4Lb,30.741177
+590,315,"Puffs Ultra Soft Facial Tissues, 2 Mega Cube Boxes, 72 Tissues per Box",30.741114
+591,221,"Kit Kat Miniatures Milk Chocolate Wafer Valentine's Candy, Gift Box 6.4 oz",30.740677
+592,417,Winter Coffee Shop Kcups and Syrups Set,30.740543
+593,477,chse-vrty-inst-grt,30.740227
+594,740,sow-good-candy,30.740213
+595,667,romaine-hearts,30.74021
+596,227,"Lay's Classic Potato Chips Snack Chips, 1 Ounce Bag",30.740133
+597,64,"Complete Pancake & Waffle Mix, Buttermilk, 32 oz",30.740057
+598,613,mixed-grapes,30.740034
+599,783,wr-sweet-potatoes,30.74
+600,109,"Equate Easy Grip Pill Crusher, Colors May Vary",30.739977
+601,397,"Valentine's Day Red Paper Shred, 1.25 oz, by Way To Celebrate",30.739891
+602,454,boneless-pork-ribs,30.739752
+603,171,"HORMEL BLACK LABEL Bacon, Gluten Free, Fully Cooked, Shelf Stable, 2.52 oz Plastic Package",30.739721
+604,336,"Rubbermaid TakeAlongs 2.9 Cup On the Go Square Food Storage Containers, Set of 4, Teal Splash",30.739693
+605,325,"RITZ Toasted Chips Sour Cream and Onion Crackers, Party Snacks, 8.1 oz",30.739687
+606,515,fresh-meats,30.739578
+607,419,"Wonderful Pistachios, Roasted and Salted In-Shell Nuts, 5oz Bag",30.739521
+608,69,"Crush Caffeine Free Orange Soda Pop, 20 fl oz, Bottle",30.739311
+609,198,"International Delight Caramel Macchiato Cold Foam Coffee Creamer, 14 oz Can",30.739302
+610,777,wr-asparagus,30.738863
+611,59,"Cirkul FitSip Blackberry Burst Flavor Cartridge, Drink Mix, 1-Pack",30.738825
+612,11,60 Inch Grogu with Bat Star Wars for Halloween by Airblown Inflatables,30.738817
+613,279,"Nutella Hazelnut Spread with Cocoa, 1 oz Mini Glass Holiday Jar",30.738619
+614,348,"Sharp Cheddar Finely Shredded Cheese, 8 oz Bag",30.738554
+615,700,seg-grape-tomatoes,30.73854
+616,316,"Pumpkin Squishy Toy, Orange, 2.5"", Halloween by Way To Celebrate",30.738485
+617,609,minute-maid-drink,30.738394
+618,239,"Lucky Charms Gluten Free Cereal with Marshmallows, Kids Cereal, Family Size, 18.6 oz",30.738369
+619,228,"Lay's Wavy Potato Chips, Original Flavor, 7.75 oz Bag",30.738121
+620,63,"Colgate Total Active Prevention Travel Whitening Toothpaste, Mint, 1.4 oz",30.73812
+621,189,"Hickory Smoked Lower Sodium Bacon, 16 oz",30.73805
+622,480,cinnagraham-cereal,30.737906
+623,673,scott-bthrm-tissue,30.737856
+624,647,philadlph-crm-chse,30.737757
+625,447,bhf-carrots,30.737698
+626,34,"Best Party Ever Edible Glitter Confetti Popper, Cake Topper, Blue 2 Pack, 3.5 Inches Wide",30.737627
+627,178,"Hanes Womens Underwear 6-Pack, Super Stretch Panties, Comfort Flex Fit Underwear for Women",30.73762
+628,581,little-debbie-foot,30.737383
+629,88,"Disposable Paper Food Boat Tray 96 oz., Red, White & Blue, 2 Ct., Way to Celebrate",30.73738
+630,361,"Sparkling Ice Naturally Flavored Sparkling Water, Kiwi Strawberry 17 Fl Oz",30.737333
+631,692,seg-canned-fruit,30.737265
+632,478,chuck-steak,30.737255
+633,529,green-bell-pepper,30.737162
+634,779,wr-hotline-by-lb,30.737139
+635,138,"Fresh Red Cherries, 2.25 lb Bag",30.736948
+636,112,"Equate Men's 5 Blade Refills, Cartridges Fit Equate 5 Blade & Gillette Fusion Handles (4 Count)",30.736929
+637,264,"Mushroom Pasta Sauce, 24 oz",30.736902
+638,749,sunny-meadows-eggs,30.736816
+639,317,"Purified Drinking Water, 16.9 Fl. Oz., 40 Count",30.736519
+640,322,"REESE'S Milk Chocolate King Size Peanut Butter Eggs, Easter Candy Pack, 2.4 oz",30.736446
+641,172,Hallmark 12-Pack Valentine's Day Plastic Goodie Bags (Bright Stripes),30.736422
+642,362,"Special Kitty Lightweight and Scoopable Clumping Cat Litter, Fresh Scent, 8.5 lb",30.73641
+643,439,banquet-sausage,30.73641
+644,367,Squishmallows Official Kellytoy 8 Inch Soft Plush Squishy Toy Animals (Maddie the Crab),30.736408
+645,56,Chobani Flip Low-Fat Greek Yogurt Cookies and Cream 4.5 oz Cup,30.735998
+646,393,"Tropicana Pure Premium 100% Orange Juice Original, No Pulp, Low Acid, 46 fl oz bottle",30.735756
+647,720,seg-slcd-mushrooms,30.735722
+648,183,"Hello Hobby Large Black and White Plastic Wiggly Eyes, 12-Pack",30.73541
+649,231,"Lender's Original Plain Bagels, 6 count, Pre-sliced Refrigerated Bagels, 17.1 oz Bag",30.734959
+650,768,usda-chce-stw-meat,30.734896
+651,601,mccormick-ssng-mix,30.734867
+652,689,seg-bagel-bites,30.73486
+653,635,onn 32GB Class 10 U1 SDHC Flash Memory Card,30.734674
+654,496,digiorno-pizza,30.734306
+655,580,lipton-soup-mix,30.734255
+656,536,hersheys-syrup,30.734016
+657,311,"Post Cocoa PEBBLES Cereal, Chocolatey Kids Cereal, Gluten Free, Crunchy 2.0 oz Individual Cereal Cup",30.733953
+658,686,seg-100-juice,30.733854
+659,513,fbrz-air-refresher,30.733843
+660,357,"Soothing Lotion Facial Tissues, 1 Cube Carton, 75 Tissues per Cube",30.73362
+661,553,kandl-diced-tomatoes,30.733614
+662,60,"Cirkul GoSip Berry Blue Punch Flavor Cartridge, Drink Mix, 1-Pack",30.733572
+663,148,"Fresh-Cut Lilies Flower Bunch, 3 Stems, Colors Vary",30.733501
+664,31,"BIC Soleil Women's 3-Blade Disposable Razors, 4 Count, with Soothing Moisture Strip",30.733385
+665,30,"BIC Soleil 4 Women's 4-Blade Disposable Razors, 3 Count",30.733265
+666,736,smuckers-uncrstbl,30.733229
+667,137,"Fresh Personal Watermelon, Each",30.733145
+668,73,"Dawn Platinum Liquid Dish Soap, Dishwashing Liquid, Grease Removal, Fresh Rain, 14.6oz",30.733063
+669,585,london-broil,30.73291
+670,29,"BAND-AID Brand Bandages for Kids, Disney Characters, Assorted, 20 Count",30.732851
+671,704,seg-hbsc-eldrbry,30.732628
+672,70,"DUDE Wipes Flushable Wipes, XL Wet Wipes for At Home Use, Unscented, 48 Count, 2 Pack",30.73246
+673,426,andes-snap-bar,30.732134
+674,738,sno-balls-to-go,30.732006
+675,229,Lee Women's Regular Fit Comfort Waist Straight Woven Pant,30.731937
+676,540,hswt-thk-bacon,30.7319
+677,381,Terra & Sky Women's Plus Size V-Neck Tee with Short Sleeves,30.731878
+678,19,"Adventure Force Bite Buggy Motorized Vehicle, Gator",30.731812
+679,488,daisy-french-onion,30.731657
+680,448,blue-bell-icecream,30.731428
+681,573,knorr-rice-sides,30.731308
+682,130,"Freezer Guard Double Zipper Freezer Bags, Gallon, 40 Count",30.73115
+683,654,pringles-chips,30.731113
+684,446,betty-crcekr-potato,30.730864
+685,702,seg-green-grapes,30.730524
+686,128,"Frankford SpongeBob SquarePants Krabby Patties Easter Original Gummy Candy Box, 2.19oz",30.730173
+687,46,"Buttermilk Pancakes, 16.5 oz, 12 Count (Frozen)",30.730072
+688,411,Well All Over Glitter Silver,30.72999
+689,249,"Marketside Fresh Asiago Cheese Bagels, Wheat and Barley Flour, Shelf-Stable, 22.8 oz, 6 Count",30.729572
+690,631,om-basics-ham-amer,30.72925
+691,464,cc-sparkling-water,30.729242
+692,563,kandl-tomato-paste,30.729137
+693,756,tidy-cats-litter,30.72891
+694,90,"Disposable Plastic Cups, Clear, 2 oz, 50 Count",30.728891
+695,632,om-basics-turkey-a,30.728651
+696,113,"Equate Moisturizing Hand Sanitizer, 32 oz",30.72845
+697,329,"Reduced Calorie Sugar Free Syrup, 24 fl oz",30.728336
+698,505,egglands-best-egg,30.72805
+699,617,monster-ultra-fant,30.72804
+700,394,"Tropicana Twister Fruit Punch Flavored Juice Drink, Pulp-Free, 59 oz Carton",30.727554
+701,97,"Dunkaroos Chocolate Cookies and Double Chocolate Frosting, 1 oz, 10 ct",30.727167
+702,337,"Russet Baking Potatoes Whole Fresh, Each",30.726933
+703,500,doritos-trtlla-chp,30.726633
+704,238,"Low-Splash Bleach, 81 fl oz",30.726562
+705,360,"Sparkling Ice Naturally Flavored Sparkling Water, Black Raspberry 17 fl oz",30.7264
+706,197,"Hunts Garlic & Herb Pasta Sauce, 24 oz. Can",30.726322
+707,290,Oxbow Simple Harvest Western Timothy Hay 15oz.,30.72568
+708,89,"Disposable Plastic Coffee Stirrers, Black, 250 Count",30.725628
+709,633,on-the-border-chip,30.72521
+710,463,cc-oil-spread,30.72513
+711,114,"Equate Nighttime Cold & Flu Liquid Medicine, Cough & Cold Medicine, Cherry, 12 fl oz",30.724993
+712,493,degree-dry-spray,30.724442
+713,533,hallmark-item,30.724415
+714,435,assume-its-butter,30.72432
+715,3,-sno-balls-to-go,30.724077
+716,774,whoppers-candy,30.723646
+717,572,kinder-joy-treat,30.723518
+718,333,"Rice Krispies Treats Original with Holiday Sprinkles Chewy Mini Marshmallow Cereal Bars, Kids Snacks, 12.4 oz, 32 Count",30.723356
+719,548,kand1-diced-tomatoes,30.7232
+720,286,"Oikos Triple Zero 15g Protein, 0g Added Sugar, Fat Free Lemon Tart Greek Yogurt Cup, 5.3 oz",30.723122
+721,687,seg-alfredo-sauce,30.72272
+722,705,seg-ic-sandwich,30.722593
+723,715,seg-pasta-sauce,30.722267
+724,314,"Pringles Original Potato Crisps Chips, Lunch Snacks, 2.3 oz Canister",30.721786
+725,655,produce-cucumbers,30.721518
+726,234,"Little Debbie Blueberry Mini Muffins, 8.44 oz (5 Count)",30.721464
+727,602,mentos-mint,30.721308
+728,462,cauliflower,30.721144
+729,94,"Dove Shampoo for Women Anti Frizz & Smooth with Bio-Protein Care Technology and Shea Butter, 18 fl oz",30.72111
+730,649,pillsbury-biscuits,30.721046
+731,200,"Irish Spring Original Moisturizing Body Wash for Men, 24-Hour Fresh, Face and Body Wash, Mens Body Wash, Biodegradable Ingredients, Paraben Free, Cool Fresh Scent, 20 fl oz Bottle",30.720957
+732,345,"Seasonal Fruit Tray, 40 oz",30.720736
+733,564,kandl-winter-mix,30.720732
+734,713,seg-parchment-ppr,30.720722
+735,676,se-grocers-foil,30.720146
+736,22,"Alani, Cosmic Stardust, 12 fl oz, Single Can",30.71999
+737,267,My Sticker Dress-Up: Swifties (Paperback),30.719894
+738,502,dr-pepper-2002,30.719332
+739,273,"New York Style & Chocolate Marble Cheesecake, 6 oz, 2 Slices",30.71884
+740,614,mm-pb-mini-shr-sz,30.717772
+741,23,"Alani, Winter Wonderland, 12 fl oz, Single Can",30.71715
+742,324,"RITZ Fresh Stacks Original Crackers, Travel Snacks, 11.8 oz (8 Multi Snack Packs)",30.716478
+743,263,Multicolor Foil Fringe Door Curtain Hanging Decoration 8' x 3' by Way to Celebrate,30.716148
+744,212,"Kellogg's Frosted Flakes Cold Breakfast Cereal Cup, 8 Vitamins and Minerals, Kids Snacks, Original, 2.1oz Cup (1 Cup)",30.715685
+745,612,mix-melon-chunks,30.715553
+746,270,"Neapolitan Ice Cream Sandwiches, 42 fl oz, 12 Pack",30.71515
+747,641,oui-yogurt,30.714588
+748,408,Way To Celebrate Multi-Color Birthday Ribbon - Great Way to Celebrate a Girl's Birthday!,30.714487
+749,364,"Sprite Lemon Lime Soda Pop, 12 fl oz, 24 Pack Cans",30.714174
+750,577,krustz-pancake-mix,30.714003
+751,510,fairlife-milk,30.713903
+752,664,reeses-candy,30.713604
+753,741,spaghettios-pasta,30.713293
+754,743,sprite-soda,30.71322
+755,93,"Dove Conditioner for Women Anti Frizz & Smooth with Bio-Protein Care Technology and Shea Butter, 18 fl oz",30.712492
+756,49,"Cat's Pride Scented Scoopable Cat Litter, 12 lb Jug",30.711157
+757,618,mr-sushi-shelf-item,30.710726
+758,661,quaker-rice-crisps,30.709665
+759,391,"Tree Hut Pink Hibiscus Shea Butter Sugar Body Scrub, 18 oz",30.709631
+760,534,hc-cafe-steamers,30.709082
+761,627,nutella-spread,30.707071
+762,640,oscar-mayer-lnchbl,30.706743
+763,107,"Equate Blue Mint Antiseptic Mouthwash for Bad Breath & Plaque Oral Care, 500 mL, Compare to Listerine Cool Mint Active Ingredients",30.706648
+764,769,wat-cat-litter,30.705683
+765,747,success-rice,30.705517
+766,351,Skittles Gummies Original Gummy Candy - 5.8 oz Bag,30.70466
+767,709,seg-jumbo-biscuit,30.703184
+768,168,"HARIBO Gummy Candy, Fruity Watermelon Gummies, 6.3 oz, Share Size Bag",30.702852
+769,753,tf-green-beans,30.702703
+770,66,"Crest Scope Outlast Mouthwash, Fresh Mint, 100mL, 3.3 fl oz",30.701773
+771,556,kandl-kidney-beans,30.70128
+772,479,cilantro,30.700361
+773,752,taylor-farms-green,30.699232
+774,433,armour-meatballs,30.698793
+775,71,"Daisy Pure and Natural Light Sour Cream, 50% Less Fat, 8 oz Tub (Refrigerated)",30.698023
+776,350,Silicone Lined Oven Glove,30.696991
+777,490,dandw-salami,30.696762
+778,32,"Baby Bottle Pop, Twisters, Assorted Fruity Flavors, Chewy Candy, 2.7 oz, Bottle",30.696234
+779,77,"Dial Gold Antibacterial Deodorant Bar Soap, Advanced Clean Deep Cleanse Bar, 4 oz, 12 Bars",30.695116
+780,332,"Revlon ColorSilk Permanent Hair Color, Bond Repair Complex, 55 Light Reddish Brown, 1 pack",30.694773
+781,471,chek-root-beer,30.69475
+782,425,alm-petit-four,30.693838
+783,522,glico-bscuit-stick,30.693525
+784,694,seg-croutons,30.69247
+785,277,"Nongshim Tonkotsu Spicy Pork & Black Garlic Ramyun Premium Ramen Noodle Soup Bowl, 3.6oz X 1 Count, Shelf-Stable",30.69179
+786,628,nyb-garlic-bread,30.6915
+787,35,"Bestway Tritech Air Mattress Queen 12"" with Built-in AC Pump",30.689524
+788,662,red-baron-pizza,30.686106
+789,159,"Gelatin Dessert, Strawberry, 6 oz",30.680182

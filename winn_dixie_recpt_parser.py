@@ -202,3 +202,65 @@ class WinnDixieRecptParser:
             if m:
                 return m.group('cashier').strip()
         return None
+    #########################################################################
+    
+    @staticmethod
+    def remove_duplicate_receipt_files(df):
+        """
+        Remove whole source files that contain an identical receipt
+        to another file with the same date+time.
+        Minimal console output. Resets index at end.
+        """
+
+        df["__signature"] = (
+            df["date"].astype(str) + "|" +
+            df["time"].astype(str) + "|" +
+            df["item"].astype(str) + "|" 
+            #df["qty"].astype(str) + "|" +
+            #df["youPay"].astype(str) + "|" +
+            #df["reg"].astype(str) + "|" +
+            #df["reportedItemsSold"].astype(str) + "|" +
+            #df["cashier"].astype(str) + "|" +
+            #df["manager"].astype(str)
+        )
+    
+        keep_sources = set()
+    
+        for (dt_date, dt_time), group in df.groupby(["date", "time"]):
+    
+            # Build signature per source
+            source_signatures = {}
+            for source, rows in group.groupby("source"):
+                sig = tuple(sorted(rows["__signature"].tolist()))
+                source_signatures[source] = sig
+    
+            # signature → list of sources
+            signature_groups = {}
+            for src, sig in source_signatures.items():
+                signature_groups.setdefault(sig, []).append(src)
+    
+            # Handle duplicates
+            for sig, sources in signature_groups.items():
+                if len(sources) == 1:
+                    keep_sources.add(sources[0])
+                    continue
+    
+                sorted_sources = sorted(sources)
+                kept = sorted_sources[0]
+                removed = sorted_sources[1:]
+    
+                # Minimal output
+                print(f"DUP: {dt_date} {dt_time} → keep {kept} ← drop {', '.join(removed)}")
+    
+                keep_sources.add(kept)
+    
+        # Filter and clean
+        result = df[df["source"].isin(keep_sources)].copy()
+        result.drop(columns=["__signature"], inplace=True)
+    
+        # ✔ Reset index here
+        result.reset_index(drop=True, inplace=True)
+    
+        return result
+#################################################################
+
