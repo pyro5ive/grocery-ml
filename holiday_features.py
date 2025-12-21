@@ -66,8 +66,9 @@ class HolidayFeatures:
         else:
             last_year = pd.Timestamp(d.year - 1, bday.month, bday.day)
             return (d - last_year).days
+    ####################################################################
 
-
+    @staticmethod
     def daysUntilSchoolStart(d):
         d = pd.to_datetime(d)
         start = pd.Timestamp(d.year, 8, 15)
