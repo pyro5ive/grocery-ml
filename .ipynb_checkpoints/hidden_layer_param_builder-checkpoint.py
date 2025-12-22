@@ -1,19 +1,17 @@
 import copy
 
 class HiddenLayerParamSetBuilder:
-
+    
     @staticmethod
     def BuildHiddenLayerSizeSets(baseline_params, start, step, stop):
-    
+        import copy
         results = []
-
         value = start
         while value <= stop:
             params_copy = copy.deepcopy(baseline_params)
-            params_copy["hiddenLayers"] = [value]
+            params_copy["buildParams"]["layers"] = [value]
             results.append(params_copy)
             value += step
-
         return results
     ###############################################
 
