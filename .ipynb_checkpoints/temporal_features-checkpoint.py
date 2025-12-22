@@ -19,17 +19,17 @@ class TemporalFeatures:
 
     @staticmethod
     def AvgDaysBetweenTrips(grouped):
-        return grouped["daysSinceLastTrip"].replace(0, np.nan).expanding().mean().fillna(0)    
+        return grouped["daysSinceLastTrip_feat"].replace(0, np.nan).expanding().mean().fillna(0)    
     #######################################################
     @staticmethod
     def CreateDateFeatures(grouped):
         dt = grouped["date"]
-        grouped["year"]    = dt.dt.year
-        grouped["month"]   = dt.dt.month
-        grouped["day"]     = dt.dt.day
-        grouped["dow"]     = dt.dt.dayofweek
-        grouped["doy"]     = dt.dt.dayofyear
-        grouped["quarter"] = dt.dt.quarter
+        grouped["year_feat"]    = dt.dt.year
+        grouped["month_cyc_feat"]   = dt.dt.month
+        grouped["day_cyc_feat"]     = dt.dt.day
+        grouped["dow_cyc_feat"]     = dt.dt.dayofweek
+        grouped["doy_feat"]     = dt.dt.dayofyear
+        grouped["quarter_feat"] = dt.dt.quarter
         return grouped;
     #######################################################
     @staticmethod
@@ -45,8 +45,8 @@ class TemporalFeatures:
         history = []
     
         col_date = group.columns.get_loc("date")
-        col_buy = group.columns.get_loc("didBuy")
-        col_freq = {w: group.columns.get_loc(f"freq_{w}") for w in freq_windows}
+        col_buy = group.columns.get_loc("didBuy_feat")
+        col_freq = {w: group.columns.get_loc(f"freq_{w}_feat") for w in freq_windows}
     
         for i in range(len(group)):
             cur_date = group.iat[i, col_date]
