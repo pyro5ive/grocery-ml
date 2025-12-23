@@ -20,7 +20,7 @@ from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 from sklearn.metrics import silhouette_score
 
-from dataset_utils import DatasetUtils
+#from dataset_utils import DatasetUtils
 from temporal_features import TemporalFeatures
 from holiday_features import HolidayFeatures
 from wallmart_rcpt_parser import WallmartRecptParser
@@ -31,16 +31,19 @@ asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 class GroceryML:
 
-    
+    def __init__(self):
+        self.item_to_id = None
+        self.id_to_item = None
+        
+    ###########################################################################################
     def BuildCombinedDataset(self):
-
 
         winndixie_df = self.BuildWinnDixie();
         wallmaert_df = self.BuildWallMart();
         weather_df = self.BuildWeather();
         
         self.combined_df = pd.concat([winndixie_df, wallmaert_df], ignore_index=True)
-         self.combined_df["item"] = (self.combined_df["item"]
+        self.combined_df["item"] = (self.combined_df["item"]
                 .str.replace(r"^\s*[-–—]\s*", "", regex=True)
                 .str.strip()
         )
@@ -60,9 +63,7 @@ class GroceryML:
         # )
         self.combined_df["item_due_ratio"] = compute_due_ratio(combined_df)
         # remove - 
-       
-
-        
+             
         freq_windows = [7, 15, 30, 90, 365]
         max_w = max(freq_windows)
         # initialize columns
@@ -78,10 +79,36 @@ class GroceryML:
         
         self.combined_df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]] = (
             self.combined_df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]].fillna(0.0)
-        )
-        
-        
+        ) 
     ###########################################################################################
+
+    def CreateItemIds(self, df):
+        if self.id_to_item is not None:
+            raise RuntimeError("ItemId mapping already initialized")
+
+        unique_items = sorted(df["item"].unique())
+        self.item_to_id = {item: idx for idx, item in enumerate(unique_items)}
+        self.id_to_item = {idx: item for item, idx in self.item_to_id.items()}
+
+        df["itemId"] = df["item"].map(self.item_to_id)
+        df.reset_index(drop=True, inplace=True)
+        return df
+    ###########################################################################################
+    
+    def MapItemIdsToNames(self, df, col_name="item"):
+        if self.id_to_item is None:
+            raise RuntimeError("ItemId mapping not initialized")
+
+        df[col_name] = df["itemId"].map(self.id_to_item)
+        return df
+    ###########################################################################################
+
+    def GetIdToItem(self):
+        if self.id_to_item is None:
+            raise RuntimeError("ItemId mapping not initialized")
+        return self.id_to_item    
+    ###########################################################################################
+
     def build_habit_features(self,df, tau_days=120):
         df = df.copy()
         df["date"] = pd.to_datetime(df["date"])
@@ -224,11 +251,6 @@ class GroceryML:
         
         # 5. NOW REPLACE combined_df with df_full
         self.combined_df = df_full.copy()
-    ###########################################################################################
-
-
-    def CreateItemIds(self):
-        self.combined_df, self.id_to_item = DatasetUtils.CreateItemId(self.combined_df)
     ###########################################################################################
 
     def Canonicalize(self):
@@ -581,7 +603,8 @@ class GroceryML:
         x_features = normalized_latest_rows_df[feature_cols].to_numpy(np.float32)
         x_item_idx = normalized_latest_rows_df["itemId"].to_numpy(np.int32)
         export_df_to_excel_table(normalized_latest_rows_df, "normalized_latest_rows_df.xlsx", ".");
-                                 
+        normalized_latest_rows_df = self.MapItemIdsToNames();
+        
         return {
             "prediction_df": normalized_latest_rows_df,
             "x_features": x_features,
