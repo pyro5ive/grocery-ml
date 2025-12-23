@@ -11,14 +11,31 @@ class TemporalFeatures:
         freq30_over365 = freq30 / (freq365 + epsilon)
         return freq7_over30, freq30_over365
     #######################################################
-    
     @staticmethod
-    def DaysSinceLastTrip(grouped):
+    def get_period_for_column(col_name):
+        """
+        Returns the cycle period for a cyclical feature column.
+        """
+
+        if col_name == "month_cyc_feat":
+            return 12
+
+        if col_name == "day_cyc_feat":
+            return 31
+
+        if col_name == "dow_cyc_feat":
+            return 7
+
+        raise ValueError(f"Unknown cyclical feature column: {col_name}")
+    ###############################################
+
+    @staticmethod
+    def ComputeDaysSinceLastTrip(grouped):
         return grouped["date"].diff().dt.days.fillna(0)
     #######################################################
 
     @staticmethod
-    def AvgDaysBetweenTrips(grouped):
+    def ComputeAvgDaysBetweenTrips(grouped):
         return grouped["daysSinceLastTrip_feat"].replace(0, np.nan).expanding().mean().fillna(0)    
     #######################################################
     @staticmethod

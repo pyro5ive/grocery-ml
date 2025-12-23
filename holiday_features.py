@@ -4,7 +4,7 @@ from pandas.tseries.holiday import USFederalHolidayCalendar
 class HolidayFeatures:
 
     @staticmethod
-    def daysUntilNextHoliday(d):
+    def ComputeDaysUntilNextHoliday(d):
         d = pd.to_datetime(d)
         holidays = USFederalHolidayCalendar().holidays()
         diffs = (holidays - d).days
@@ -13,7 +13,7 @@ class HolidayFeatures:
     ####################################################################
 
     @staticmethod
-    def daysSinceLastHoliday(d):
+    def ComputeDaysSinceLastHoliday(d):
         d = pd.to_datetime(d)
         holidays = USFederalHolidayCalendar().holidays()
         diffs = (d - holidays).days
@@ -22,15 +22,15 @@ class HolidayFeatures:
     ####################################################################
 
     @staticmethod
-    def holidayProximityIndex(d, scale=30):
+    def ComputeHolidayProximityIndex(d, scale=30):
         """
         Returns a smooth value between -1 and +1 depending on
         distance to holidays. Neural networks LOVE this.
         Negative = after holiday
         Positive = before holiday
         """
-        before = HolidayFeatures.daysUntilNextHoliday(d)
-        after = HolidayFeatures.daysSinceLastHoliday(d)
+        before = HolidayFeatures.ComputeDaysUntilNextHoliday(d)
+        after = HolidayFeatures.ComputeDaysSinceLastHoliday(d)
     
         if pd.isna(before) and pd.isna(after):
             return 0
@@ -43,7 +43,7 @@ class HolidayFeatures:
     ####################################################################
     
     @staticmethod
-    def daysUntilBirthday(d, bday):
+    def ComputeDaysUntilBirthday(d, bday):
         d = pd.to_datetime(d)
         bday = pd.to_datetime(bday)
     
@@ -56,7 +56,7 @@ class HolidayFeatures:
     ####################################################################
     
     @staticmethod
-    def daysSinceBirthday(d, bday):
+    def ComputeDaysSinceBirthday(d, bday):
         d = pd.to_datetime(d)
         bday = pd.to_datetime(bday)
     
@@ -68,45 +68,4 @@ class HolidayFeatures:
             return (d - last_year).days
     ####################################################################
 
-    @staticmethod
-    def daysUntilSchoolStart(d):
-        d = pd.to_datetime(d)
-        start = pd.Timestamp(d.year, 8, 15)
-        if d <= start:
-            return (start - d).days
-        else:
-            next_start = pd.Timestamp(d.year + 1, 8, 15)
-            return (next_start - d).days
-    ####################################################################
-
-    @staticmethod
-    def daysUntilSchoolEnd(d):
-        d = pd.to_datetime(d)
-        end = pd.Timestamp(d.year, 5, 31)
-        if d <= end:
-            return (end - d).days
-        else:
-            next_end = pd.Timestamp(d.year + 1, 5, 31)
-            return (next_end - d).days
-    ####################################################################
-
-    @staticmethod
-    def schoolSeasonIndex(d):
-        """
-        Smooth 0→1 curve inside school season.
-        <0 before season, >1 after.
-        Good for neural nets.
-        """
-        d = pd.to_datetime(d)
-        start = pd.Timestamp(d.year, 8, 15)
-        end   = pd.Timestamp(d.year, 5, 31)
-    
-        # If date is after Dec, school season continues in Jan–May.
-        if d < start:
-            return -((start - d).days) / 365.0
-        elif start <= d <= end:
-            return (d - start).days / (end - start).days
-        else:
-            return (d - end).days / 365.0
-    
-    ####################################################################
+ 
