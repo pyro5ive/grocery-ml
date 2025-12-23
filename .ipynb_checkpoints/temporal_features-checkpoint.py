@@ -28,6 +28,41 @@ class TemporalFeatures:
 
         raise ValueError(f"Unknown cyclical feature column: {col_name}")
     ###############################################
+    
+     @staticmethod
+    def compute_days_since_last_purchase(df, reference_date_col="date"):
+        df = df.sort_values(["itemId", reference_date_col]).reset_index(drop=True)
+        df["daysSinceLastPurchase_feat"] = np.nan
+        last_purchase_date = {}
+        for i in range(len(df)):
+            itemId = df.at[i, "itemId"]
+            current_date = df.at[i, reference_date_col]
+            if itemId in last_purchase_date:
+                df.at[i, "daysSinceLastPurchase_feat"] = (current_date - last_purchase_date[itemId]).days
+            else:
+                df.at[i, "daysSinceLastPurchase_feat"] = np.nan
+            if "didBuy_target" in df.columns and df.at[i, "didBuy_target"] == 1:
+                last_purchase_date[itemId] = current_date
+    
+        df["daysSinceLastPurchase_feat"] = df["daysSinceLastPurchase_feat"].fillna(0)
+        return df
+    ############################################################
+    
+    @staticmethod
+    def compute_avg_days_between_purchases(df):
+        df = df.sort_values(["itemId", "date"]).reset_index(drop=True)
+        purchase_gap = df.where(df["didBuy_target"] == 1).groupby("itemId")["date"].diff().dt.days
+        avg_gap = purchase_gap.groupby(df["itemId"]).expanding().mean().reset_index(level=0, drop=True)
+        df["avgDaysBetweenPurchases_feat"] = avg_gap.groupby(df["itemId"]).ffill().fillna(0)
+        return df
+    #######################################################
+    
+    @staticmethod
+    def compute_due_ratio(df, cap=3.0):
+        ratio = df["daysSinceLastPurchase_feat"] / df["avgDaysBetweenPurchases_feat"]
+        ratio = ratio.replace([np.inf, -np.inf], np.nan).fillna(0)
+        return ratio.clip(0, cap)
+    #######################################################
 
     @staticmethod
     def ComputeDaysSinceLastTrip(grouped):
