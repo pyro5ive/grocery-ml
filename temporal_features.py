@@ -29,7 +29,7 @@ class TemporalFeatures:
         raise ValueError(f"Unknown cyclical feature column: {col_name}")
     ###############################################
     
-     @staticmethod
+    @staticmethod
     def compute_days_since_last_purchase(df, reference_date_col="date"):
         df = df.sort_values(["itemId", reference_date_col]).reset_index(drop=True)
         df["daysSinceLastPurchase_feat"] = np.nan
