@@ -120,6 +120,7 @@ class GroceryML:
     
         return pd.DataFrame(rows)
     ###########################################################################################
+    
     def compute_due_ratio(df, cap=3.0):
         ratio = df["daysSinceLastPurchase_feat"] / df["avgDaysBetweenPurchases_feat"]
         ratio = ratio.replace([np.inf, -np.inf], np.nan).fillna(0)
@@ -224,7 +225,6 @@ class GroceryML:
         # 5. NOW REPLACE combined_df with df_full
         self.combined_df = df_full.copy()
     ###########################################################################################
-
 
 
     def CreateItemIds(self):
@@ -364,6 +364,7 @@ class GroceryML:
     
         workbook.save(file_path)
     ###########################################################################################
+    
     def CanonicalizeItems(self, df, patterns, canonical_name):
         """
         For each pattern in `patterns`, find rows where `item` contains the pattern
@@ -371,4 +372,288 @@ class GroceryML:
         """
         for p in patterns:
             mask = df["item"].str.contains(p, case=False, na=False)
-            df.loc[mask, "item"] = canonical_name
+            df.loc[mask, "item"] = canonical_name    
+    ###########################################################################################
+    
+    def export_df(dataframes, dir):
+        for name, df in dataframes.items():
+            csv_path = os.path.join(dir, f"{name}.csv")
+            xlsxPath = os.path.join(dir, f"{name}.xlsx")
+            print(f"Writing CSV: {csv_path}")
+            df.to_csv(csv_path, index=True)
+            print(f"Writing XLSX: {xlsxPath}")
+            export_df_to_excel_table(df, xlsxPath, sheet_name=f"{name}")
+    ###########################################################################################
+      
+    def save_experiment(model, history, dataframes, build_params, train_params, norm_params, base_dir):
+        name_parts = []
+        if "embedding_dim" in build_params:
+            name_parts.append(f"emb{build_params['embedding_dim']}")
+        if "layers" in build_params:
+            hl = "-".join(str(x) for x in build_params["layers"])
+            name_parts.append(f"hl{hl}")
+        if "epochs" in train_params:
+            name_parts.append(f"ep{train_params['epochs']}")
+        if "output_activation" in build_params:
+            name_parts.append(f"outAct_{build_params['output_activation']}")
+    
+        exp_name = "__".join(name_parts) if name_parts else "exp_unlabeled"
+        exp_dir = os.path.join(base_dir, exp_name)
+        print("Saving Exp: ", exp_dir)
+        
+        os.makedirs(exp_dir, exist_ok=True)
+    
+        export_df(dataframes, exp_dir)
+    
+        model.save(os.path.join(exp_dir, "model"))
+        model.save_weights(os.path.join(exp_dir, "weights.h5"))
+    
+        history_path = os.path.join(exp_dir, "history.json")
+        history_file = open(history_path, "w")
+        json.dump(history.history, history_file, indent=2)
+        history_file.close()
+    
+        build_params_path = os.path.join(exp_dir, "build_params.json")
+        build_params_file = open(build_params_path, "w")
+        json.dump(build_params, build_params_file, indent=2)
+        build_params_file.close()
+    
+        train_params_path = os.path.join(exp_dir, "train_params.json")
+        train_params_file = open(train_params_path, "w")
+        json.dump(train_params, train_params_file, indent=2)
+        train_params_file.close()
+    
+        norm_params_path = os.path.join(exp_dir, "norm_params.json")
+        norm_params_file = open(norm_params_path, "w")
+        json.dump(norm_params, norm_params_file, indent=2)
+        norm_params_file.close()
+    
+        print("Saved experiment →", exp_dir)
+
+    ###############################################
+    
+    def fit_normalization_params(combined_df):
+        params = {}
+        feature_cols = [c for c in combined_df.columns if c.endswith("_feat")]
+        cyc_cols = [c for c in feature_cols if c.endswith("_cyc_feat")]
+        num_cols = [c for c in feature_cols if c not in cyc_cols]
+    
+        for col in num_cols:
+            params[col] = {
+                "mean": combined_df[col].mean(),
+                "std": combined_df[col].std()
+            }
+    
+        for col in cyc_cols:
+            params[col] = {
+                "period": TemporalFeatures.get_period_for_column(col)
+            }
+    
+        return params
+    ###############################################
+    
+    def normalize_features(combined_df, norm_params):
+    
+        print("Normalizin df");
+        normalized_df = combined_df.copy()
+        for col, cfg in norm_params.items():
+            if col.endswith("_cyc_feat"):
+                sin_col, cos_col = TemporalFeatures.encode_sin_cos(combined_df[col], cfg["period"])
+                normalized_df[f"{col}_sin_norm"] = sin_col
+                normalized_df[f"{col}_cos_norm"] = cos_col
+                normalized_df.drop(columns=[col], inplace=True)
+    
+            else:
+                mean_val = cfg["mean"]
+                std_val = cfg["std"]
+                norm_col = col.replace("_feat", "_norm")
+    
+                if std_val == 0:
+                    normalized_df[norm_col] = 0.0
+                else:
+                    normalized_df[norm_col] = (combined_df[col] - mean_val) / std_val
+    
+                normalized_df.drop(columns=[col], inplace=True)
+    
+        return normalized_df
+    ###############################################
+
+    def build_and_compile_model(feat_cols_count, item_count, build_params):
+        num_in = layers.Input(shape=(feat_cols_count,))
+        item_in = layers.Input(shape=(), dtype="int32")
+    
+        emb = layers.Embedding(
+            input_dim=item_count,
+            output_dim=build_params["embedding_dim"]
+        )(item_in)
+    
+        x = layers.Concatenate()([num_in, layers.Flatten()(emb)])
+    
+        for neuron_count in build_params["layers"]:
+            x = layers.Dense(neuron_count, activation=build_params["activation"])(x)
+    
+        out = layers.Dense(1, activation=build_params["output_activation"])(x)
+    
+        model = models.Model(inputs=[num_in, item_in], outputs=out)
+    
+        optimizer_name = build_params.get("optimizer", "adam")
+        learning_rate = build_params.get("learning_rate")
+    
+        if optimizer_name == "adam":
+            optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+        elif optimizer_name == "adamw":
+            optimizer = tf.keras.optimizers.AdamW(learning_rate=learning_rate)
+        else:
+            raise ValueError(f"Unsupported optimizer: {optimizer_name}")
+    
+        model.compile(
+            optimizer=optimizer,
+            loss=build_params.get("loss", "mse"),
+            metrics=build_params.get("metrics", ["mae"])
+        )
+    
+        return model
+    ###############################################
+
+
+    def train_model(model, df, feature_cols, target_col, train_params):
+        x_feat = df[feature_cols].to_numpy(np.float32)
+        x_item = df["itemId"].to_numpy(np.int32)
+        y = df[target_col].to_numpy(np.float32)
+    
+        x_feat_tr, x_feat_te, x_item_tr, x_item_te, y_tr, y_te = train_test_split(
+            x_feat, x_item, y, test_size=0.2, random_state=42
+        )
+    
+        history = model.fit(
+            [x_feat_tr, x_item_tr],
+            y_tr,
+            validation_split=0.1,
+            epochs=train_params["epochs"],
+            batch_size=train_params.get("batch_size", 32),
+            verbose=1
+        )
+    
+        return history
+    ###############################################
+
+
+    def build_prediction_input(combined_df, prediction_date, norm_params):
+    
+        print("Building Prediction df");
+        print(f"Prediction date: {prediction_date}")
+        
+        latest_rows_df = (combined_df.sort_values("date").groupby("itemId").tail(1).copy())
+        latest_rows_df["date"] = prediction_date       
+        latest_rows_df["daysSinceLastTrip_feat"] = (prediction_date - combined_df["date"].max()).days
+        latest_rows_df["avgDaysBetweenTrips_feat"] = combined_df["avgDaysBetweenTrips_feat"].iloc[-1]
+    
+        latest_rows_df["daysUntilNextHoliday_feat"] = HolidayFeatures.ComputeDaysUntilNextHoliday(prediction_date)
+        latest_rows_df["daysSinceLastHoliday_feat"] = HolidayFeatures.ComputeDaysSinceLastHoliday(prediction_date)
+        latest_rows_df["holidayProximityIndex_feat"] = HolidayFeatures.ComputeHolidayProximityIndex(prediction_date)
+        latest_rows_df["daysUntilSchoolStart_feat"] = SchoolFeatures.ComputeDaysUntilSchoolStart(prediction_date)
+        latest_rows_df["daysUntilSchoolEnd_feat"] = SchoolFeatures.ComputeDaysUntilSchoolEnd(prediction_date)
+        latest_rows_df["schoolSeasonIndex_feat"] = SchoolFeatures.ComputeSchoolSeasonIndex(prediction_date)
+    
+        latest_rows_df["year_feat"] = prediction_date.year
+        latest_rows_df["month_cyc_feat"] = prediction_date.month
+        latest_rows_df["day_cyc_feat"] = prediction_date.day
+        latest_rows_df["dow_cyc_feat"] = prediction_date.weekday()
+        latest_rows_df["doy_feat"] = prediction_date.timetuple().tm_yday
+        latest_rows_df["quarter_feat"] = ((prediction_date.month - 1) // 3) + 1
+    
+        for item_id in latest_rows_df["itemId"].values:
+            hist = combined_df[combined_df["itemId"] == item_id]
+    
+            #FeatureBuilders.compute_frequency_features(hist, latest_rows_df, item_id, prediction_date)
+    
+            #FeatureBuilders.compute_habit_features(hist, latest_rows_df, item_id, prediction_date)
+    
+        if "didBuy_target" in latest_rows.columns:
+            latest_rows_df.drop(columns=["didBuy_target"], inplace=True)
+    
+        export_df_to_excel_table(latest_rows_df, "latest_rows_df.xlsx", ".");
+        
+        normalized_latest_rows_df = normalize_features(latest_rows_df, norm_params)
+    
+        feature_cols = [c for c in normalized_latest_rows_df.columns if c.endswith("_norm")]
+    
+        x_features = normalized_latest_rows_df[feature_cols].to_numpy(np.float32)
+        x_item_idx = normalized_latest_rows_df["itemId"].to_numpy(np.int32)
+        export_df_to_excel_table(normalized_latest_rows_df, "normalized_latest_rows_df.xlsx", ".");
+                                 
+        return {
+            "prediction_df": normalized_latest_rows_df,
+            "x_features": x_features,
+            "x_item_idx": x_item_idx,
+            "feature_cols": feature_cols
+        }
+    ###############################################
+    
+    
+    def RunExperiment(combined_df, modelBuildParams, modelTrainParams, baseDir):
+        norm_params = fit_normalization_params(combined_df)
+        normalized_df = normalize_features(combined_df, norm_params)
+    
+        feature_cols = [c for c in normalized_df.columns if c.endswith("_norm")]
+        target_cols = [c for c in normalized_df.columns if c.endswith("_target")]
+    
+        if len(target_cols) != 1:
+            raise ValueError("Exactly one target column is required")
+    
+        target_col = target_cols[0]
+    
+        feat_cols_count = len(feature_cols)
+        item_count = int(normalized_df["itemId"].max()) + 1
+    
+        model = build_and_compile_model(feat_cols_count, item_count, modelBuildParams)
+    
+        history = train_model(model, normalized_df, feature_cols, target_col, modelTrainParams)
+       
+        # pred_input = build_prediction_input_df(combined_df, normalized_df["date"].max(), norm_params)
+        pred_input = build_prediction_input(combined_df, pd.Timestamp.now(), norm_params)
+        
+        print("Running Model.Predict()");
+        predictions = model.predict( [pred_input["x_features"], pred_input["x_item_idx"]])
+    
+        prediction_df = pred_input["prediction_df"]
+        prediction_df["prediction"] = predictions
+    
+        dataframes = {
+             "predictions": prediction_df,
+             "normalized_df": normalized_df,
+             "combined_df": combined_df
+         }
+        save_experiment(model, history, dataframes, modelBuildParams, modelTrainParams, norm_params, base_dir=baseDir)
+        # return {
+        #     "model": model,
+        #     "history": history,
+        #     "normalized_df": normalized_df,
+        #     "prediction_df": prediction_df,
+        #     "norm_params": norm_params
+        # }
+    ###############################################
+    
+    
+    def RunPredictionsOnly(combined_df,model_dir,prediction_date):
+        """
+        Loads a trained model + artifacts and runs predictions only.
+        """
+        model = tf.keras.models.load_model(f"{model_dir}/model.keras")
+    
+        with open(f"{model_dir}/norm_params.json", "r") as f:
+            norm_params = json.load(f)
+    
+        pred_input = build_prediction_input(combined_df=combined_df, prediction_date=prediction_date,norm_params=norm_params)
+    
+        predictions = model.predict(
+            [pred_input["x_features"], pred_input["x_item_idx"]]
+        )
+    
+        prediction_df = pred_input["prediction_df"].copy()
+        prediction_df["prediction"] = predictions
+    
+        return prediction_df
+    ###############################################
+
+    
