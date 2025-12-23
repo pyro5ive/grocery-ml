@@ -409,6 +409,7 @@ class GroceryML:
       
     def save_experiment(model, history, dataframes, build_params, train_params, norm_params, base_dir):
         name_parts = []
+       
         if "embedding_dim" in build_params:
             name_parts.append(f"emb{build_params['embedding_dim']}")
         if "layers" in build_params:
@@ -427,31 +428,30 @@ class GroceryML:
     
         export_df(dataframes, exp_dir)
     
-        model.save(os.path.join(exp_dir, "model"))
-        model.save_weights(os.path.join(exp_dir, "weights.h5"))
+        model.save(os.path.join(exp_dir, f"model__{exp_name}"))
+        model.save_weights(os.path.join(exp_dir, f"weights__{exp_name}.h5"))
     
-        history_path = os.path.join(exp_dir, "history.json")
+        history_path = os.path.join(exp_dir, f"history__{exp_name}.json")
         history_file = open(history_path, "w")
         json.dump(history.history, history_file, indent=2)
         history_file.close()
     
-        build_params_path = os.path.join(exp_dir, "build_params.json")
+        build_params_path = os.path.join(exp_dir, f"build_params__{exp_name}.json")
         build_params_file = open(build_params_path, "w")
         json.dump(build_params, build_params_file, indent=2)
         build_params_file.close()
     
-        train_params_path = os.path.join(exp_dir, "train_params.json")
+        train_params_path = os.path.join(exp_dir, f"train_params__{exp_name}.json")
         train_params_file = open(train_params_path, "w")
         json.dump(train_params, train_params_file, indent=2)
         train_params_file.close()
     
-        norm_params_path = os.path.join(exp_dir, "norm_params.json")
+        norm_params_path = os.path.join(exp_dir, f"norm_params__{exp_name}.json")
         norm_params_file = open(norm_params_path, "w")
         json.dump(norm_params, norm_params_file, indent=2)
         norm_params_file.close()
-    
-        print("Saved experiment →", exp_dir)
 
+        print("Saved experiment →", exp_dir)
     ###############################################
     
     def fit_normalization_params(combined_df):
