@@ -4,7 +4,7 @@ import os
 class WallmartRecptParser:
     
     @staticmethod
-    def ImportWallMart(folder_path: str) -> pd.DataFrame:
+    def BuildWallMart(folder_path: str) -> pd.DataFrame:
         """
         Import all Walmart receipt CSV files from a folder.
         Adds a 'source' column set to the CSV filename.
@@ -22,13 +22,15 @@ class WallmartRecptParser:
             return pd.DataFrame()
     
         df = pd.concat(dataframes, ignore_index=True)
+        
         df["Product Description"] = (
             df["Product Description"]
             .str.replace("Great Value", "", regex=False)
             .str.replace("Freshness Guaranteed", "", regex=False)
             .str.strip()
         )
-    
+        
+        
         ## remove some non-food items
         df = df[
             ~df["Product Description"].str.contains("Mainstays", case=False, na=False)
@@ -39,6 +41,9 @@ class WallmartRecptParser:
             &
             ~df["Product Description"].str.contains("Athletic", case=False, na=False)  
         ]
+
+        df = df.rename(columns={"Order Date": "date","Product Description": "item"})
+        df["date"] = pd.to_datetime(df["date"])
         
         return df
     ##########################################################################

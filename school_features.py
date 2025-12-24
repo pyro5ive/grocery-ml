@@ -2,7 +2,7 @@ import pandas as pd
 class SchoolFeatures:
     
     @staticmethod
-    def ComputeDaysUntilSchoolStart(d):
+    def compute_days_until_school_start(d):
         d = pd.to_datetime(d)
         start = pd.Timestamp(d.year, 8, 15)
         if d <= start:
@@ -13,7 +13,7 @@ class SchoolFeatures:
     ####################################################################
 
     @staticmethod
-    def ComputeDaysUntilSchoolEnd(d):
+    def compute_days_until_school_end(d):
         d = pd.to_datetime(d)
         end = pd.Timestamp(d.year, 5, 31)
         if d <= end:
@@ -24,7 +24,7 @@ class SchoolFeatures:
     ####################################################################
 
     @staticmethod
-    def ComputeSchoolSeasonIndex(d):
+    def compute_school_season_index(d):
         """
         Smooth 0→1 curve inside school season.
         <0 before season, >1 after.

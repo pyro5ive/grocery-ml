@@ -4,7 +4,7 @@ from pandas.tseries.holiday import USFederalHolidayCalendar
 class HolidayFeatures:
 
     @staticmethod
-    def ComputeDaysUntilNextHoliday(d):
+    def compute_days_until_next_holiday(d):
         d = pd.to_datetime(d)
         holidays = USFederalHolidayCalendar().holidays()
         diffs = (holidays - d).days
@@ -13,7 +13,7 @@ class HolidayFeatures:
     ####################################################################
 
     @staticmethod
-    def ComputeDaysSinceLastHoliday(d):
+    def compute_days_since_last_holiday(d):
         d = pd.to_datetime(d)
         holidays = USFederalHolidayCalendar().holidays()
         diffs = (d - holidays).days
@@ -22,15 +22,15 @@ class HolidayFeatures:
     ####################################################################
 
     @staticmethod
-    def ComputeHolidayProximityIndex(d, scale=30):
+    def compute_holiday_proximity_index(d, scale=30):
         """
         Returns a smooth value between -1 and +1 depending on
         distance to holidays. Neural networks LOVE this.
         Negative = after holiday
         Positive = before holiday
         """
-        before = HolidayFeatures.ComputeDaysUntilNextHoliday(d)
-        after = HolidayFeatures.ComputeDaysSinceLastHoliday(d)
+        before = HolidayFeatures.compute_days_until_next_holiday(d)
+        after = HolidayFeatures.compute_days_since_last_holiday(d)
     
         if pd.isna(before) and pd.isna(after):
             return 0
@@ -42,30 +42,30 @@ class HolidayFeatures:
             return -max(0, (scale - after) / scale)
     ####################################################################
     
-    @staticmethod
-    def ComputeDaysUntilBirthday(d, bday):
-        d = pd.to_datetime(d)
-        bday = pd.to_datetime(bday)
+    # @staticmethod
+    # def ComputeDaysUntilBirthday(d, bday):
+    #     d = pd.to_datetime(d)
+    #     bday = pd.to_datetime(bday)
     
-        this_year = pd.Timestamp(d.year, bday.month, bday.day)
-        if d <= this_year:
-            return (this_year - d).days
-        else:
-            next_year = pd.Timestamp(d.year + 1, bday.month, bday.day)
-            return (next_year - d).days
-    ####################################################################
+    #     this_year = pd.Timestamp(d.year, bday.month, bday.day)
+    #     if d <= this_year:
+    #         return (this_year - d).days
+    #     else:
+    #         next_year = pd.Timestamp(d.year + 1, bday.month, bday.day)
+    #         return (next_year - d).days
+    # ####################################################################
     
-    @staticmethod
-    def ComputeDaysSinceBirthday(d, bday):
-        d = pd.to_datetime(d)
-        bday = pd.to_datetime(bday)
+    # @staticmethod
+    # def ComputeDaysSinceBirthday(d, bday):
+    #     d = pd.to_datetime(d)
+    #     bday = pd.to_datetime(bday)
     
-        this_year = pd.Timestamp(d.year, bday.month, bday.day)
-        if d >= this_year:
-            return (d - this_year).days
-        else:
-            last_year = pd.Timestamp(d.year - 1, bday.month, bday.day)
-            return (d - last_year).days
+    #     this_year = pd.Timestamp(d.year, bday.month, bday.day)
+    #     if d >= this_year:
+    #         return (d - this_year).days
+    #     else:
+    #         last_year = pd.Timestamp(d.year - 1, bday.month, bday.day)
+    #         return (d - last_year).days
     ####################################################################
 
  

@@ -125,8 +125,7 @@ class WinnDixieRecptParser:
             correct_qty = int(m.group(1))
             clean_name = m.group(2).strip()
             return clean_name, correct_qty
-        return item_name, qty
-
+        return item_name, qty      
     #########################################################################
     def clean_item_name(self, item: str) -> str:
         if item is None:
