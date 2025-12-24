@@ -51,14 +51,13 @@ class GroceryML:
         #self.canonicalize()
         #self.combined_df["item"] = self.combined_df["item"].apply(ItemNameUtils.clean_item_name)
         self.itemNameUtils.create_item_ids(self.combined_df)  # itemId now stable
-        self.build_trip_level_features()  # trip/date features added AFTER itemId exists
-        # self.build_trip_level_features();
+        #self.build_trip_level_features()  # trip/date features added AFTER itemId exists
+        
         # # self.canonicalize();
         # # self.combined_df["item"] = self.combined_df["item"].apply(ItemNameUtils.clean_item_name)
-        # self.itemNameUtils.create_item_ids(self.combined_df);
         # #
-        #weather_df = WeatherFeatures.BuildWeather();
-        #self.combined_df = self.combined_df.merge(weather_df, on="date", how="left")
+        weather_df = WeatherFeatures.BuildWeather();
+        self.combined_df = self.combined_df.merge(weather_df, on="date", how="left")
         #
         self.back_fill_history();
         self.build_purchase_item_freq_cols();
@@ -207,8 +206,8 @@ class GroceryML:
             .reset_index(drop=True)
         )
     
-        grouped_df["daysSinceLastTrip_feat"]      = TemporalFeatures.compute_days_since_last_trip(grouped_df)
-        grouped_df["avgDaysBetweenTrips_feat"]    = TemporalFeatures.compute_avg_days_between_trips(grouped_df)
+        grouped_df["daysSinceLastTrip_feat"] = TemporalFeatures.create_days_since_last_trip(grouped_df)
+        grouped_df["avgDaysBetweenTrips_feat"] = TemporalFeatures.compute_avg_days_between_trips(grouped_df)
         grouped_df["daysUntilNextHoliday_feat"]   = grouped_df["date"].apply(HolidayFeatures.compute_days_until_next_holiday)
         grouped_df["daysSinceLastHoliday_feat"]   = grouped_df["date"].apply(HolidayFeatures.compute_days_since_last_holiday)
         grouped_df["holidayProximityIndex_feat"]  = grouped_df["date"].apply(HolidayFeatures.compute_holiday_proximity_index)

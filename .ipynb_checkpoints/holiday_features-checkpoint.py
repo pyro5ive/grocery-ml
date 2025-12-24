@@ -1,5 +1,6 @@
 import pandas as pd
 from pandas.tseries.holiday import USFederalHolidayCalendar
+import numpy as np
 
 class HolidayFeatures:
 

@@ -65,13 +65,13 @@ class TemporalFeatures:
     #######################################################
 
     @staticmethod
-    def compute_days_since_last_trip(grouped):
+    def compute_days_since_last_trip(grouped_df):
         return grouped["date"].diff().dt.days.fillna(0)
     #######################################################
 
     @staticmethod
     def compute_avg_days_between_trips(grouped):
-        return grouped["daysSinceLastTrip_feat"].replace(0, np.nan).expanding().mean().fillna(0)    
+        return grouped_df["daysSinceLastTrip_feat"].replace(0, np.nan).expanding().mean().fillna(0)    
     #######################################################
     @staticmethod
     def create_date_features(grouped):
