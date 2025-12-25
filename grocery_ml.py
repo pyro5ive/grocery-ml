@@ -60,11 +60,11 @@ class GroceryML:
         self.build_purchase_item_freq_cols()
 
         self.build_freq_ratios()
-
+        
         self.combined_df = TemporalFeatures.compute_days_since_last_purchase(self.combined_df)
         self.combined_df = TemporalFeatures.compute_avg_days_between_purchases(self.combined_df)
         self.combined_df["item_due_ratio"] = self.compute_due_ratio(self.combined_df)
-  
+        self.create_bulk_adjusted_urgency_ratio()
         # ============================================================
         # MERGE HABIT FEATURES
         # ============================================================
@@ -191,7 +191,7 @@ class GroceryML:
     ###########################################################################################
 
     def build_trip_level_features(self):
-        
+        print("build_trip_level_features()");
         grouped_df = ( self.combined_df[["date"]]
             .drop_duplicates()
             .sort_values("date")
@@ -211,7 +211,33 @@ class GroceryML:
         return grouped_df;
     ###########################################################################################
 
+    def create_bulk_adjusted_urgency_ratio(self):
+        """
+        New column bulkAdjustedUrgencyRatio.
+        Uses bulkFactor only when didBuy_target == 1, else 0.0.
+        """
+        bulk_factor_value = 2.5
+    
+        if "bulkFlag" not in self.combined_df.columns:
+            self.combined_df["bulkAdjustedUrgencyRatio"] = [0.0] * len(self.combined_df)
+            return
+    
+        ratios = []
+        for _, row in self.combined_df.iterrows():
+            if row["didBuy_target"] != 1:
+                ratios.append(0.0)
+                continue
+    
+            bulk_factor = bulk_factor_value if row["bulkFlag"] == 1 else 1.0
+            denominator = row["avgDaysBetweenPurchases"] * bulk_factor
+            ratios.append(0.0 if denominator == 0 else row["daysSinceLastPurchase"] / denominator)
+    
+        self.combined_df["bulkAdjustedUrgencyRatio"] = ratios
+    ###########################################################################################
+    
     def build_purchase_item_freq_cols(self):
+
+        print("build_purchase_item_freq_cols()");
         freq_windows = [7, 15, 30, 90, 365]
         max_w = max(freq_windows)
     
@@ -255,6 +281,9 @@ class GroceryML:
         self.combined_df = pd.concat(result_frames, ignore_index=True)
     ###########################################################################################
 
+    # def build_trip_ratio(self):
+    #     self.combined_df["purchaseToTripRatio"] = combined_df["daysSinceLastPurchase"] / combined_df["avgDaysBetweenPurchases"]
+    
     def build_freq_ratios(self):
         (
             self.combined_df["freq7_over30_feat"],
@@ -267,6 +296,7 @@ class GroceryML:
     ###########################################################################################
         
     def insert_negative_samples(self):
+        print("insert_negative_samples()");
         # 1. Mark actual purchases in the raw receipt rows
         self.combined_df["didBuy_target"] = 1
         # 2. Build complete grid
@@ -366,21 +396,16 @@ class GroceryML:
     
         workbook.save(file_path)
         print(f"   XLSX Done: {file_path}")
+    ###########################################################################################    
 
-    ###########################################################################################
-    
-
-    
     def export_dataframes(self, dataframes, dir):
         for name, df in dataframes.items():
             csv_path = os.path.join(dir, f"{name}.csv")
-            xlsxPath = os.path.join(dir, f"{name}.xlsx")
-            # print(f"Writing CSV: {csv_path}")
-            # df.to_csv(csv_path, index=True)
-            # print(f"  CSV done: {csv_path}")
-            print(f"Writing XLSX: {xlsxPath}")
+            xlsxPath = os.path.join(dir, f"{name}.xlsx")           
             export_df_to_excel_table(df, xlsxPath, sheet_name=f"{name}")
-            print(f"  XLSX Done: {xlsxPath}")
+            print(f"Writing CSV: {csv_path}")
+            df.to_csv(csv_path, index=True)
+            print(f"  CSV done: {csv_path}")
     ###########################################################################################
     
     def save_experiment(self,model, history, dataframes, build_params, train_params, norm_params, base_dir):
@@ -400,20 +425,21 @@ class GroceryML:
         exp_dir = os.path.join(base_dir, exp_name)
         print("Saving Exp: ", exp_dir)
         
-        os.makedirs(exp_dir, exist_ok=True)
-        export_df(dataframes, exp_dir)
-
+        print("Creating dir: {exp_dir}");
+        os.makedirs(exp_dir, exist_ok=True);
+        
         print("Exporting dataframes");
-        for name, df in dataframes.items():
-            csv_path = os.path.join(dir, f"{name}.csv")
-            xlsxPath = os.path.join(dir, f"{name}.xlsx")
-            export_df_to_excel_table(df, xlsxPath, sheet_name=f"{name}")
-            
+        export_dataframes(dataframes, exp_dir)
+
         modelDir = os.path.join(exp_dir, "model")
+        print("Creating model dir: {modelDir}");
         os.makedirs(modelDir, exist_ok=True)
+        
+        print("Saving Model")
         model.save(modelDir)
         model.save_weights(os.path.join(modelDir, "weights.h5"))
-    
+
+        
         history_path = os.path.join(modelDir, "history.json")
         history_file = open(history_path, "w")
         json.dump(history.history, history_file, indent=2)
@@ -454,7 +480,7 @@ class GroceryML:
     
     def normalize_features(self,combined_df, norm_params):
     
-        print("Normalizin df");
+        print("normalize_features()");
         normalized_df = combined_df.copy()
         for col, cfg in norm_params.items():
             if col.endswith("_cyc_feat"):
@@ -516,6 +542,7 @@ class GroceryML:
     ###########################################################################################
     
     def train_model(self, model, df, feature_cols, target_col, train_params):
+        print("train_model()");
         x_feat = df[feature_cols].to_numpy(np.float32)
         x_item = df["itemId"].to_numpy(np.int32)
         y = df[target_col].to_numpy(np.float32)
@@ -537,9 +564,9 @@ class GroceryML:
     ###########################################################################################
     
     
-    def build_prediction_input(self,combined_df, prediction_date, norm_params):
+    def build_prediction_input(self, combined_df, prediction_date, norm_params):
     
-        print("Building Prediction df");
+        print("build_prediction_input()");
         print(f"Prediction date: {prediction_date.strftime('%Y-%m-%d')}")
         
         latest_rows_df = (combined_df.sort_values("date").groupby("itemId").tail(1).copy())
@@ -548,7 +575,6 @@ class GroceryML:
         latest_rows_df["daysSinceLastTrip_feat"] = (prediction_date - combined_df["date"].max()).days
         latest_rows_df["avgDaysBetweenTrips_feat"] = combined_df["avgDaysBetweenTrips_feat"].iloc[-1]  
         
-      
         last_purchase_dates = (combined_df.sort_values("date").groupby("itemId")["date"].last().reindex(latest_rows_df["itemId"]))
         last_purchase_dates = pd.to_datetime(last_purchase_dates)
         latest_rows_df["daysSinceLastPurchase_feat"] = (prediction_date - last_purchase_dates).dt.days
@@ -564,12 +590,12 @@ class GroceryML:
         
         latest_rows_df["item_due_ratio_feat"] = TemporalFeatures.compute_due_ratio(latest_rows_df)
         
-        latest_rows_df["daysUntilNextHoliday_feat"] = HolidayFeatures.ComputeDaysUntilNextHoliday(prediction_date)
-        latest_rows_df["daysSinceLastHoliday_feat"] = HolidayFeatures.ComputeDaysSinceLastHoliday(prediction_date)
-        latest_rows_df["holidayProximityIndex_feat"] = HolidayFeatures.ComputeHolidayProximityIndex(prediction_date)
-        latest_rows_df["daysUntilSchoolStart_feat"] = SchoolFeatures.ComputeDaysUntilSchoolStart(prediction_date)
-        latest_rows_df["daysUntilSchoolEnd_feat"] = SchoolFeatures.ComputeDaysUntilSchoolEnd(prediction_date)
-        latest_rows_df["schoolSeasonIndex_feat"] = SchoolFeatures.ComputeSchoolSeasonIndex(prediction_date)
+        latest_rows_df["daysUntilNextHoliday_feat"] = HolidayFeatures.compute_days_until_next_holiday(prediction_date)
+        latest_rows_df["daysSinceLastHoliday_feat"] = HolidayFeatures.compute_days_since_last_holiday(prediction_date)
+        latest_rows_df["holidayProximityIndex_feat"] = HolidayFeatures.compute_holiday_proximity_index(prediction_date)
+        latest_rows_df["daysUntilSchoolStart_feat"] = SchoolFeatures.compute_days_until_school_start(prediction_date)
+        latest_rows_df["daysUntilSchoolEnd_feat"] = SchoolFeatures.compute_days_until_school_end(prediction_date)
+        latest_rows_df["schoolSeasonIndex_feat"] = SchoolFeatures.compute_school_season_index(prediction_date)
     
         latest_rows_df["year_feat"] = prediction_date.year
         latest_rows_df["month_cyc_feat"] = prediction_date.month
@@ -589,7 +615,7 @@ class GroceryML:
         if "didBuy_target" in latest_rows_df.columns:
             latest_rows_df.drop(columns=["didBuy_target"], inplace=True)
     
-        export_df_to_excel_table(latest_rows_df, "latest_rows_df.xlsx", ".");
+        self.export_df_to_excel_table(latest_rows_df, "latest_rows_df.xlsx", ".");
         
         normalized_latest_rows_df = normalize_features(latest_rows_df, norm_params)
     
@@ -609,7 +635,9 @@ class GroceryML:
     ###########################################################################################
 
     
-    def RunExperiment(self, combined_df, modelBuildParams, modelTrainParams, baseDir):
+    def run_experiment(self, combined_df, modelBuildParams, modelTrainParams, baseDir):
+        
+        print("run_experiment() ");
         norm_params = self.fit_normalization_params(combined_df)
         normalized_df = self.normalize_features(combined_df, norm_params)
     
