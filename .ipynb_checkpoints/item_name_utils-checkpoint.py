@@ -42,8 +42,6 @@ class ItemNameUtils:
         df[col_name] = df["itemId"].map(self.id_to_item)
         return df
     ###########################################################################################
-
-    ###########################################################################################
     
     @staticmethod
     def clean_item_name(name: str) -> str:

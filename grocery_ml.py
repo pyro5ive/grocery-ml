@@ -1,5 +1,5 @@
 
-
+import time
 import pandas as pd
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple
@@ -63,7 +63,7 @@ class GroceryML:
         
         self.combined_df = TemporalFeatures.compute_days_since_last_purchase(self.combined_df)
         self.combined_df = TemporalFeatures.compute_avg_days_between_purchases(self.combined_df)
-        self.combined_df["item_due_ratio"] = self.compute_due_ratio(self.combined_df)
+        self.combined_df["item_due_ratio_feat"] = self.compute_due_ratio(self.combined_df)
         
         #self.create_bulkAdjustedUrgencyRatio_for_training(self.combined_df);
         # ============================================================
@@ -148,7 +148,7 @@ class GroceryML:
         return ratio.clip(0, cap)
     ###########################################################################################
 
-    def compute_due_score(self, df,itemId=None,use_sigmoid=True,normalize=False, weights=None):
+    def compute_due_score(self, df, itemId=None, use_sigmoid=True, normalize=False, weights=None):
         
         if weights is None:
             weights = {
@@ -396,7 +396,7 @@ class GroceryML:
         return winndixie_df;
     ###########################################################################################
 
-    def export_df_to_excel_table(self, df, file_path, sheet_name="Data"):
+    def export_df_to_excel_table(self, df, base_path_without_ext, sheet_name="Data"):
         """
         Export a pandas DataFrame to an Excel file as a proper Excel Table
         with no duplicated header rows.
@@ -404,6 +404,7 @@ class GroceryML:
         from openpyxl import load_workbook
         from openpyxl.worksheet.table import Table, TableStyleInfo
 
+        file_path = f"{base_path_without_ext}.xlsx"
         print(f"Writing XLSX: {file_path}")
 
         df.to_excel(file_path, sheet_name=sheet_name, index=False)
@@ -433,67 +434,62 @@ class GroceryML:
         print(f"   XLSX Done: {file_path}")
     ###########################################################################################    
 
-    def export_dataframes(self, dataframes, dir):
+    def export_dataframe_to_csv(self, df, base_path_without_ext):
+        file_path = f"{base_path_without_ext}.csv"
+        print(f"Writing CSV: {file_path}")
+        df.to_csv(file_path, index=True)
+        print(f"  CSV done: {file_path}")
+    ###########################################################################################    
+
+    def export_dataframes_with_exp_name(self, dataframes, path, exp_suffix):
         for name, df in dataframes.items():
-            csv_path = os.path.join(dir, f"{name}.csv")
-            xlsxPath = os.path.join(dir, f"{name}.xlsx")           
-            self.export_df_to_excel_table(df, xlsxPath, sheet_name=f"{name}")
-            print(f"Writing CSV: {csv_path}")
-            df.to_csv(csv_path, index=True)
-            print(f"  CSV done: {csv_path}")
+            base = os.path.join(path, f"{name}-{exp_suffix}")
+            self.export_df_to_excel_table(df, base, sheet_name=f"{name}")
+            #self.export_dataframe_to_csv(df, base)
     ###########################################################################################
-    
+    def write_json(self, obj, path):
+        f = open(path, "w")
+        json.dump(obj, f, indent=2)
+        f.close()
+    ###########################################################################################
+        
     def save_experiment(self,model, history, dataframes, build_params, train_params, norm_params, base_dir):
         name_parts = []
        
         if "embedding_dim" in build_params:
-            name_parts.append(f"emb{build_params['embedding_dim']}")
+            name_parts.append(f"e{build_params['embedding_dim']}")
         if "layers" in build_params:
             hl = "-".join(str(x) for x in build_params["layers"])
-            name_parts.append(f"hl{hl}")
+            name_parts.append(f"l{hl}")
         if "epochs" in train_params:
             name_parts.append(f"ep{train_params['epochs']}")
         if "output_activation" in build_params:
-            name_parts.append(f"outAct_{build_params['output_activation']}")
-    
-        exp_name = "__".join(name_parts) if name_parts else "exp_unlabeled"
-        exp_dir = os.path.join(base_dir, exp_name)
-        print("Saving Exp: ", exp_dir)
+            name_parts.append(f"oa_{build_params['output_activation']}")
+
+        # add uniqueness to avoid overwrite
+        base_name = "__".join(name_parts) if name_parts else "exp_unlabeled"
+        short_id = str(abs(hash(time.time())))[:6]
+        exp_name = f"{base_name}__{short_id}"
+
+        exp_dir = os.path.join(base_dir, exp_name)      
         
-        print("Creating dir: {exp_dir}");
+        print(f"Creating dir: {exp_dir}");
         os.makedirs(exp_dir, exist_ok=True);
         
-        print("Exporting dataframes");
-        export_dataframes(dataframes, exp_dir)
+        print("Exporting dataframes:");
+        self.export_dataframes_with_exp_name(dataframes, exp_dir, exp_name)
 
         modelDir = os.path.join(exp_dir, "model")
-        print("Creating model dir: {modelDir}");
+        print(f"Creating model dir: {modelDir}");
         os.makedirs(modelDir, exist_ok=True)
         
         print("Saving Model")
         model.save(modelDir)
         model.save_weights(os.path.join(modelDir, "weights.h5"))
-
-        
-        history_path = os.path.join(modelDir, "history.json")
-        history_file = open(history_path, "w")
-        json.dump(history.history, history_file, indent=2)
-        history_file.close()
-    
-        build_params_path = os.path.join(exp_dir, "build_params.json")
-        build_params_file = open(build_params_path, "w")
-        json.dump(build_params, build_params_file, indent=2)
-        build_params_file.close()
-    
-        train_params_path = os.path.join(exp_dir, "train_params.json")
-        train_params_file = open(train_params_path, "w")
-        json.dump(train_params, train_params_file, indent=2)
-        train_params_file.close()
-    
-        norm_params_path = os.path.join(exp_dir, "norm_params.json")
-        norm_params_file = open(norm_params_path, "w")
-        json.dump(norm_params, norm_params_file, indent=2)
-        norm_params_file.close()
+        self.write_json(history.history, os.path.join(modelDir, "history.json"))
+        self.write_json(build_params,    os.path.join(exp_dir,  "build_params.json"))
+        self.write_json(train_params,    os.path.join(exp_dir,  "train_params.json"))
+        self.write_json(norm_params,     os.path.join(exp_dir,  "norm_params.json"))
     
         print("Saved experiment →", exp_dir)
     ###########################################################################################
@@ -598,7 +594,7 @@ class GroceryML:
        
         x_features = normalized_latest_rows_df[feature_cols].to_numpy(np.float32)
         x_item_idx = normalized_latest_rows_df["itemId"].to_numpy(np.int32)
-        export_df_to_excel_table(normalized_latest_rows_df, "normalized_latest_rows_df.xlsx", ".");
+        self.export_df_to_excel_table(normalized_latest_rows_df, "normalized_latest_rows_df.xlsx", ".");
        
         
         return {
@@ -666,9 +662,7 @@ class GroceryML:
     
         return history
     ###########################################################################################
- 
-
-    
+  
     def run_experiment(self, combined_df, modelBuildParams, modelTrainParams, baseDir):
         
         print("run_experiment() ");
@@ -698,9 +692,9 @@ class GroceryML:
     
         prediction_df = pred_input["prediction_df"]
         prediction_df.insert(3, "prediction",  predictions)    
-    
-        prediction_df = dataset_utils.MapItemIdsToNames(prediction_df)
-    
+        prediction_df = self.itemNameUtils.map_item_ids_to_names(prediction_df)
+        prediction_df = prediction_df.sort_values("prediction", ascending=False).reset_index(drop=True)
+        
         dataframes = {
             "predictions": prediction_df,
             "normalized_df": normalized_df,
@@ -708,27 +702,32 @@ class GroceryML:
         }
         self.save_experiment(model, history, dataframes, modelBuildParams, modelTrainParams, norm_params, base_dir=baseDir)
     ###########################################################################################
-    
-    @staticmethod
-    def RunPredictionsOnly(combined_df,model_dir,prediction_date):
+    def RunPredictionsOnly(self, combined_df, model_dir, prediction_date):
         """
         Loads a trained model + artifacts and runs predictions only.
+        Same behavior as run_experiment(), minus training + saving.
         """
-        model = tf.keras.models.load_model(f"{model_dir}/model.keras")
+        print("RunPredictionsOnly()")
     
-        with open(f"{model_dir}/norm_params.json", "r") as f:
+        # load model + artifacts
+        model = tf.keras.models.load_model(model_dir)
+    
+        with open(os.path.join(model_dir, "norm_params.json"), "r") as f:
             norm_params = json.load(f)
     
-        pred_input = build_prediction_input(combined_df=combined_df, prediction_date=prediction_date,norm_params=norm_params)
+        # build input rows
+        pred_input = self.build_prediction_input(combined_df, prediction_date, norm_params)
     
-        predictions = model.predict(
-            [pred_input["x_features"], pred_input["x_item_idx"]]
-        )
+        # run predict
+        print("Running Model.Predict()")
+        predictions = model.predict([pred_input["x_features"], pred_input["x_item_idx"]])
     
+        # attach + post-process
         prediction_df = pred_input["prediction_df"].copy()
         prediction_df["prediction"] = predictions
+        prediction_df = self.itemNameUtils.map_item_ids_to_names(prediction_df)
+        prediction_df = prediction_df.sort_values("prediction", ascending=False).reset_index(drop=True)
     
         return prediction_df
-   ###########################################################################################
-
-    
+    ###########################################################################################
+   

@@ -1,7 +1,0 @@
-{
-  "embedding_dim": 12,
-  "hiddenLayers": [
-    512
-  ],
-  "output_activation": "relu"
-}
