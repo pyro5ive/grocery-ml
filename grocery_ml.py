@@ -42,33 +42,24 @@ class GroceryML:
         
         winndixie_df = self.build_winn_dixie_df();
         wallmart_df = WallmartRecptParser.build_wall_mart_df("./walmart");
-        self.combined_df = pd.concat([winndixie_df, wallmart_df], ignore_index=True)
-        #     combined_df = pd.concat(
-        #     [winndixie_df, wallmart_df[["date", "item", "source"]]],
-        #     ignore_index=True
-        # )
+        #self.combined_df = pd.concat([winndixie_df, wallmart_df], ignore_index=True)
+        self.combined_df = pd.concat([winndixie_df, wallmart_df[["date", "item", "source"]]],ignore_index=True)
+ 
         
-        #self.canonicalize()
-        #self.combined_df["item"] = self.combined_df["item"].apply(ItemNameUtils.clean_item_name)
-        self.itemNameUtils.create_item_ids(self.combined_df)  # itemId now stable
-        #self.build_trip_level_features()  # trip/date features added AFTER itemId exists
+        self.canonicalize()
+        self.combined_df["item"] = self.combined_df["item"].apply(ItemNameUtils.clean_item_name)
         
-        # # self.canonicalize();
-        # # self.combined_df["item"] = self.combined_df["item"].apply(ItemNameUtils.clean_item_name)
-        # #
-        weather_df = WeatherFeatures.BuildWeather();
-        self.combined_df = self.combined_df.merge(weather_df, on="date", how="left")
-        #
-        self.back_fill_history();
-        self.build_purchase_item_freq_cols();
-        (
-            self.combined_df["freq7_over30_feat"],
-            self.combined_df["freq30_over365_feat"],
-        ) = TemporalFeatures.compute_freq_ratios(
-            self.combined_df["freq_7_feat"],
-            self.combined_df["freq_30_feat"],
-            self.combined_df["freq_365_feat"],
-        )
+        self.combined_df = self.itemNameUtils.create_item_ids(self.combined_df)
+        self.insert_negative_samples()
+        
+        df_weather = WeatherFeatures.BuildWeather().reset_index()
+        self.combined_df = self.combined_df.merge(df_weather, on="date", how="left")
+
+        trip_df = self.build_trip_level_features()
+        self.combined_df = self.combined_df.merge(trip_df, on="date", how="left")
+        self.build_purchase_item_freq_cols()
+
+        self.build_freq_ratios()
 
         self.combined_df = TemporalFeatures.compute_days_since_last_purchase(self.combined_df)
         self.combined_df = TemporalFeatures.compute_avg_days_between_purchases(self.combined_df)
@@ -200,6 +191,7 @@ class GroceryML:
     ###########################################################################################
 
     def build_trip_level_features(self):
+        
         grouped_df = ( self.combined_df[["date"]]
             .drop_duplicates()
             .sort_values("date")
@@ -216,29 +208,9 @@ class GroceryML:
         grouped_df["schoolSeasonIndex_feat"]      = grouped_df["date"].apply(SchoolFeatures.compute_school_season_index)
     
         grouped_df = TemporalFeatures.create_date_features(grouped_df)
-        self.combined_df = self.combined_df.merge(grouped_df, on="date", how="left")
-
-        
-    # def build_trip_level_features(self):
-    #     # 1. Build grouped table (one row per trip date)
-    #     grouped_df = ( self.combined_df[["date"]]
-    #         .drop_duplicates()
-    #         .sort_values("date")
-    #         .reset_index(drop=True)
-    #     )
-    #     grouped_df["daysSinceLastTrip_feat"] = TemporalFeatures.compute_days_since_last_trip(grouped_df)
-    #     grouped_df["avgDaysBetweenTrips_feat"] = TemporalFeatures.compute_avg_days_between_trips(grouped_df)
-    #     # 3. Holiday / School features
-    #     grouped_df["daysUntilNextHoliday_feat"] = grouped_df["date"].apply(HolidayFeatures.compute_days_until_next_holiday)
-    #     grouped_df["daysSinceLastHoliday_feat"] = grouped_df["date"].apply(HolidayFeatures.compute_days_since_last_holiday)
-    #     grouped_df["holidayProximityIndex_feat"] = grouped_df["date"].apply(HolidayFeatures.compute_holiday_proxmity_index)
-    #     grouped_df["daysUntilSchoolStart_feat"] = grouped_df["date"].apply(SchoolFeatures.compute_days_until_school_start)
-    #     grouped_df["daysUntilSchoolEnd_feat"]   = grouped_df["date"].apply(SchoolFeatures.compute_days_until_school_end)
-    #     grouped_df["schoolSeasonIndex_feat"]    = grouped_df["date"].apply(SchoolFeatures.compute_school_season_index)
-        
-    #     grouped_df = TemporalFeatures.create_date_features(grouped_df)        
-    #     self.combined_df = self.combined_df.merge(grouped_df, on="date", how="left")
+        return grouped_df;
     ###########################################################################################
+
     def build_purchase_item_freq_cols(self):
         freq_windows = [7, 15, 30, 90, 365]
         max_w = max(freq_windows)
@@ -282,50 +254,19 @@ class GroceryML:
     
         self.combined_df = pd.concat(result_frames, ignore_index=True)
     ###########################################################################################
-    # def build_purchase_item_freq_cols(self):
-        
-    #     freq_windows = [7, 15, 30, 90, 365]
-    #     max_w = max(freq_windows)
-    #     # initialize columns
-    #     for w in freq_windows:
-    #         self.combined_df[f"freq_{w}_feat"] = np.nan
 
-    #     self.combined_df = (self.combined_df.groupby("itemId", group_keys=False).apply(self.fill_freq_columns))
-    # ###########################################################################################
-    
-    # def fill_freq_columns(self, group):
-    #     group = group.copy()
-    #     group = group.sort_values("date").reset_index(drop=True)
-    #     history = []
-    
-    #     col_date = group.columns.get_loc("date")
-    #     col_buy = group.columns.get_loc("didBuy_target")
-    #     col_freq = {w: group.columns.get_loc(f"freq_{w}_feat") for w in freq_windows}
-    
-    #     for i in range(len(group)):
-    #         cur_date = group.iat[i, col_date]
-    
-    #         # record purchase
-    #         if group.iat[i, col_buy] == 1:
-    #             history.append(cur_date)
-    
-    #         # prune history ONCE using largest window
-    #         cutoff_max = cur_date - pd.Timedelta(days=max_w)
-    #         history = [d for d in history if d >= cutoff_max]
-    
-    #         # compute windowed counts
-    #         for w in freq_windows:
-    #             cutoff = cur_date - pd.Timedelta(days=w)
-    #             count = 0
-    #             for d in history:
-    #                 if d >= cutoff:
-    #                     count += 1
-    #             group.iat[i, col_freq[w]] = count
-    
-    #     return group
-    ####################################################################
-    
-    def back_fill_history(self):
+    def build_freq_ratios(self):
+        (
+            self.combined_df["freq7_over30_feat"],
+            self.combined_df["freq30_over365_feat"],
+        ) = TemporalFeatures.compute_freq_ratios(
+            self.combined_df["freq_7_feat"],
+            self.combined_df["freq_30_feat"],
+            self.combined_df["freq_365_feat"],
+        )
+    ###########################################################################################
+        
+    def insert_negative_samples(self):
         # 1. Mark actual purchases in the raw receipt rows
         self.combined_df["didBuy_target"] = 1
         # 2. Build complete grid
@@ -380,8 +321,8 @@ class GroceryML:
         winndixie_df["time"] = winndixie_df["time"].astype(str)
         
         winndixie_df = WinnDixieRecptParser.remove_duplicate_receipt_files(winndixie_df)
+        
         winndixie_df["item"] = winndixie_df["item"].str.replace(r"^know-and-love\s*", "", regex=True, case=False).str.strip()
-
         winndixie_df["item"] = winndixie_df["item"].str.replace(r"^seg\s*", "", regex=True, case=False).str.strip()
         winndixie_df["item"] = winndixie_df["item"].str.replace(r"^kandl\s*", "", regex=True, case=False).str.strip()
 
@@ -397,6 +338,8 @@ class GroceryML:
         """
         from openpyxl import load_workbook
         from openpyxl.worksheet.table import Table, TableStyleInfo
+
+        print(f"Writing XLSX: {file_path}")
 
         df.to_excel(file_path, sheet_name=sheet_name, index=False)
     
@@ -422,11 +365,13 @@ class GroceryML:
         worksheet.add_table(table)
     
         workbook.save(file_path)
+        print(f"   XLSX Done: {file_path}")
+
     ###########################################################################################
     
 
     
-    def export_df(self, dataframes, dir):
+    def export_dataframes(self, dataframes, dir):
         for name, df in dataframes.items():
             csv_path = os.path.join(dir, f"{name}.csv")
             xlsxPath = os.path.join(dir, f"{name}.xlsx")
@@ -457,7 +402,13 @@ class GroceryML:
         
         os.makedirs(exp_dir, exist_ok=True)
         export_df(dataframes, exp_dir)
-        
+
+        print("Exporting dataframes");
+        for name, df in dataframes.items():
+            csv_path = os.path.join(dir, f"{name}.csv")
+            xlsxPath = os.path.join(dir, f"{name}.xlsx")
+            export_df_to_excel_table(df, xlsxPath, sheet_name=f"{name}")
+            
         modelDir = os.path.join(exp_dir, "model")
         os.makedirs(modelDir, exist_ok=True)
         model.save(modelDir)
@@ -563,7 +514,6 @@ class GroceryML:
     
         return model
     ###########################################################################################
-    
     
     def train_model(self, model, df, feature_cols, target_col, train_params):
         x_feat = df[feature_cols].to_numpy(np.float32)
