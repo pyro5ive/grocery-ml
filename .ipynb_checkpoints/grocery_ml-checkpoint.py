@@ -45,11 +45,12 @@ class GroceryML:
         #self.combined_df = pd.concat([winndixie_df, wallmart_df], ignore_index=True)
         self.combined_df = pd.concat([winndixie_df, wallmart_df[["date", "item", "source"]]],ignore_index=True)
  
-        
+
+        # item name and id operations
         self.canonicalize()
         self.combined_df["item"] = self.combined_df["item"].apply(ItemNameUtils.clean_item_name)
-        
         self.combined_df = self.itemNameUtils.create_item_ids(self.combined_df)
+        # 
         self.insert_negative_samples()
         
         df_weather = WeatherFeatures.BuildWeather().reset_index()
@@ -61,8 +62,8 @@ class GroceryML:
 
         self.build_freq_ratios()
         
-        self.combined_df = TemporalFeatures.compute_days_since_last_purchase(self.combined_df)
-        self.combined_df = TemporalFeatures.compute_avg_days_between_purchases(self.combined_df)
+        self.combined_df = TemporalFeatures.compute_days_since_last_purchase_for_item(self.combined_df)
+        self.combined_df = TemporalFeatures.compute_avg_days_between_item_purchases(self.combined_df)
         self.combined_df["item_due_ratio_feat"] = self.compute_due_ratio(self.combined_df)
         
         #self.create_bulkAdjustedUrgencyRatio_for_training(self.combined_df);
@@ -143,7 +144,7 @@ class GroceryML:
     ###########################################################################################
     
     def compute_due_ratio(self, df, cap=3.0):
-        ratio = df["daysSinceLastPurchase_feat"] / df["avgDaysBetweenPurchases_feat"]
+        ratio = df["daysSinceThisItemLastPurchased_feat"] / df["avgDaysBetweenItemPurchases_feat"]
         ratio = ratio.replace([np.inf, -np.inf], np.nan).fillna(0)
         return ratio.clip(0, cap)
     ###########################################################################################
@@ -152,7 +153,7 @@ class GroceryML:
         
         if weights is None:
             weights = {
-                "daysSinceLastPurchase_feat": 1.5,
+                "daysSinceThisItemLastPurchased_feat": 1.5,
                 "freq_30_feat": 1.0,
                 "freq_90_feat": 0.5
             }
@@ -169,7 +170,7 @@ class GroceryML:
         # RAW linear score (pre-normalization)
         # --------------------------------------------------------
         df["due_score_raw_feat"] = (
-            weights["daysSinceLastPurchase_feat"] * df["daysSinceLastPurchase_feat"]
+            weights["daysSinceThisItemLastPurchased_feat"] * df["daysSinceThisItemLastPurchased_feat"]
           + weights["freq_30_feat"]              * df["freq_30_feat"]
           + weights["freq_90_feat"]              * df["freq_90_feat"]
         )
@@ -240,8 +241,8 @@ class GroceryML:
         ratios = []
         for _, row in df.iterrows():
             ratios.append(self.compute_bulkAdjustedUrgencyRatio_value(
-                row["daysSinceLastPurchase_feat"],
-                row["avgDaysBetweenPurchases_feat"],
+                row["daysSinceThisItemLastPurchased_feat"],
+                row["avgDaysBetweenItemPurchases_feat"],
                 row["bulkFlag"],
                 row["didBuy_target"]      # <-- real 0/1
             ))
@@ -260,8 +261,8 @@ class GroceryML:
         ratios = []
         for _, row in df.iterrows():
             ratios.append(self.compute_bulkAdjustedUrgencyRatio_value(
-                row["daysSinceLastPurchase_feat"],
-                row["avgDaysBetweenPurchases_feat"],
+                row["daysSinceThisItemLastPurchased_feat"],
+                row["avgDaysBetweenItemPurchases_feat"],
                 row["bulkFlag"],
                 1                           # <-- always 1 at prediction time
             ))
@@ -533,35 +534,52 @@ class GroceryML:
                 normalized_df.drop(columns=[col], inplace=True)
     
         return normalized_df
-    ###########################################################################################
-       
-    
+    ###########################################################################################    
+
     def build_prediction_input(self, combined_df, prediction_date, norm_params):
     
-        print("build_prediction_input()");
+        print("build_prediction_input()")
         print(f"Prediction date: {prediction_date.strftime('%Y-%m-%d')}")
-        
-        latest_rows_df = (combined_df.sort_values("date").groupby("itemId").tail(1).copy())
+    
+        latest_rows_df = (
+            combined_df.sort_values("date")
+            .groupby("itemId")
+            .tail(1)
+            .copy()
+            .reset_index(drop=True)
+        )
     
         latest_rows_df["date"] = prediction_date
-        latest_rows_df["daysSinceLastTrip_feat"] = (prediction_date - combined_df["date"].max()).days
-        latest_rows_df["avgDaysBetweenTrips_feat"] = combined_df["avgDaysBetweenTrips_feat"].iloc[-1]  
-        
-        last_purchase_dates = (combined_df.sort_values("date").groupby("itemId")["date"].last().reindex(latest_rows_df["itemId"]))
-        last_purchase_dates = pd.to_datetime(last_purchase_dates)
-        latest_rows_df["daysSinceLastPurchase_feat"] = (prediction_date - last_purchase_dates).dt.days
     
-        latest_rows_df["avgDaysBetweenPurchases_feat"] = combined_df["avgDaysBetweenPurchases_feat"].iloc[-1]
+        # days since last trip
+        max_data_date = combined_df["date"].max()
+        days_forward = (prediction_date - max_data_date).days
+        latest_rows_df["daysSinceLastTrip_feat"] = days_forward
+    
+        # avg days between trips (global)
+        latest_rows_df["avgDaysBetweenTrips_feat"] = combined_df["avgDaysBetweenTrips_feat"].iloc[-1]
+    
+        # === extend "days since this item last purchased"
+        # last known value already correct per item at max_data_date
+        last_vals = combined_df.sort_values("date").groupby("itemId").tail(1)
+        latest_rows_df["daysSinceThisItemLastPurchased_feat"] = (
+            last_vals["daysSinceThisItemLastPurchased_feat"].values + days_forward
+        )
+    
+        # === extend avgDaysBetweenItemPurchases per item
+        last_avg_vals = combined_df.sort_values("date").groupby("itemId").tail(1)
+        latest_rows_df["avgDaysBetweenItemPurchases_feat"] = last_avg_vals["avgDaysBetweenItemPurchases_feat"].values
     
         latest_rows_df[[
-            "daysSinceLastPurchase_feat",
-            "avgDaysBetweenPurchases_feat"
+            "daysSinceThisItemLastPurchased_feat",
+            "avgDaysBetweenItemPurchases_feat"
         ]] = latest_rows_df[[
-            "daysSinceLastPurchase_feat",
-            "avgDaysBetweenPurchases_feat"]].fillna(0)
-        
+            "daysSinceThisItemLastPurchased_feat",
+            "avgDaysBetweenItemPurchases_feat"
+        ]].fillna(0)
+    
         latest_rows_df["item_due_ratio_feat"] = TemporalFeatures.compute_due_ratio(latest_rows_df)
-        
+    
         latest_rows_df["daysUntilNextHoliday_feat"] = HolidayFeatures.compute_days_until_next_holiday(prediction_date)
         latest_rows_df["daysSinceLastHoliday_feat"] = HolidayFeatures.compute_days_since_last_holiday(prediction_date)
         latest_rows_df["holidayProximityIndex_feat"] = HolidayFeatures.compute_holiday_proximity_index(prediction_date)
@@ -576,27 +594,18 @@ class GroceryML:
         latest_rows_df["doy_feat"] = prediction_date.timetuple().tm_yday
         latest_rows_df["quarter_feat"] = ((prediction_date.month - 1) // 3) + 1
     
-        #self.create_bulkAdjustedUrgencyRatio_for_prediction(latest_rows_df)
-        
-        for item_id in latest_rows_df["itemId"].values:
-            hist = combined_df[combined_df["itemId"] == item_id]
-            #FeatureBuilders.compute_frequency_features(hist, latest_rows_df, item_id, prediction_date)
-            #FeatureBuilders.compute_habit_features(hist, latest_rows_df, item_id, prediction_date)
-    
         if "didBuy_target" in latest_rows_df.columns:
             latest_rows_df.drop(columns=["didBuy_target"], inplace=True)
     
-        self.export_df_to_excel_table(latest_rows_df, "latest_rows_df.xlsx", ".");
-        
         normalized_latest_rows_df = self.normalize_features(latest_rows_df, norm_params)
     
         feature_cols = [c for c in normalized_latest_rows_df.columns if c.endswith("_norm")]
-       
         x_features = normalized_latest_rows_df[feature_cols].to_numpy(np.float32)
         x_item_idx = normalized_latest_rows_df["itemId"].to_numpy(np.int32)
-        self.export_df_to_excel_table(normalized_latest_rows_df, "normalized_latest_rows_df.xlsx", ".");
-       
-        
+    
+        self.export_df_to_excel_table(normalized_latest_rows_df, "normalized_latest_rows_df.xlsx", ".")
+        self.export_df_to_excel_table(latest_rows_df, "latest_rows_df.xlsx", ".")
+    
         return {
             "prediction_df": normalized_latest_rows_df,
             "x_features": x_features,
@@ -604,6 +613,9 @@ class GroceryML:
             "feature_cols": feature_cols
         }
     ###########################################################################################
+
+
+
     def build_and_compile_model(self,feat_cols_count, item_count, build_params):
         num_in = layers.Input(shape=(feat_cols_count,))
         item_in = layers.Input(shape=(), dtype="int32")
@@ -674,7 +686,6 @@ class GroceryML:
     
         if len(target_cols) != 1:
             raise ValueError("Exactly one target column is required")
-    
         target_col = target_cols[0]
     
         feat_cols_count = len(feature_cols)
