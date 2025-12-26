@@ -687,7 +687,9 @@ class GroceryML:
   
     def run_experiment(self, combined_df, modelBuildParams, modelTrainParams, baseDir):
         
-        print("run_experiment() ");
+        print(f"run_experiment()  baseDir: {baseDir}  ");
+        print(f"run_experiment()  when: {datetime.now()} params: {modelTrainParams}  ");
+                
         norm_params = self.fit_normalization_params(combined_df)
         normalized_df = self.normalize_features(combined_df, norm_params)
     
@@ -702,10 +704,8 @@ class GroceryML:
         item_count = int(normalized_df["itemId"].max()) + 1
     
         model = self.build_and_compile_model(feat_cols_count, item_count, modelBuildParams)
-    
         history = self.train_model(model, normalized_df, feature_cols, target_col, modelTrainParams)
        
-        # pred_input = build_prediction_input_df(combined_df, normalized_df["date"].max(), norm_params)
         pred_input = self.build_prediction_input(combined_df, pd.Timestamp.now(), norm_params)
         
         print("Running Model.Predict()");
