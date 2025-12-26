@@ -332,34 +332,44 @@ class GroceryML:
     ###########################################################################################
         
     def insert_negative_samples(self):
-        print("insert_negative_samples()");
-        # 1. Mark actual purchases in the raw receipt rows
+        print("insert_negative_samples()")
+    
+        # keep a lookup of itemId -> item name (each itemId maps to exactly one name)
+        item_lookup = (
+            self.combined_df[["itemId", "item"]]
+            .drop_duplicates(subset=["itemId"])
+        )
+    
+        # 1. mark real purchases
         self.combined_df["didBuy_target"] = 1
-        # 2. Build complete grid
+    
+        # 2. full grid
         all_items = self.combined_df["itemId"].unique()
         all_dates = self.combined_df["date"].unique()
-        
         full = (
-            pd.MultiIndex.from_product(
-                [all_dates, all_items], 
-                names=["date", "itemId"]
-            ).to_frame(index=False)
+            pd.MultiIndex.from_product([all_dates, all_items], names=["date", "itemId"])
+            .to_frame(index=False)
         )
-        
-        # 3. Merge raw purchases onto the full grid
+    
+        # 3. merge raw purchase rows
         df_full = full.merge(
             self.combined_df[["date", "itemId", "item", "source", "didBuy_target"]],
             on=["date", "itemId"],
             how="left"
         )
-        
-        # 4. Fill missing purchases with didBuy=0
+    
+        # 4. fill missing didBuy
         df_full["didBuy_target"] = df_full["didBuy_target"].fillna(0).astype(int)
-        
-        # 5. NOW REPLACE combined_df with df_full
+    
+        # 5. fill missing item names using lookup
+        df_full = df_full.merge(item_lookup, on="itemId", how="left", suffixes=("", "_lookup"))
+        df_full["item"] = df_full["item"].fillna(df_full["item_lookup"])
+        df_full = df_full.drop(columns=["item_lookup"])
+    
+        # 6. replace
         self.combined_df = df_full.copy()
     ###########################################################################################
-  
+
     def build_winn_dixie_df(self):
         recptParser = WinnDixieRecptParser()
         rows = []
