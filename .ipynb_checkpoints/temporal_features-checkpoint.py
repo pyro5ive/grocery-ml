@@ -56,23 +56,31 @@ class TemporalFeatures:
         df["avgDaysBetweenItemPurchases_feat"] = avg_gap.groupby(df["itemId"]).ffill().fillna(0)
         return df
     #######################################################
-    
     @staticmethod
-    def compute_due_ratio(df, cap=3.0):
+    def compute_item_due_ratio(df, cap=3.0):
         ratio = df["daysSinceThisItemLastPurchased_feat"] / df["avgDaysBetweenItemPurchases_feat"]
         ratio = ratio.replace([np.inf, -np.inf], np.nan).fillna(0)
         return ratio.clip(0, cap)
-    #######################################################
+    ##########################################################################################
+    # @staticmethod
+    # def compute_item_due_ratio(df, cap=3.0):
+    #     ratio = df["daysSinceThisItemLastPurchased_feat"] / df["avgDaysBetweenItemPurchases_feat"]
+    #     ratio = ratio.replace([np.inf, -np.inf], np.nan).fillna(0)
+    #     return ratio.clip(0, cap)
+    # #######################################################
 
     @staticmethod
-    def create_days_since_last_trip(grouped_df):
-        return grouped_df["date"].diff().dt.days.fillna(0)
+    def create_days_since_last_trip(targetDf):
+        return targetDf["date"].diff().dt.days.fillna(0)
     #######################################################
-
     @staticmethod
     def compute_avg_days_between_trips(grouped_df):
         return grouped_df["daysSinceLastTrip_feat"].replace(0, np.nan).expanding().mean().fillna(0)    
     #######################################################
+    staticmethod
+    def compute_trip_due_ratio(targetDf):
+        targetDf["tripDueRatio_feat"] = (targetDf["daysSinceLastTrip_feat"] / targetDf["avgDaysBetweenTrips_feat"]).fillna(0)
+    ###########################################################################################
     @staticmethod
     def create_date_features(grouped):
         dt = grouped["date"]

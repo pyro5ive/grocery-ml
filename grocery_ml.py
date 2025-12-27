@@ -66,7 +66,7 @@ class GroceryML:
         
         self.combined_df = TemporalFeatures.compute_days_since_last_purchase_for_item(self.combined_df)
         self.combined_df = TemporalFeatures.compute_avg_days_between_item_purchases(self.combined_df)
-        self.combined_df["item_due_ratio_feat"] = self.compute_item_due_ratio(self.combined_df)
+        self.combined_df["item_due_ratio_feat"] = TemporalFeatures.compute_item_due_ratio(self.combined_df)
                 
         ##self.export_df_to_excel_table(self.combined_df, "./combined_df", sheet_name="combined_df")
         #self.create_bulkAdjustedUrgencyRatio_for_training(self.combined_df);
@@ -172,10 +172,10 @@ class GroceryML:
     #     return pd.DataFrame(rows)
     # ###########################################################################################     
         
-    def compute_item_due_ratio(self, df, cap=3.0):
-        ratio = df["daysSinceThisItemLastPurchased_feat"] / df["avgDaysBetweenItemPurchases_feat"]
-        ratio = ratio.replace([np.inf, -np.inf], np.nan).fillna(0)
-        return ratio.clip(0, cap)
+    # def compute_item_due_ratio(self, df, cap=3.0):
+    #     ratio = df["daysSinceThisItemLastPurchased_feat"] / df["avgDaysBetweenItemPurchases_feat"]
+    #     ratio = ratio.replace([np.inf, -np.inf], np.nan).fillna(0)
+    #     return ratio.clip(0, cap)
     ###########################################################################################
 
     def compute_due_score(self, df, itemId=None, use_sigmoid=True, normalize=False, weights=None):
@@ -238,8 +238,8 @@ class GroceryML:
         grouped_df["daysUntilSchoolEnd_feat"]     = grouped_df["date"].apply(SchoolFeatures.compute_days_until_school_end)
         grouped_df["schoolSeasonIndex_feat"]      = grouped_df["date"].apply(SchoolFeatures.compute_school_season_index)
 
-        grouped_df["tripDueRatio_feat"] = 0 
-        self.compute_trip_due_ratio(grouped_df);
+        #grouped_df["tripDueRatio_feat"] = 0 
+        TemporalFeatures.compute_trip_due_ratio(grouped_df);
                
         grouped_df = TemporalFeatures.create_date_features(grouped_df)
         return grouped_df;
@@ -348,11 +348,6 @@ class GroceryML:
     
         self.combined_df = pd.concat(result_frames, ignore_index=True)
     ###########################################################################################
-
-    def compute_trip_due_ratio(self, targetDf):
-        targetDf["tripDueRatio_feat"] = (targetDf["daysSinceLastTrip_feat"] /targetDf["avgDaysBetweenTrips_feat"]).fillna(0)
-    ###########################################################################################
-    
     def build_freq_ratios(self):
         (
             self.combined_df["freq7_over30_feat"],
@@ -581,8 +576,7 @@ class GroceryML:
 
     def build_prediction_input(self, combined_df, prediction_date, norm_params):
     
-        print("build_prediction_input()")
-        print(f"Prediction date: {prediction_date.strftime('%Y-%m-%d')}")
+        print(f" build_prediction_input()   Prediction date: {prediction_date.strftime('%Y-%m-%d')}")
     
         latest_rows_df = (
             combined_df.sort_values("date")
@@ -604,9 +598,9 @@ class GroceryML:
     
         # avg days between trips (global)
         latest_rows_df["avgDaysBetweenTrips_feat"] = combined_df["avgDaysBetweenTrips_feat"].iloc[-1]
-
-        latest_rows_df["daysSinceLastTrip_feat"] = (prediction_date - max_hist_date).days       
-        latest_rows_df = self.compute_trip_due_ratio(latest_rows_df)
+        # trip due ratio
+        TemporalFeatures.compute_trip_due_ratio(latest_rows_df)
+        
         # === extend "days since this item last purchased"
         # last known value already correct per item at max_data_date
         last_vals = combined_df.sort_values("date").groupby("itemId").tail(1)
@@ -627,7 +621,6 @@ class GroceryML:
         ]].fillna(0)
     
         latest_rows_df["item_due_ratio_feat"] = TemporalFeatures.compute_due_ratio(latest_rows_df)
-    
         latest_rows_df["daysUntilNextHoliday_feat"] = HolidayFeatures.compute_days_until_next_holiday(prediction_date)
         latest_rows_df["daysSinceLastHoliday_feat"] = HolidayFeatures.compute_days_since_last_holiday(prediction_date)
         latest_rows_df["holidayProximityIndex_feat"] = HolidayFeatures.compute_holiday_proximity_index(prediction_date)
