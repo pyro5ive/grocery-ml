@@ -53,6 +53,8 @@ class GroceryML:
         # 
         self.insert_negative_samples()
         
+        self.build_habit_frequency_for_training();
+        
         df_weather = WeatherFeatures.BuildWeather().reset_index()
         self.combined_df = self.combined_df.merge(df_weather, on="date", how="left")
 
@@ -64,8 +66,9 @@ class GroceryML:
         
         self.combined_df = TemporalFeatures.compute_days_since_last_purchase_for_item(self.combined_df)
         self.combined_df = TemporalFeatures.compute_avg_days_between_item_purchases(self.combined_df)
-        self.combined_df["item_due_ratio_feat"] = self.compute_due_ratio(self.combined_df)
-        
+        self.combined_df["item_due_ratio_feat"] = self.compute_item_due_ratio(self.combined_df)
+                
+        ##self.export_df_to_excel_table(self.combined_df, "./combined_df", sheet_name="combined_df")
         #self.create_bulkAdjustedUrgencyRatio_for_training(self.combined_df);
         # ============================================================
         # MERGE HABIT FEATURES
@@ -103,47 +106,73 @@ class GroceryML:
         patterns = ["egglands-best-egg", "egglands-best-eggs", "eggs"]
         self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "eggs")
     ###########################################################################################
+    def build_habit_frequency_for_training(self):
+        print("build_habit_frequency_for_training()");
+        df = self.combined_df[self.combined_df["didBuy_target"] == 1]
+        latest_trip_date = df["date"].max()
+        freq_map = self.compute_habit_frequency_map(df, latest_trip_date)
+        self.combined_df["itemPurchaseHabitFrequency_feat"] = self.combined_df["itemId"].map(freq_map)
+    ############################################################################################
+    def recompute_habit_frequency_for_prediction_time(self, prediction_date: datetime):
+        print("recompute_habit_frequency_for_prediction_time()");
+        df = self.combined_df[self.combined_df["didBuy_target"] == 1]
+        latest_trip_date = prediction_date
+        freq_map = self.compute_habit_frequency_map(df, latest_trip_date)
+        return freq_map
+    ############################################################################################
+    def compute_habit_frequency_map(self, filtered_df: pd.DataFrame, ref_date: datetime):
+        print("compute_habit_frequency_map()");
+        oldest_date = filtered_df["date"].min()
+        days_span = (ref_date - oldest_date).days
+        if days_span <= 0:
+            return {}
 
-    def build_habit_features(self, df, tau_days=120):
-        df = df.copy()
-        df["date"] = pd.to_datetime(df["date"])
+        counts = filtered_df.groupby("itemId")["date"].count()
+        freq_map = (counts / days_span).to_dict()
+        return freq_map
+    #############################################################################################
+
+        
+    # def build_habit_features(self, df, tau_days=120):
+    #     df = df.copy()
+    #     df["date"] = pd.to_datetime(df["date"])
     
-        total_trips = df["date"].nunique()
-        timeline_days = (df["date"].max() - df["date"].min()).days or 1
+    #     total_trips = df["date"].nunique()
+    #     timeline_days = (df["date"].max() - df["date"].min()).days or 1
     
-        rows = []
+    #     rows = []
     
-        for itemId, g in df.groupby("itemId"):
-            buys = g[g["didBuy_target"] == 1]["date"]
+    #     for itemId, g in df.groupby("itemId"):
+    #         buys = g[g["didBuy_target"] == 1]["date"]
     
-            if len(buys) == 0:
-                rows.append({
-                    "itemId": itemId,
-                    "habitFrequency_feat": 0.0,
-                    "habitSpan_feat": 0.0,
-                    "habitDecay_feat": 0.0,
-                })
-                continue
+    #         if len(buys) == 0:
+    #             rows.append({
+    #                 "itemId": itemId,
+    #                 "habitFrequency_feat": 0.0,
+    #                 "habitSpan_feat": 0.0,
+    #                 "habitDecay_feat": 0.0,
+    #             })
+    #             continue
     
-            first = buys.min()
-            last = buys.max()
+    #         first = buys.min()
+    #         last = buys.max()
     
-            habitFrequency = len(buys) / total_trips
-            habitSpan = (last - first).days / timeline_days
-            days_since_last = (df["date"].max() - last).days
-            habitDecay = np.exp(-days_since_last / tau_days)
+    #         habitFrequency = len(buys) / total_trips
+    #         habitSpan = (last - first).days / timeline_days
+    #         days_since_last = (df["date"].max() - last).days
+    #         habitDecay = np.exp(-days_since_last / tau_days)
     
-            rows.append({
-                "itemId": itemId,
-                "habitFrequency_feat": habitFrequency,
-                "habitSpan_feat": habitSpan,
-                "habitDecay_feat": habitDecay,
-            })
+    #         rows.append({
+    #             "itemId": itemId,
+    #             "habitFrequency_feat": habitFrequency,
+    #             "habitSpan_feat": habitSpan,
+    #             "habitDecay_feat": habitDecay,
+    #         })
     
-        return pd.DataFrame(rows)
-    ###########################################################################################
-    
-    def compute_due_ratio(self, df, cap=3.0):
+    #     return pd.DataFrame(rows)
+    # ###########################################################################################     
+        
+    def compute_item_due_ratio(self, df, cap=3.0):
         ratio = df["daysSinceThisItemLastPurchased_feat"] / df["avgDaysBetweenItemPurchases_feat"]
         ratio = ratio.replace([np.inf, -np.inf], np.nan).fillna(0)
         return ratio.clip(0, cap)
@@ -208,7 +237,10 @@ class GroceryML:
         grouped_df["daysUntilSchoolStart_feat"]   = grouped_df["date"].apply(SchoolFeatures.compute_days_until_school_start)
         grouped_df["daysUntilSchoolEnd_feat"]     = grouped_df["date"].apply(SchoolFeatures.compute_days_until_school_end)
         grouped_df["schoolSeasonIndex_feat"]      = grouped_df["date"].apply(SchoolFeatures.compute_school_season_index)
-    
+
+        grouped_df["tripDueRatio_feat"] = 0 
+        self.compute_trip_due_ratio(grouped_df);
+               
         grouped_df = TemporalFeatures.create_date_features(grouped_df)
         return grouped_df;
     ###########################################################################
@@ -317,8 +349,9 @@ class GroceryML:
         self.combined_df = pd.concat(result_frames, ignore_index=True)
     ###########################################################################################
 
-    # def build_trip_ratio(self):
-    #     self.combined_df["purchaseToTripRatio"] = combined_df["daysSinceLastPurchase"] / combined_df["avgDaysBetweenPurchases"]
+    def compute_trip_due_ratio(self, targetDf):
+        targetDf["tripDueRatio_feat"] = (targetDf["daysSinceLastTrip_feat"] /targetDf["avgDaysBetweenTrips_feat"]).fillna(0)
+    ###########################################################################################
     
     def build_freq_ratios(self):
         (
@@ -456,7 +489,7 @@ class GroceryML:
         for name, df in dataframes.items():
             base = os.path.join(path, f"{name}-{exp_suffix}")
             self.export_df_to_excel_table(df, base, sheet_name=f"{name}")
-            #self.export_dataframe_to_csv(df, base)
+            self.export_dataframe_to_csv(df, base)
     ###########################################################################################
     def write_json(self, obj, path):
         f = open(path, "w")
@@ -558,7 +591,10 @@ class GroceryML:
             .copy()
             .reset_index(drop=True)
         )
-    
+
+        freq_map = self.recompute_habit_frequency_for_prediction_time(prediction_date)
+        latest_rows_df["itemPurchaseHabitFrequency_feat"] = latest_rows_df["itemId"].map(freq_map).fillna(0)
+        
         latest_rows_df["date"] = prediction_date
     
         # days since last trip
@@ -568,7 +604,9 @@ class GroceryML:
     
         # avg days between trips (global)
         latest_rows_df["avgDaysBetweenTrips_feat"] = combined_df["avgDaysBetweenTrips_feat"].iloc[-1]
-    
+
+        latest_rows_df["daysSinceLastTrip_feat"] = (prediction_date - max_hist_date).days       
+        latest_rows_df = self.compute_trip_due_ratio(latest_rows_df)
         # === extend "days since this item last purchased"
         # last known value already correct per item at max_data_date
         last_vals = combined_df.sort_values("date").groupby("itemId").tail(1)
@@ -613,8 +651,8 @@ class GroceryML:
         x_features = normalized_latest_rows_df[feature_cols].to_numpy(np.float32)
         x_item_idx = normalized_latest_rows_df["itemId"].to_numpy(np.int32)
     
-        self.export_df_to_excel_table(normalized_latest_rows_df, "normalized_latest_rows_df.xlsx", ".")
-        self.export_df_to_excel_table(latest_rows_df, "latest_rows_df.xlsx", ".")
+        # self.export_df_to_excel_table(normalized_latest_rows_df, "normalized_latest_rows_df.xlsx", ".")
+        # self.export_df_to_excel_table(latest_rows_df, "latest_rows_df.xlsx", ".")
     
         return {
             "prediction_df": normalized_latest_rows_df,
@@ -623,8 +661,6 @@ class GroceryML:
             "feature_cols": feature_cols
         }
     ###########################################################################################
-
-
 
     def build_and_compile_model(self,feat_cols_count, item_count, build_params):
         num_in = layers.Input(shape=(feat_cols_count,))
