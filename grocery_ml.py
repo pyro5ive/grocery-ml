@@ -46,22 +46,20 @@ class GroceryML:
         winndixie_df = pd.concat([winndixie_df, winndixie_add_txt_rpts_df], ignore_index=True)
         #       
         wallmart_df = WallmartRecptParser.build_wall_mart_df("./walmart");
-        #self.combined_df = pd.concat([winndixie_df, wallmart_df], ignore_index=True)
-        self.combined_df = pd.concat([winndixie_df, wallmart_df[["date", "item", "source"]]],ignore_index=True)
-         
-        
+        self.combined_df = pd.concat([winndixie_df, wallmart_df[["date", "item", "source"]]],ignore_index=True)        
         
         # item name and id operations
         self.canonicalize()
         self.combined_df["item"] = self.combined_df["item"].apply(ItemNameUtils.clean_item_name)
         self.combined_df = self.itemNameUtils.create_item_ids(self.combined_df)
-        # 
-        if use_neg_samples: 
-            self.create_didBuy_target_col();
+        
+        self.create_didBuy_target_col();
+        if use_neg_samples:     
+            print(f"use_neg_samples is true")
             self.insert_negative_samples();
         else:
-            self.create_didBuy_target_col();
-        
+            print(f"use_neg_samples is false, not doing it.")
+        #    
         self.build_habit_frequency_for_training();
         
         df_weather = WeatherFeatures.BuildWeather().reset_index()
@@ -87,6 +85,12 @@ class GroceryML:
         # self.combined_df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]] = (
         #     self.combined_df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]].fillna(0.0)
         # ) 
+    ###########################################################################################
+    def validate_no_empty_columns(df):
+        # if ANY column has at least one missing value
+        bad_cols = [c for c in df.columns if df[c].isna().any()]
+        if bad_cols:
+            raise ValueError(f"Columns contain empty values: {bad_cols}")
     ###########################################################################################
     def create_didBuy_target_col(self):
         # 1. mark real purchases
@@ -374,12 +378,15 @@ class GroceryML:
         
     def insert_negative_samples(self):
         print("insert_negative_samples()")
-    
+        
         # keep a lookup of itemId -> item name (each itemId maps to exactly one name)
         item_lookup = (
             self.combined_df[["itemId", "item"]]
             .drop_duplicates(subset=["itemId"])
         )
+
+        targetColName = "didBuy_target";
+        self.combined_df["didBuy_target"] = 1
 
         # 2. full grid
         all_items = self.combined_df["itemId"].unique()
@@ -428,20 +435,20 @@ class GroceryML:
                     #"qtyMatchReported": result["validation"]["qtyMatchReported"],
                 })
     
-        winndixie_df = pd.DataFrame(rows)
+        additional_rcpts_df = pd.DataFrame(rows)
         
-        winndixie_df["date"] = pd.to_datetime(winndixie_df["date"])
-        winndixie_df["time"] = winndixie_df["time"].astype(str)
+        additional_rcpts_df["date"] = pd.to_datetime(additional_rcpts_df["date"])
+        additional_rcpts_df["time"] = additional_rcpts_df["time"].astype(str)
         
-        winndixie_df = WinnDixieRecptParser.remove_duplicate_receipt_files(winndixie_df)
+        additional_rcpts_df = WinnDixieRecptParser.remove_duplicate_receipt_files(additional_rcpts_df)
         
-        winndixie_df["item"] = winndixie_df["item"].str.replace(r"^know-and-love\s*", "", regex=True, case=False).str.strip()
-        winndixie_df["item"] = winndixie_df["item"].str.replace(r"^seg\s*", "", regex=True, case=False).str.strip()
-        winndixie_df["item"] = winndixie_df["item"].str.replace(r"^kandl\s*", "", regex=True, case=False).str.strip()
+        #additional_rcpts_df["item"] = additional_rcpts_df["item"].str.replace(r"^know-and-love\s*", "", regex=True, case=False).str.strip()
+        additional_rcpts_df["item"] = additional_rcpts_df["item"].str.replace(r"^seg\s*", "", regex=True, case=False).str.strip()
+        additional_rcpts_df["item"] = additional_rcpts_df["item"].str.replace(r"^kandl\s*", "", regex=True, case=False).str.strip()
 
-        winndixie_df = winndixie_df.sort_values(by=["date", "time"]).reset_index(drop=True)
-        winndixie_df = winndixie_df.drop(columns=["time"])
-        return winndixie_df;
+        additional_rcpts_df = additional_rcpts_df.sort_values(by=["date", "time"]).reset_index(drop=True)
+        additional_rcpts_df = additional_rcpts_df.drop(columns=["time"])
+        return additional_rcpts_df;
     ###########################################################################################
     def build_winn_dixie_df(self):
         recptParser = WinnDixieRecptParser()
@@ -802,10 +809,13 @@ class GroceryML:
         Loads a trained model + artifacts and runs predictions only.
         Same behavior as run_experiment(), minus training + saving.
         """
-        print("RunPredictionsOnly()")
-    
+        import os
+        
+        print(f"RunPredictionsOnly()  prediction_date: {prediction_date} ")
+
+        model_sub_dir = os.path.join(model_dir, "model")
         # load model + artifacts
-        model = tf.keras.models.load_model(model_dir)
+        model = tf.keras.models.load_model(model_sub_dir)
     
         with open(os.path.join(model_dir, "norm_params.json"), "r") as f:
             norm_params = json.load(f)
