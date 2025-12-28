@@ -77,7 +77,7 @@ class TemporalFeatures:
     def compute_avg_days_between_trips(grouped_df):
         return grouped_df["daysSinceLastTrip_feat"].replace(0, np.nan).expanding().mean().fillna(0)    
     #######################################################
-    staticmethod
+    @staticmethod
     def compute_trip_due_ratio(targetDf):
         targetDf["tripDueRatio_feat"] = (targetDf["daysSinceLastTrip_feat"] / targetDf["avgDaysBetweenTrips_feat"]).fillna(0)
     ###########################################################################################

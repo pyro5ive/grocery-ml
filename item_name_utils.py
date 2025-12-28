@@ -14,7 +14,7 @@ class ItemNameUtils:
         and replace df['item'] with `canonical_name`.
         """
         for p in patterns:
-            mask = df["item"].str.contains(p, case=False, na=False)
+            mask = df["item"].str.contains(p, case=False, na=False, regex=False)
             df.loc[mask, "item"] = canonical_name    
     ###########################################################################################
 

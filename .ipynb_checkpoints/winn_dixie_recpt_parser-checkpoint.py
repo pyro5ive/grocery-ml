@@ -17,9 +17,15 @@ class WinnDixieRecptParser:
     )
 
     DATETIME_PATTERN = re.compile(
-        r'(?P<date>\d{1,2}/\d{1,2}/\d{2,4})\s*(?:,?\s*at\s+)?(?P<time>\d{1,2}:\d{2}(?:\s*[AP]M)?)',
-        re.IGNORECASE
+    r'(?P<date>\d{1,2}/\d{1,2}/\d{2,4})'
+    r'\s*(?:,?\s*at\s+)?'
+    r'(?P<time>\d{1,2}:\d{2}(?:\s*[aApP][mM])?)',
+    re.IGNORECASE
     )
+    # DATETIME_PATTERN = re.compile(
+    #     r'(?P<date>\d{1,2}/\d{1,2}/\d{2,4})\s*(?:,?\s*at\s+)?(?P<time>\d{1,2}:\d{2}(?:\s*[AP]M)?)',
+    #     re.IGNORECASE
+    # )
 
     ITEM_PATTERN = re.compile(
         r'^(?:QTY\s*(?P<qty>\d+)\s+)?'
@@ -32,6 +38,7 @@ class WinnDixieRecptParser:
 
     #########################################################################
     def parse(self, text: str) -> Dict[str, Any]:
+
         # Normalize all lines
         lines = [self.normalize_spaces(ln) for ln in text.splitlines() if ln.strip()]
 

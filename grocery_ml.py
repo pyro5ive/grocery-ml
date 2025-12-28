@@ -38,20 +38,29 @@ class GroceryML:
         self.itemNameUtils = ItemNameUtils();
         
     ###########################################################################################
-    def build_combined_df(self):
-        
+    def build_combined_df(self, use_neg_samples):
+
+        print(f"build_combined_df(use_neg_samples = {use_neg_samples})") 
         winndixie_df = self.build_winn_dixie_df();
+        winndixie_add_txt_rpts_df = self.build_winn_dixie_additional_text_rcpts_df(r"winndixie rcpts\textRcpts")
+        winndixie_df = pd.concat([winndixie_df, winndixie_add_txt_rpts_df], ignore_index=True)
+        #       
         wallmart_df = WallmartRecptParser.build_wall_mart_df("./walmart");
         #self.combined_df = pd.concat([winndixie_df, wallmart_df], ignore_index=True)
         self.combined_df = pd.concat([winndixie_df, wallmart_df[["date", "item", "source"]]],ignore_index=True)
- 
-
+         
+        
+        
         # item name and id operations
         self.canonicalize()
         self.combined_df["item"] = self.combined_df["item"].apply(ItemNameUtils.clean_item_name)
         self.combined_df = self.itemNameUtils.create_item_ids(self.combined_df)
         # 
-        self.insert_negative_samples()
+        if use_neg_samples: 
+            self.create_didBuy_target_col();
+            self.insert_negative_samples();
+        else:
+            self.create_didBuy_target_col();
         
         self.build_habit_frequency_for_training();
         
@@ -79,11 +88,18 @@ class GroceryML:
         #     self.combined_df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]].fillna(0.0)
         # ) 
     ###########################################################################################
+    def create_didBuy_target_col(self):
+        # 1. mark real purchases
+        targetColName = "didBuy_target";
+        print(f"creating target col: {targetColName}");
+        self.combined_df[targetColName] = 1
+    
+    ###########################################################################################
     def canonicalize(self):
     
         patterns = ["prairie-farm-milk","kleinpeter-milk", "kl-milk", "Milk, Fat Free,", "Fat-Free Milk"]
         self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "milk")
-        patterns = ["Bunny Bread", "White Sandwich Bread", "bunny-bread","se-grocers-bread","seg-sandwich-bread", "seg-white-bread"]
+        patterns = ["Bunny Bread", "sandwich-bread", "White Sandwich Bread", "bunny-bread","se-grocers-bread","seg-sandwich-bread", "seg-white-bread"]
         self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "bread")
         patterns = ["dandw-cheese", "kraft-cheese", "se-grocers-cheese", "know-and-love-cheese"]
         self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "cheese")
@@ -105,6 +121,9 @@ class GroceryML:
         self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "minute-maid-drink")
         patterns = ["egglands-best-egg", "egglands-best-eggs", "eggs"]
         self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "eggs")
+        patterns = ["sprklng-water", "sparkling-ice-wtr", "sparkling-ice", "sparkling-water"]
+        self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "sparkling-ice")
+                                      
     ###########################################################################################
     def build_habit_frequency_for_training(self):
         print("build_habit_frequency_for_training()");
@@ -172,12 +191,6 @@ class GroceryML:
     #     return pd.DataFrame(rows)
     # ###########################################################################################     
         
-    # def compute_item_due_ratio(self, df, cap=3.0):
-    #     ratio = df["daysSinceThisItemLastPurchased_feat"] / df["avgDaysBetweenItemPurchases_feat"]
-    #     ratio = ratio.replace([np.inf, -np.inf], np.nan).fillna(0)
-    #     return ratio.clip(0, cap)
-    ###########################################################################################
-
     def compute_due_score(self, df, itemId=None, use_sigmoid=True, normalize=False, weights=None):
         
         if weights is None:
@@ -367,10 +380,7 @@ class GroceryML:
             self.combined_df[["itemId", "item"]]
             .drop_duplicates(subset=["itemId"])
         )
-    
-        # 1. mark real purchases
-        self.combined_df["didBuy_target"] = 1
-    
+
         # 2. full grid
         all_items = self.combined_df["itemId"].unique()
         all_dates = self.combined_df["date"].unique()
@@ -397,7 +407,42 @@ class GroceryML:
         # 6. replace
         self.combined_df = df_full.copy()
     ###########################################################################################
+    def build_winn_dixie_additional_text_rcpts_df(self, folderPath):
+        recptParser = WinnDixieRecptParser()
+        rows = []
+        for p in Path(folderPath).glob("*.txt"):
+            result = recptParser.parse(p.read_text(encoding="utf-8", errors="ignore"))
+            for r in result["items"]:
+                rows.append({
+                    "source": p.name,
+                    "date": result["date"],
+                    "time": result["time"],
+                    #"manager": result["manager"],
+                    #"cashier": result["cashier"],
+                    "item": r["item"]
+                    #"qty": r["qty"],
+                    #"reg": r["reg"],
+                    #"youPay": r["youPay"],
+                    #"reportedItemsSold": result["reported"],
+                    #"rowsMatchReported": result["validation"]["rowsMatchReported"],
+                    #"qtyMatchReported": result["validation"]["qtyMatchReported"],
+                })
+    
+        winndixie_df = pd.DataFrame(rows)
+        
+        winndixie_df["date"] = pd.to_datetime(winndixie_df["date"])
+        winndixie_df["time"] = winndixie_df["time"].astype(str)
+        
+        winndixie_df = WinnDixieRecptParser.remove_duplicate_receipt_files(winndixie_df)
+        
+        winndixie_df["item"] = winndixie_df["item"].str.replace(r"^know-and-love\s*", "", regex=True, case=False).str.strip()
+        winndixie_df["item"] = winndixie_df["item"].str.replace(r"^seg\s*", "", regex=True, case=False).str.strip()
+        winndixie_df["item"] = winndixie_df["item"].str.replace(r"^kandl\s*", "", regex=True, case=False).str.strip()
 
+        winndixie_df = winndixie_df.sort_values(by=["date", "time"]).reset_index(drop=True)
+        winndixie_df = winndixie_df.drop(columns=["time"])
+        return winndixie_df;
+    ###########################################################################################
     def build_winn_dixie_df(self):
         recptParser = WinnDixieRecptParser()
         rows = []
@@ -620,7 +665,7 @@ class GroceryML:
             "avgDaysBetweenItemPurchases_feat"
         ]].fillna(0)
     
-        latest_rows_df["item_due_ratio_feat"] = TemporalFeatures.compute_due_ratio(latest_rows_df)
+        latest_rows_df["item_due_ratio_feat"] = TemporalFeatures.compute_item_due_ratio(latest_rows_df)
         latest_rows_df["daysUntilNextHoliday_feat"] = HolidayFeatures.compute_days_until_next_holiday(prediction_date)
         latest_rows_df["daysSinceLastHoliday_feat"] = HolidayFeatures.compute_days_since_last_holiday(prediction_date)
         latest_rows_df["holidayProximityIndex_feat"] = HolidayFeatures.compute_holiday_proximity_index(prediction_date)
