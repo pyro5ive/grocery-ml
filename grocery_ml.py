@@ -72,6 +72,11 @@ class GroceryML:
         self.combined_df = self.combined_df.merge(trip_df, on="date", how="left")
         self.build_purchase_item_freq_cols()
 
+        self.combined_df = self.add_item_total_purchase_count_feat(self.combined_df);
+        self.combined_df = self.drop_rare_items_with_zero_freq(self.combined_df, "freq_7_feat")
+        self.combined_df = self.drop_rare_items_with_zero_freq(self.combined_df, "freq_15_feat")
+        self.combined_df = self.drop_rare_items_with_zero_freq(self.combined_df, "freq_30_feat")
+        self.combined_df = self.drop_rare_items_with_zero_freq(self.combined_df, "freq_90_feat")
         self.build_freq_ratios()
         
         self.combined_df = TemporalFeatures.compute_days_since_last_purchase_for_item(self.combined_df)
@@ -91,7 +96,32 @@ class GroceryML:
         #     self.combined_df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]].fillna(0.0)
         # ) 
     ###########################################################################################
-  
+    def add_item_total_purchase_count_feat(self, df):
+        """
+        Add column itemTotalPurchaseCount_feat with total purchase count per item.
+        Counts only rows where didBuy_target == 1, then fills same count for all rows of that item.
+        """
+        item_counts = (
+            df.loc[df["didBuy_target"] == 1]
+              .groupby("itemId")["itemId"]
+              .count()
+        )
+        df["itemTotalPurchaseCount_feat"] = df["itemId"].map(item_counts).fillna(0)
+        return df
+    ###########################################################################################
+    def drop_rare_items_with_zero_freq(self, df, freq_col):
+        """
+        Removes rows where an item was purchased only once AND
+        its long-term frequency feature is zero.
+        
+        freq_col: the column name to check, e.g. "freq_365_feat"
+        """
+        mask = ~(
+            (df["itemTotalPurchaseCount_feat"] == 1) &
+            (df[freq_col] == 0)
+        )
+        return df[mask].copy()
+    ###########################################################################################
     def validate_no_empty_columns(self, df):
         # if ANY column has at least one missing value
         bad_cols = [c for c in df.columns if df[c].isna().any()]
@@ -133,6 +163,11 @@ class GroceryML:
         self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "eggs")
         patterns = ["sprklng-water", "sparkling-ice-wtr", "sparkling-ice", "sparkling-water"]
         self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "sparkling-ice")
+        patterns = ["dr-pepper"]
+        self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "dr-pepper")
+
+        
+
                                       
     ###########################################################################################
     def build_habit_frequency_for_training(self):
@@ -490,7 +525,7 @@ class GroceryML:
         winndixie_df["item"] = winndixie_df["item"].str.replace(r"^know-and-love\s*", "", regex=True, case=False).str.strip()
         winndixie_df["item"] = winndixie_df["item"].str.replace(r"^seg\s*", "", regex=True, case=False).str.strip()
         winndixie_df["item"] = winndixie_df["item"].str.replace(r"^kandl\s*", "", regex=True, case=False).str.strip()
-
+        winndixie_df["source"] = "winndixie";
         winndixie_df = winndixie_df.sort_values(by=["date", "time"]).reset_index(drop=True)
         winndixie_df = winndixie_df.drop(columns=["time"])
         return winndixie_df;
@@ -610,7 +645,7 @@ class GroceryML:
        os.makedirs(modelDir, exist_ok=True)
 
        print(f"[save_model] writing combined_df snapshot (parquet, pre-normalized)")
-       combined_df.to_parquet(os.path.join(modelDir, "combined_df.parquet"), compression="snappy")
+       combined_df.to_parquet(os.path.join(modelDir, "combined_training_df_frozen.parquet"), compression="snappy")
        
        print("[save_model] writing training history json")
        self.write_json(history.history, os.path.join(modelDir, "history.json"))
@@ -634,7 +669,7 @@ class GroceryML:
         print(f"[load_model_artifacts] loading model → {model_sub_dir}")
         model = tf.keras.models.load_model(model_sub_dir)
 
-        frozen_path = os.path.join(model_dir, "combined_df.parquet")
+        frozen_path = os.path.join(model_dir, "combined_training_df_frozen.parquet")
         print(f"[load_model_artifacts] loading frozen combined_df → {frozen_path}")
         combined_df_frozen = pd.read_parquet(frozen_path)
 
