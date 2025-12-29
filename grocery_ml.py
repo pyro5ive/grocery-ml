@@ -32,26 +32,30 @@ asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 
 class GroceryML:
+
+    combined_training_df: pd = None;
+    itemNameUtils = None; 
     
     def __init__(self):
         pass;
         self.itemNameUtils = ItemNameUtils();
         
+
     ###########################################################################################
     def build_combined_df(self, use_neg_samples):
 
         print(f"build_combined_df(use_neg_samples = {use_neg_samples})") 
-        winndixie_df = self.build_winn_dixie_df();
-        winndixie_add_txt_rpts_df = self.build_winn_dixie_additional_text_rcpts_df(r"winndixie rcpts\textRcpts")
+        winndixie_df = self.build_winn_dixie_df(r"data\winndixie\txt");
+        winndixie_add_txt_rpts_df = self.build_winn_dixie_additional_text_rcpts_df(r"data\winndixie\additionalTxtRcpts")
         winndixie_df = pd.concat([winndixie_df, winndixie_add_txt_rpts_df], ignore_index=True)
         #       
-        wallmart_df = WallmartRecptParser.build_wall_mart_df("./walmart");
-        self.combined_df = pd.concat([winndixie_df, wallmart_df[["date", "item", "source"]]],ignore_index=True)        
+        wallmart_df = WallmartRecptParser.build_wall_mart_df("data\walmart");
+        self.combined_training_df = pd.concat([winndixie_df, wallmart_df[["date", "item", "source"]]],ignore_index=True)        
         
         # item name and id operations
         self.canonicalize()
-        self.combined_df["item"] = self.combined_df["item"].apply(ItemNameUtils.clean_item_name)
-        self.combined_df = self.itemNameUtils.create_item_ids(self.combined_df)
+        self.combined_training_df["item"] = self.combined_training_df["item"].apply(ItemNameUtils.clean_item_name)
+        self.combined_training_df = self.itemNameUtils.create_item_ids(self.combined_training_df)
         
         self.create_didBuy_target_col();
         if use_neg_samples:     
@@ -63,27 +67,27 @@ class GroceryML:
         self.build_habit_frequency_for_training();
         
         df_weather = WeatherFeatures.BuildWeather().reset_index()
-        self.combined_df = self.combined_df.merge(df_weather, on="date", how="left")
+        self.combined_training_df = self.combined_training_df.merge(df_weather, on="date", how="left")
 
         trip_df = self.build_trip_level_features()
-        self.combined_df = self.combined_df.merge(trip_df, on="date", how="left")
+        self.combined_training_df = self.combined_training_df.merge(trip_df, on="date", how="left")
         self.build_purchase_item_freq_cols()
 
         self.build_freq_ratios()
         
-        self.combined_df = TemporalFeatures.compute_days_since_last_purchase_for_item(self.combined_df)
-        self.combined_df = TemporalFeatures.compute_avg_days_between_item_purchases(self.combined_df)
-        self.combined_df["item_due_ratio_feat"] = TemporalFeatures.compute_item_due_ratio(self.combined_df)
+        self.combined_training_df = TemporalFeatures.compute_days_since_last_purchase_for_item(self.combined_training_df)
+        self.combined_training_df = TemporalFeatures.compute_avg_days_between_item_purchases(self.combined_training_df)
+        self.combined_training_df["item_due_ratio_feat"] = TemporalFeatures.compute_item_due_ratio(self.combined_training_df)
                 
-        ##self.export_df_to_excel_table(self.combined_df, "./combined_df", sheet_name="combined_df")
-        #self.create_bulkAdjustedUrgencyRatio_for_training(self.combined_df);
+        ##self.export_df_to_excel_table(self.combined_training_df, "./combined_df", sheet_name="combined_df")
+        #self.create_bulkAdjustedUrgencyRatio_for_training(self.combined_training_df);
         # ============================================================
         # MERGE HABIT FEATURES
         # ============================================================
         # habit_df = build_habit_features(combined_df)
-        # self.combined_df = self.combined_df.merge(habit_df, on="itemId",how="left")
-        # self.combined_df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]] = (
-        #     self.combined_df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]].fillna(0.0)
+        # self.combined_training_df = self.combined_training_df.merge(habit_df, on="itemId",how="left")
+        # self.combined_training_df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]] = (
+        #     self.combined_training_df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]].fillna(0.0)
         # ) 
     ###########################################################################################
     def validate_no_empty_columns(df):
@@ -96,49 +100,49 @@ class GroceryML:
         # 1. mark real purchases
         targetColName = "didBuy_target";
         print(f"creating target col: {targetColName}");
-        self.combined_df[targetColName] = 1
+        self.combined_training_df[targetColName] = 1
     
     ###########################################################################################
     def canonicalize(self):
     
         patterns = ["prairie-farm-milk","kleinpeter-milk", "kl-milk", "Milk, Fat Free,", "Fat-Free Milk"]
-        self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "milk")
+        self.itemNameUtils.canonicalize_items(self.combined_training_df, patterns, "milk")
         patterns = ["Bunny Bread", "sandwich-bread", "White Sandwich Bread", "bunny-bread","se-grocers-bread","seg-sandwich-bread", "seg-white-bread"]
-        self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "bread")
+        self.itemNameUtils.canonicalize_items(self.combined_training_df, patterns, "bread")
         patterns = ["dandw-cheese", "kraft-cheese", "se-grocers-cheese", "know-and-love-cheese"]
-        self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "cheese")
+        self.itemNameUtils.canonicalize_items(self.combined_training_df, patterns, "cheese")
         patterns = ["blue-plate-mayo", "blue-plate-mynnase"]
-        self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "mayo")
+        self.itemNameUtils.canonicalize_items(self.combined_training_df, patterns, "mayo")
         patterns = ["gatorade", "powerade"]
-        self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "gatorade-powerade")
+        self.itemNameUtils.canonicalize_items(self.combined_training_df, patterns, "gatorade-powerade")
         patterns = ["chicken-cutlet", "chicken-leg", "chicken-thigh", "chicken-thighs"]
-        self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "chicken")
+        self.itemNameUtils.canonicalize_items(self.combined_training_df, patterns, "chicken")
         patterns = ["chobani-yogrt-flip", "chobani-yogurt"]
-        self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "yogurt")
+        self.itemNameUtils.canonicalize_items(self.combined_training_df, patterns, "yogurt")
         patterns = ["coca-cola", "coca-cola-cola", "cocacola-soda", "coke", "cola"]
-        self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "coke")
+        self.itemNameUtils.canonicalize_items(self.combined_training_df, patterns, "coke")
         patterns = ["hugbi-pies", "-hugbi-pies"]
-        self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "hugbi-pies")
+        self.itemNameUtils.canonicalize_items(self.combined_training_df, patterns, "hugbi-pies")
         patterns  = ["cereal"]
-        self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "cereal")
+        self.itemNameUtils.canonicalize_items(self.combined_training_df, patterns, "cereal")
         patterns = ["minute-maid-drink", "minute-maid-drinks", "minute-maid-lmnade"]
-        self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "minute-maid-drink")
+        self.itemNameUtils.canonicalize_items(self.combined_training_df, patterns, "minute-maid-drink")
         patterns = ["egglands-best-egg", "egglands-best-eggs", "eggs"]
-        self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "eggs")
+        self.itemNameUtils.canonicalize_items(self.combined_training_df, patterns, "eggs")
         patterns = ["sprklng-water", "sparkling-ice-wtr", "sparkling-ice", "sparkling-water"]
-        self.itemNameUtils.canonicalize_items(self.combined_df, patterns, "sparkling-ice")
+        self.itemNameUtils.canonicalize_items(self.combined_training_df, patterns, "sparkling-ice")
                                       
     ###########################################################################################
     def build_habit_frequency_for_training(self):
         print("build_habit_frequency_for_training()");
-        df = self.combined_df[self.combined_df["didBuy_target"] == 1]
+        df = self.combined_training_df[self.combined_training_df["didBuy_target"] == 1]
         latest_trip_date = df["date"].max()
         freq_map = self.compute_habit_frequency_map(df, latest_trip_date)
-        self.combined_df["itemPurchaseHabitFrequency_feat"] = self.combined_df["itemId"].map(freq_map)
+        self.combined_training_df["itemPurchaseHabitFrequency_feat"] = self.combined_training_df["itemId"].map(freq_map)
     ############################################################################################
     def recompute_habit_frequency_for_prediction_time(self, prediction_date: datetime):
         print("recompute_habit_frequency_for_prediction_time()");
-        df = self.combined_df[self.combined_df["didBuy_target"] == 1]
+        df = self.combined_training_df[self.combined_training_df["didBuy_target"] == 1]
         latest_trip_date = prediction_date
         freq_map = self.compute_habit_frequency_map(df, latest_trip_date)
         return freq_map
@@ -240,7 +244,7 @@ class GroceryML:
 
     def build_trip_level_features(self):
         print("build_trip_level_features()");
-        grouped_df = ( self.combined_df[["date"]]
+        grouped_df = ( self.combined_training_df[["date"]]
             .drop_duplicates()
             .sort_values("date")
             .reset_index(drop=True)
@@ -328,11 +332,11 @@ class GroceryML:
     
         # initialize output columns
         for w in freq_windows:
-            self.combined_df[f"freq_{w}_feat"] = np.nan
+            self.combined_training_df[f"freq_{w}_feat"] = np.nan
     
         # process each itemId independently
         result_frames = []
-        for item_id, group in self.combined_df.groupby("itemId", group_keys=False):
+        for item_id, group in self.combined_training_df.groupby("itemId", group_keys=False):
             group = group.copy()
             group = group.sort_values("date").reset_index(drop=True)
             history = []
@@ -363,16 +367,16 @@ class GroceryML:
     
             result_frames.append(group)
     
-        self.combined_df = pd.concat(result_frames, ignore_index=True)
+        self.combined_training_df = pd.concat(result_frames, ignore_index=True)
     ###########################################################################################
     def build_freq_ratios(self):
         (
-            self.combined_df["freq7_over30_feat"],
-            self.combined_df["freq30_over365_feat"],
+            self.combined_training_df["freq7_over30_feat"],
+            self.combined_training_df["freq30_over365_feat"],
         ) = TemporalFeatures.compute_freq_ratios(
-            self.combined_df["freq_7_feat"],
-            self.combined_df["freq_30_feat"],
-            self.combined_df["freq_365_feat"],
+            self.combined_training_df["freq_7_feat"],
+            self.combined_training_df["freq_30_feat"],
+            self.combined_training_df["freq_365_feat"],
         )
     ###########################################################################################
         
@@ -381,16 +385,16 @@ class GroceryML:
         
         # keep a lookup of itemId -> item name (each itemId maps to exactly one name)
         item_lookup = (
-            self.combined_df[["itemId", "item"]]
+            self.combined_training_df[["itemId", "item"]]
             .drop_duplicates(subset=["itemId"])
         )
 
         targetColName = "didBuy_target";
-        self.combined_df["didBuy_target"] = 1
+        self.combined_training_df["didBuy_target"] = 1
 
         # 2. full grid
-        all_items = self.combined_df["itemId"].unique()
-        all_dates = self.combined_df["date"].unique()
+        all_items = self.combined_training_df["itemId"].unique()
+        all_dates = self.combined_training_df["date"].unique()
         full = (
             pd.MultiIndex.from_product([all_dates, all_items], names=["date", "itemId"])
             .to_frame(index=False)
@@ -398,7 +402,7 @@ class GroceryML:
     
         # 3. merge raw purchase rows
         df_full = full.merge(
-            self.combined_df[["date", "itemId", "item", "source", "didBuy_target"]],
+            self.combined_training_df[["date", "itemId", "item", "source", "didBuy_target"]],
             on=["date", "itemId"],
             how="left"
         )
@@ -412,7 +416,7 @@ class GroceryML:
         df_full = df_full.drop(columns=["item_lookup"])
     
         # 6. replace
-        self.combined_df = df_full.copy()
+        self.combined_training_df = df_full.copy()
     ###########################################################################################
     def build_winn_dixie_additional_text_rcpts_df(self, folderPath):
         recptParser = WinnDixieRecptParser()
@@ -450,10 +454,10 @@ class GroceryML:
         additional_rcpts_df = additional_rcpts_df.drop(columns=["time"])
         return additional_rcpts_df;
     ###########################################################################################
-    def build_winn_dixie_df(self):
+    def build_winn_dixie_df(self, path):
         recptParser = WinnDixieRecptParser()
         rows = []
-        for p in Path("winndixie rcpts/StevePhone2/pdf/text").glob("*.txt"):
+        for p in Path(path).glob("*.txt"):
             result = recptParser.parse(p.read_text(encoding="utf-8", errors="ignore"))
             for r in result["items"]:
                 rows.append({
@@ -626,7 +630,7 @@ class GroceryML:
         return normalized_df
     ###########################################################################################    
 
-    def build_prediction_input(self, combined_df, prediction_date, norm_params):
+    def build_prediction_input(self, prediction_date, norm_params):
     
         print(f" build_prediction_input()   Prediction date: {prediction_date.strftime('%Y-%m-%d')}")
     
@@ -737,8 +741,8 @@ class GroceryML:
     
         model.compile(
             optimizer=optimizer,
-            loss=build_params.get("loss", "mse"),
-            metrics=build_params.get("metrics", ["mae"])
+            loss=build_params.get("loss"),
+            metrics=build_params.get("metrics")
         )
     
         return model
@@ -766,7 +770,8 @@ class GroceryML:
         return history
     ###########################################################################################
   
-    def run_experiment(self, combined_df, modelBuildParams, modelTrainParams, baseDir):
+    def run_experiment(self, combined_df,  modelBuildParams, modelTrainParams, baseDir):
+
         
         print(f"run_experiment()  baseDir: {baseDir}  ");
         print(f"run_experiment()  when: {datetime.now()} params: {modelTrainParams}  ");

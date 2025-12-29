@@ -2,10 +2,10 @@ import pandas as pd
 class WeatherFeatures:  
     
     @staticmethod
-    def BuildWeather():
+    def BuildWeather(sourcePath):
         # --- WEATHER PREP ---
         weatherCols=["datetime", "temp", "humidity", "feelslike", "dew", "precip"]
-        df_weather = pd.read_csv("datasets/VisualCrossing-70062 2000-01-01 to 2025-12-14.csv", usecols=weatherCols)
+        df_weather = pd.read_csv(sourcePath, usecols=weatherCols)
         df_weather["datetime"] = pd.to_datetime(df_weather["datetime"])
         df_weather = df_weather.set_index("datetime").sort_index()
         df_weather["temp_5day_avg_feat"] = df_weather["temp"].rolling(5, min_periods=1).mean()
