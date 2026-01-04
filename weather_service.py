@@ -5,7 +5,7 @@ class NwsWeatherService:
     
     def __init__(self):
         self.session = requests.Session()
-        self.session.headers.update({"User-Agent": "(myapp, contact@example.com)"})
+        self.session.headers.update({"User-Agent": "(grocery-ml, nolabizit@gmail.com)"})
         self.points_url = "https://api.weather.gov/points"
 
         self.cached_periods = None
@@ -78,3 +78,16 @@ class NwsWeatherService:
         if target_date == date.today():
             return self.get_current_conditions(latitude, longitude)
         return self.get_forecast_by_date(latitude, longitude, target_date)
+
+
+####################################################################
+
+class WeatherConditions:
+    def __init__(self, date_value, temp_c, humidity_pct, precip_mm, short_forecast):
+        self.date_value = date_value
+        self.temp_c = temp_c
+        self.humidity_pct = humidity_pct
+        self.precip_mm = precip_mm
+        self.short_forecast = short_forecast
+#
+

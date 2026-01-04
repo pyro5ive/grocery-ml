@@ -1,0 +1,12 @@
+12/20/2025 at 10:06 PM
+Store Manager: 	PAUL
+Your Cashier: 	ACM LANE_091
+							Reg 	You Pay	
+QTY 2 	Hugbi Pies			$5.38	$5.38	
+QTY 1	Pearl Millng Syrup	$4.79	$4.79
+QTY 1	k&l Milk 	   		$5.29	$4.29
+QTY 1	Bunny Bread 	   	$3.69	$3.69
+			
+Total number of items sold = 5
+
+

@@ -1,0 +1,15 @@
+ 
+
+12/30/25  6:21pm
+Store Manager: 	PAUL
+Your Cashier: 	DONNA
+				
+		Reg 	You Pay	
+	Pure Value Milk 	   $4.99	   $4.99	B
+	Bunny Bread 	   $3.69	   $3.69	B
+	SEG Ham 	   $6.09	   $4.26	B
+	 0.61 lbs @ $6.99/lb
+	 You save ($1.83)
+
+			
+Total number of items sold = 3

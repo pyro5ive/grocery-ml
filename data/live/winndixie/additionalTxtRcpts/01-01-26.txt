@@ -1,0 +1,50 @@
+
+01/01/26  8:18pm 
+Store Manager: 	PAUL
+Your Cashier: 	AMY
+				
+					Reg 	You Pay	
+	Bunny Bread 	   $3.69	   $3.69	B
+	Blue Bell IceCream 	   $9.49	   $9.49	B
+	LAYS 10CT 	   $7.19	   $7.19	B
+	Little Debbie Snck 	   $3.19	   $3.19	B
+	Success Rice 	   $2.79	   $2.79	B
+	Pasta Roni Pasta 	   $1.79	   $1.79	B
+	Blue Runner Beans 	   $2.39	   $2.39	B
+	k&l Canned Beans 	   $1.39	   $0.83	B
+	 You save ($0.56)
+	Kraft Mac & Cheese 	   $1.99	   $1.39	B
+	 You save ($0.60)
+	Strbucks Frppccino 	   $3.99	   $3.99	B
+QTY 2 	k&l Corn 	   $2.38	   $1.42	B
+	 You save ($0.96)
+	Blue Runner Beans 	   $3.79	   $3.79	B
+	Kool Aid Drinks 	   $2.49	   $2.49	B
+	Topcare Liquid Rlf 	   $8.29	   $8.29	T
+	k&l Green Beans 	   $1.19	   $0.71	B
+	 You save ($0.48)
+	Milk Magic Straws 	   $1.99	   $0.50	B
+	 You save ($1.49)
+QTY 2 	SE Grocers Pasta 	   $3.58	   $2.14	B
+	 You save ($1.44)
+	Quaker Rice Crisps 	   $3.69	   $3.69	B
+	Brkstn Cottage Chs 	   $3.89	   $3.89	B
+	Dole Can Pineapple 	   $2.69	   $2.69	B
+	Fanta Soda 	   $3.79	   $3.79	B
+	HS Applewood Bacon 	   $6.99	   $5.99	B
+	 You save ($1.00)
+	Manda Sausage 	   $4.59	   $4.59	B
+	Chicken Cutlets 	  $10.21	   $7.72	B
+	 1.46 lbs @ $5.29/lb
+	 You save ($2.49)
+	Sparkling Ice Wtr 	   $1.59	   $1.25	B
+	 You save ($0.34)
+	Sparkling Ice Wtr 	   $1.59	   $1.25	B
+	 You save ($0.34)
+	Sparkling Ice Wtr 	   $1.59	   $1.25	B
+	 You save ($0.34)
+	Sparkling Ice Wtr 	   $1.59	   $1.25	B
+	 You save ($0.34)
+
+			
+Total number of items sold = 30
