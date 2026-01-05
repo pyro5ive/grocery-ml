@@ -21,8 +21,8 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import silhouette_score
 
 
-## Domain
-from grocery_ml_core import GroceryML-Core
+### Domain
+from grocery_ml_core import GroceryMLCore
 from school_features import SchoolFeatures
 from weather_features import WeatherFeatures
 from item_name_utils import ItemNameUtils
@@ -33,13 +33,39 @@ from wallmart_rcpt_parser import WallmartRecptParser
 from winn_dixie_recpt_parser import WinnDixieRecptParser 
 from hidden_layer_param_builder import HiddenLayerParamSetBuilder
 from weather_service import NwsWeatherService;
-
 # asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 
-class GroceryMLTensorFlow:
+class GroceryML:
 
+    brand_prefixes = [
+    "great-value-",
+    "gv-",
+    "se-grocers-",
+    "marketside-",
+    "sam-s-choice-",
+    "equate-",
+    "parent-s-choice-",
+    "member-s-mark-",
+    "kirkland-",
+    "walmart-",
+    "kgl-",
+    "kand1",
+    "kandl",
+    "wr-",
+    ]
+    
+    exclude_items = [
+        "shirt", "joggers", "underwear", "sandals", "socks",
+        "toy", "doll", "game", "plush", "fleece"
+        "cleaner", "shorts", "pants", "mens", 
+        "birthday", "christmas", "halloween",
+        "greeting-cards", "greeting", "hallmark", "sleeves"
+        ]
+    
+    _combined_df: pd.DataFrame = None 
     training_df: pd.DataFrame = None
+    live_df: pd.DataFrame = None
     groceryMLCore: GroceryMLCore = None;
     itemNameUtils = None; 
     weatherService = None; 
@@ -53,8 +79,9 @@ class GroceryMLTensorFlow:
     liveSources  = {
         "walmart": r"data\live\walmart",
         "winndixie": r"data\live\winndixie\txt",
-        "winndixieAdditional" : "data\live\winndixie\additionalTxtRcpts"
-    },
+        "winndixieAdditional" : r"data\live\winndixie\additionalTxtRcpts",
+        "weather": r"data\live\weather\VisualCrossing-70062 2000-01-01 to 2025-12-14.csv"
+    }
         
     def __init__(self):
         pass;
@@ -64,100 +91,83 @@ class GroceryMLTensorFlow:
     ###########################################################################################        
     
     def build_training_df(self):
-        self.training_df = build_combined_df(self.trainingSources)
+        self.training_df =  self._build_combined_df(self.trainingSources)
     ###########################################################################################        
     def build_live_df(self):
-        self.live_df = build_combined_df(self.liveSources)
+        self.live_df = self._build_combined_df(self.liveSources)
         
     ###########################################################################################
-    def build_combined_df(self, use_neg_samples = "True", data_sources: Dict):
+    def _build_combined_df(self, data_sources: Dict):
+        
+        print(f"build_combined_df()")
+        self._build_sources(data_sources);
+        # item name and id operations
+        self._normalize_item_names();
+        self._combined_df = self.itemNameUtils.create_item_ids(self._combined_df, allow_new_items=True)
+        #            
+        # synthetic_df = DataCreator.build_synthetic_rows_until(408, 24, "01/01/2020", "12/31/2020")
+        # df = pd.concat([df, synthetic_df], ignore_index=True)
+        # synthetic_df = self.create_synthetic_samples(df, "01-01-2023", "12-31-2023", 3)
+        # df = pd.concat([df, synthetic_df], ignore_index=True)
+        #
+        self._combined_df = self.groceryMLCore.create_didBuy_target_col(self._combined_df, "didBuy_target");
+        self._combined_df = self.groceryMLCore.insert_negative_samples(self._combined_df);
+        #
+        self._combined_df = TemporalFeatures.compute_days_since_last_purchase_for_item(self._combined_df)
+        self._combined_df = TemporalFeatures.compute_avg_days_between_item_purchases(self._combined_df)  
+        self._combined_df = TemporalFeatures.compute_expected_gap_ewma_feat(self._combined_df);
+        self._combined_df = self.groceryMLCore.create_item_supply_level_feat(self._combined_df);
+        #
+        self._combined_df["item_due_ratio_feat"] = TemporalFeatures.compute_item_due_ratio(self._combined_df)  
+        self._combined_df = self.groceryMLCore.add_item_total_purchase_count_feat(self._combined_df, "itemPurchaseCount_feat");     
+        #
+        #TemporalFeatures.compute_recent_purchase_penalty(self._combined_df)              
+        #self._combined_df = self.groceryMLCore.build_purchase_item_freq_cols(self._combined_df)
 
-        print(f"build_training_df(use_neg_samples = {use_neg_samples})") 
-        winndixie_df = self.groceryMLCore.build_winn_dixie_df(data_sources.get(winndixie));
-        winndixie_add_txt_rpts_df =  self.groceryMLCore.build_winn_dixie_additional_text_rcpts_df(data_sources.get(winndixieAdditional))
+        self._combined_df = self._combined_df[self._combined_df["itemPurchaseCount_feat"] != 1].reset_index(drop=True)
+        ######## trip level ######
+        trip_df = self.build_trip_level_features(self._combined_df)
+        if trip_df is None: 
+            raise RuntimeError("build_trip_level_features() returned None")
+        self._combined_df = self._combined_df.merge(trip_df, on="date", how="left")
+                
+        # df_weather = WeatherFeatures.BuildWeather(r"data\training\weather\VisualCrossing-70062 2000-01-01 to 2025-12-14.csv").reset_index()
+        # self._combined_df = self._combined_df.merge(df_weather, on="date", how="left")
+
+        self.drop_rare_purchases();
+        
+        #df = df.drop(columns=["source"]) 
+        #self.groceryMLCore.validate_no_empty_columns(self._combined_df)
+        print("self._combined_df() done")
+    
+        ##self.groceryMLCore.export_df_to_excel_table(self._combined_df, "./combined_df", sheet_name="combined_df")
+        return self._combined_df
+    ###########################################################################################
+    def _build_sources(self, data_sources: Dict):
+        winndixie_df = self.groceryMLCore.build_winn_dixie_df(data_sources.get("winndixie"));
+        winndixie_add_txt_rpts_df =  self.groceryMLCore.build_winn_dixie_additional_text_rcpts_df(data_sources.get("winndixieAdditional"))
         winndixie_df = pd.concat([winndixie_df, winndixie_add_txt_rpts_df], ignore_index=True)
         #       
-        wallmart_df = WallmartRecptParser.build_wall_mart_df(data_sources.get(walmart);
-        df = pd.concat([winndixie_df, wallmart_df[["date", "item", "source"]]],ignore_index=True)        
+        wallmart_df = WallmartRecptParser.build_wall_mart_df(data_sources.get("walmart"));
+        
         if winndixie_df is None:
             raise RuntimeError("build_winn_dixie_df() returned None")
         if winndixie_add_txt_rpts_df is None:
             raise RuntimeError("build_winn_dixie_additional_text_rcpts_df() returned None")
         if wallmart_df is None:
             raise RuntimeError("build_wall_mart_df() returned None")
-        if df is None:
+        if self._combined_df is None:
             raise RuntimeError("build_wall_mart_df() returned None")
-
-       
-        # item name and id operations
-        self.groceryMLCore.canonicalize(df)
-        df["item"] = df["item"].apply(ItemNameUtils.clean_item_name)
-        df = self.itemNameUtils.create_item_ids(df)
         
-        self.groceryMLCore.create_didBuy_target_col(df);
-             
-        # synthetic_df = DataCreator.build_synthetic_rows_until(408, 24, "01/01/2020", "12/31/2020")
-        # df = pd.concat([df, synthetic_df], ignore_index=True)
-        # synthetic_df = self.create_synthetic_samples(df, "01-01-2023", "12-31-2023", 3)
-        # df = pd.concat([df, synthetic_df], ignore_index=True)
+        self._combined_df = pd.concat([winndixie_df, wallmart_df[["date", "item", "source"]]],ignore_index=True)        
+    ###########################################################################################
+    def _normalize_item_names(self):
         
-        if use_neg_samples:     
-            print(f"use_neg_samples is true")
-            df = self.groceryMLCore.insert_negative_samples(df);
-        else:
-            print(f"use_neg_samples is false, not doing it.")
-
-        df = TemporalFeatures.compute_days_since_last_purchase_for_item(df)
-        df = TemporalFeatures.compute_expected_gap_ewma_feat(df);
-        df = TemporalFeatures.compute_avg_days_between_item_purchases(df)  
-        df = self.groceryMLCore.create_item_supply_level_feat(df);
-        
-        df["item_due_ratio_feat"] = TemporalFeatures.compute_item_due_ratio(df)  
-        
-        TemporalFeatures.compute_recent_purchase_penalty(df)        
-        
-        df = self.groceryMLCore.add_item_total_purchase_count_feat(df, "itemPurchaseCount_feat");     
-        
-        # item level
-        # self.build_purchase_item_freq_cols()
-        # self.build_habit_frequency_for_training();
-        
-        # self.groceryMLCore.build_freq_ratios()
-                
-    
-
-     
-        ######## trip level ######
-        trip_df = self.build_trip_level_features()
-        if trip_df is None: 
-            raise RuntimeError("build_trip_level_features() returned None")
-        df = df.merge(trip_df, on="date", how="left")
-                
-        df_weather = WeatherFeatures.BuildWeather(r"data\training\weather\VisualCrossing-70062 2000-01-01 to 2025-12-14.csv").reset_index()
-        df = df.merge(df_weather, on="date", how="left")
-        
-        #self.drop_rare_items()
-
-        #df = df.drop(columns=["source"]) 
-        self.groceryMLCore.validate_no_empty_columns(df)
-        print("build_training_df() done")
-    
-        ##self.groceryMLCore.export_df_to_excel_table(df, "./combined_df", sheet_name="combined_df")
-        #self.create_bulkAdjustedUrgencyRatio_for_training(df);
-        # ============================================================
-        # MERGE HABIT FEATURES
-        # ============================================================
-        # habit_df = build_habit_features(combined_df)
-        # df = df.merge(habit_df, on="itemId",how="left")
-        # df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]] = (
-        #     df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]].fillna(0.0)
-        # ) 
-    # ###########################################################################################
-    #def drop_rare_items(self):
-        # self.combined_df = self.drop_rare_items_with_zero_freq(self.combined_df, "freq_7_feat")
-        # self.combined_df = self.drop_rare_items_with_zero_freq(self.combined_df, "freq_15_feat")
-        # self.combined_df = self.drop_rare_items_with_zero_freq(self.combined_df, "freq_30_feat")
-        # self.combined_df = self.drop_rare_items_with_zero_freq(self.combined_df, "freq_90_feat")
+        self._combined_df = self.itemNameUtils.remove_items_matching_terms(self._combined_df, "item", self.exclude_items);
+        self._combined_df["itemName_lemma"] = self._combined_df["item"].apply(self.itemNameUtils.lemmatize_item_name)
+        self._combined_df["item"] = self._combined_df["item"].apply(ItemNameUtils.clean_item_name)
+        self._combined_df = ItemNameUtils.strip_prefixes_from_column(self._combined_df ,"item", self.brand_prefixes);
+        self._combined_df = self.groceryMLCore.canonicalize(self._combined_df)
     ###########################################################################################
     def create_synthetic_samples(self, df, startDate, stopDate, fuzzRangeDays=3):
         print("create_synthetic_samples()")
@@ -202,220 +212,10 @@ class GroceryMLTensorFlow:
         return df[mask].copy()
  
     ###########################################################################################
-    def build_habit_frequency_for_training(self):
-        print("build_habit_frequency_for_training()");
-        df = self.combined_df[self.combined_df["didBuy_target"] == 1]
-        latest_trip_date = df["date"].max()
-        freq_map = self.compute_habit_frequency_map(df, latest_trip_date)
-        self.combined_df["itemPurchaseHabitFrequency_feat"] = self.combined_df["itemId"].map(freq_map)
-    ############################################################################################
-    def recompute_habit_frequency_for_prediction_time(self, prediction_date: datetime):
-        print("recompute_habit_frequency_for_prediction_time()");
-        df = self.combined_df[self.combined_df["didBuy_target"] == 1]
-        latest_trip_date = prediction_date
-        freq_map = self.compute_habit_frequency_map(df, latest_trip_date)
-        return freq_map
-    ############################################################################################
-    def compute_habit_frequency_map(self, filtered_df: pd.DataFrame, ref_date: datetime):
-        print("compute_habit_frequency_map()");
-        oldest_date = filtered_df["date"].min()
-        days_span = (ref_date - oldest_date).days
-        if days_span <= 0:
-            return {}
-
-        counts = filtered_df.groupby("itemId")["date"].count()
-        freq_map = (counts / days_span).to_dict()
-        return freq_map
-    #############################################################################################
-
-        
-    # def build_habit_features(self, df, tau_days=120):
-    #     df = df.copy()
-    #     df["date"] = pd.to_datetime(df["date"])
+    def _drop_rare_purchases(self):
+        self._combined_df = self._combined_df[self._combined_df["itemPurchaseCount_feat"] != 1].reset_index(drop=True)
     
-    #     total_trips = df["date"].nunique()
-    #     timeline_days = (df["date"].max() - df["date"].min()).days or 1
-    
-    #     rows = []
-    
-    #     for itemId, g in df.groupby("itemId"):
-    #         buys = g[g["didBuy_target"] == 1]["date"]
-    
-    #         if len(buys) == 0:
-    #             rows.append({
-    #                 "itemId": itemId,
-    #                 "habitFrequency_feat": 0.0,
-    #                 "habitSpan_feat": 0.0,
-    #                 "habitDecay_feat": 0.0,
-    #             })
-    #             continue
-    
-    #         first = buys.min()
-    #         last = buys.max()
-    
-    #         habitFrequency = len(buys) / total_trips
-    #         habitSpan = (last - first).days / timeline_days
-    #         days_since_last = (df["date"].max() - last).days
-    #         habitDecay = np.exp(-days_since_last / tau_days)
-    
-    #         rows.append({
-    #             "itemId": itemId,
-    #             "habitFrequency_feat": habitFrequency,
-    #             "habitSpan_feat": habitSpan,
-    #             "habitDecay_feat": habitDecay,
-    #         })
-    
-    #     return pd.DataFrame(rows)
-    # ###########################################################################################     
-        
-    # def compute_due_score(self, df, itemId=None, use_sigmoid=True, normalize=False, weights=None):
-        
-    #     if weights is None:
-    #         weights = {
-    #             "daysSinceThisItemLastPurchased_log_feat": 1.5,
-    #             "freq_30_feat": 1.0,
-    #             "freq_90_feat": 0.5
-    #         }
-    
-    #     # --------------------------------------------------------
-    #     # Optional itemId filter
-    #     # --------------------------------------------------------
-    #     if itemId is not None:
-    #         df = df[df["itemId"] == itemId].copy()
-    #     else:
-    #         df = df.copy()
-    
-    #     # --------------------------------------------------------
-    #     # RAW linear score (pre-normalization)
-    #     # --------------------------------------------------------
-    #     df["due_score_raw_feat"] = (
-    #         weights["daysSinceThisItemLastPurchased_log_feat"] * df["daysSinceThisItemLastPurchased_log_feat"]
-    #       + weights["freq_30_feat"]              * df["freq_30_feat"]
-    #       + weights["freq_90_feat"]              * df["freq_90_feat"]
-    #     )
-    
-    #     # --------------------------------------------------------
-    #     # Final due_score
-    #     # --------------------------------------------------------
-    #     if use_sigmoid:
-    #         df["due_score"] = 1 / (1 + np.exp(-df["due_score_raw"]))
-    
-    #     elif normalize:
-    #         mean = df["due_score_raw"].mean()
-    #         std  = df["due_score_raw"].std() or 1.0
-    #         df["due_score"] = (df["due_score_raw"] - mean) / std
-    
-    #     else:
-    #         df["due_score"] = df["due_score_raw"]
-    
-    #     return df
     ###########################################################################################
-
-    
-    # def compute_bulkAdjustedUrgencyRatio_value(self, days_since, avg_between, bulk_flag, did_buy):
-    #     """
-    #     Compute one bulk-adjusted urgency ratio value.
-    #     Shared by training + prediction. Caller decides did_buy.
-    #     """
-    #     if did_buy != 1:
-    #         return 0.0
-
-    #     bulk_factor_value = 2.5
-    #     denominator = avg_between * (bulk_factor_value if bulk_flag == 1 else 1.0)
-
-    #     if denominator == 0:
-    #         return 0.0
-
-    #     return days_since / denominator
-    # ###########################################################################
-   
-    # def create_bulkAdjustedUrgencyRatio_for_training(self, df):
-    #     """
-    #     Create bulkAdjustedUrgencyRatio_feat using real didBuy_target values.
-    #     """
-    #     if "bulkFlag" not in df.columns:
-    #         df["bulkAdjustedUrgencyRatio_feat"] = [0.0] * len(df)
-    #         return dfFnor
-
-    #     ratios = []
-    #     for _, row in df.iterrows():
-    #         ratios.append(self.compute_bulkAdjustedUrgencyRatio_value(
-    #             row["daysSinceThisItemLastPurchased_log_feat"],
-    #             row["avgDaysBetweenItemPurchases_log_feat"],
-    #             row["bulkFlag"],
-    #             row["didBuy_target"]      # <-- real 0/1
-    #         ))
-
-    #     df["bulkAdjustedUrgencyRatio_feat"] = ratios
-    #     return df
-    # ###########################################################################
-    # def create_bulkAdjustedUrgencyRatio_for_prediction(self, df):
-    #     """
-    #     Create bulkAdjustedUrgencyRatio_feat assuming did_buy==1 for all rows.
-    #     """
-    #     if "bulkFlag" not in df.columns:
-    #         df["bulkAdjustedUrgencyRatio_feat"] = [0.0] * len(df)
-    #         return df
-
-    #     ratios = []
-    #     for _, row in df.iterrows():
-    #         ratios.append(self.compute_bulkAdjustedUrgencyRatio_value(
-    #             row["daysSinceThisItemLastPurchased_log_feat"],
-    #             row["avgDaysBetweenItemPurchases_log_feat"],
-    #             row["bulkFlag"],
-    #             1                           # <-- always 1 at prediction time
-    #         ))
-
-    #     df["bulkAdjustedUrgencyRatio_feat"] = ratios
-    #     return df
-    # ###########################################################################
-    
-    def build_purchase_item_freq_cols(self):
-
-        print("build_purchase_item_freq_cols()");
-        freq_windows = [7, 15, 30, 90, 365]
-        max_w = max(freq_windows)
-    
-        # initialize output columns
-        for w in freq_windows:
-            self.combined_df[f"freq_{w}_feat"] = np.nan
-    
-        # process each itemId independently
-        result_frames = []
-        for item_id, group in self.combined_df.groupby("itemId", group_keys=False):
-            group = group.copy()
-            group = group.sort_values("date").reset_index(drop=True)
-            history = []
-    
-            col_date = group.columns.get_loc("date")
-            col_buy = group.columns.get_loc("didBuy_target")
-            col_freq = {w: group.columns.get_loc(f"freq_{w}_feat") for w in freq_windows}
-    
-            for i in range(len(group)):
-                cur_date = group.iat[i, col_date]
-    
-                # record a purchase occurrence
-                if group.iat[i, col_buy] == 1:
-                    history.append(cur_date)
-    
-                # prune old entries once using max window
-                cutoff_max = cur_date - pd.Timedelta(days=max_w)
-                history = [d for d in history if d >= cutoff_max]
-    
-                # compute window counts
-                for w in freq_windows:
-                    cutoff = cur_date - pd.Timedelta(days=w)
-                    count = 0
-                    for d in history:
-                        if d >= cutoff:
-                            count += 1
-                    group.iat[i, col_freq[w]] = count
-    
-            result_frames.append(group)
-    
-        self.combined_df = pd.concat(result_frames, ignore_index=True)
-    ###########################################################################################
-
     def build_freq_ratios(self):
         (
             self.combined_df["freq7_over30_feat"],
@@ -426,6 +226,7 @@ class GroceryMLTensorFlow:
             self.combined_df["freq_365_feat"],
         )
     ########################################################################################### 
+    
     def fit_normalization_params(self, df):
         params = {}
         feature_cols = self.get_feature_col_names(df);
@@ -440,9 +241,7 @@ class GroceryMLTensorFlow:
     
         return params
     ###########################################################################################
-    
-    def normalize_features(self,combined_df, norm_params):
-    
+    def normalize_features(self, combined_df, norm_params):
         print("normalize_features()");
         normalized_df = combined_df.copy()
         for col, cfg in norm_params.items():
@@ -466,7 +265,6 @@ class GroceryMLTensorFlow:
     
         return normalized_df
     ###########################################################################################    
-
     def build_and_compile_model(self, feat_cols_count, item_count, build_params):
 
         num_in = layers.Input(shape=(feat_cols_count,))
@@ -486,7 +284,6 @@ class GroceryMLTensorFlow:
         outputLayer = layers.Dense(1, activation=build_params["output_activation"])(x)
 
         model = models.Model(inputs=[num_in, item_in], outputs=outputLayer)
-    
     
         optimizer_name = build_params.get("optimizer", "adam")
         learning_rate = build_params.get("learning_rate")
@@ -665,23 +462,6 @@ class GroceryMLTensorFlow:
     def save_experiment(self, model, combined_df, extra_dataframes, history, build_params, train_params, exp_dir):
         name_parts = []
 
-        # if "embedding_dim" in build_params:
-        #     name_parts.append(f"e{build_params['embedding_dim']}")
-        # # if "layers" in build_params:
-        # #     hl = "-".join(str(x) for x in build_params["layers"])
-        # #     name_parts.append(f"l{hl}")
-        # if "epochs" in train_params:
-        #     name_parts.append(f"ep{train_params['epochs']}")
-        # if "output_activation" in build_params:
-        #     name_parts.append(f"oa_{build_params['output_activation']}")
-    
-        # base_name = "__".join(name_parts) if name_parts else "exp_unlabeled"
-        # short_id = str(abs(hash(time.time())))[:6]
-        # exp_name = f"{base_name}__{short_id}"
-        # exp_dir = os.path.join(base_dir, exp_name)      
-        # print(f"Creating dir: {exp_dir}")
-        # os.makedirs(exp_dir, exist_ok=True)
-        
         print("Exporting extra_dataframes:")
         groceryMLCore.export_dataframes_with_exp_name(extra_dataframes, exp_dir)
         
@@ -775,13 +555,13 @@ class GroceryMLTensorFlow:
             "avgDaysBetweenItemPurchases_raw"
         ]].fillna(0)
     
-        #latest_rows_df["item_due_ratio_feat"] = TemporalFeatures.compute_item_due_ratio(latest_rows_df)
+        latest_rows_df["item_due_ratio_feat"] = TemporalFeatures.compute_item_due_ratio(latest_rows_df)
         #TemporalFeatures.compute_recent_purchase_penalty(latest_rows_df)
         
         #
-        # latest_rows_df["daysUntilNextHoliday_feat"] = HolidayFeatures.compute_days_until_next_holiday(prediction_date)
-        # latest_rows_df["daysSinceLastHoliday_feat"] = HolidayFeatures.compute_days_since_last_holiday(prediction_date)
-        # latest_rows_df["holidayProximityIndex_feat"] = HolidayFeatures.compute_holiday_proximity_index(prediction_date)
+        latest_rows_df["daysUntilNextHoliday_feat"] = HolidayFeatures.compute_days_until_next_holiday(prediction_date)
+        latest_rows_df["daysSinceLastHoliday_feat"] = HolidayFeatures.compute_days_since_last_holiday(prediction_date)
+        latest_rows_df["holidayProximityIndex_feat"] = HolidayFeatures.compute_holiday_proximity_index(prediction_date)
         #
         latest_rows_df["daysUntilSchoolStart_feat"] = SchoolFeatures.compute_days_until_school_start(prediction_date)
         latest_rows_df["daysUntilSchoolEnd_feat"] = SchoolFeatures.compute_days_until_school_end(prediction_date)
@@ -789,12 +569,12 @@ class GroceryMLTensorFlow:
         #
         # latest_rows_df = TemporalFeatures.add_dst_since_until_features(latest_rows_df);
         #       
-        # latest_rows_df["year_feat"] = prediction_date.year
-        # latest_rows_df["month_cyc_feat"] = prediction_date.month
-        # latest_rows_df["day_cyc_feat"] = prediction_date.day
-        # latest_rows_df["dow_cyc_feat"] = prediction_date.weekday()
-        # latest_rows_df["doy_feat"] = prediction_date.timetuple().tm_yday
-        # latest_rows_df["quarter_feat"] = ((prediction_date.month - 1) // 3) + 1
+        latest_rows_df["year_feat"] = prediction_date.year
+        latest_rows_df["month_cyc_feat"] = prediction_date.month
+        latest_rows_df["day_cyc_feat"] = prediction_date.day
+        latest_rows_df["dow_cyc_feat"] = prediction_date.weekday()
+        latest_rows_df["doy_feat"] = prediction_date.timetuple().tm_yday
+        latest_rows_df["quarter_feat"] = ((prediction_date.month - 1) // 3) + 1
     
         if "didBuy_target" in latest_rows_df.columns:
             latest_rows_df.drop(columns=["didBuy_target"], inplace=True)
@@ -816,7 +596,7 @@ class GroceryMLTensorFlow:
             "x_item_idx": x_item_idx,
             "feature_cols": feature_cols
         }
- 
+    ########################################################################################## 
     def get_normalized_feature_col_names(self, df):
         """Returns normalized feature columns used for model input."""
         return [c for c in df.columns if c.endswith("_norm")]

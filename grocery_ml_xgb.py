@@ -120,8 +120,7 @@ class GroceryML:
         self._combined_df = self.groceryMLCore.canonicalize(self._combined_df)
         
         self._combined_df = self.itemNameUtils.create_item_ids(self._combined_df, allow_new_items=True)
-        
-             
+                     
         # synthetic_df = DataCreator.build_synthetic_rows_until(408, 24, "01/01/2020", "12/31/2020")
         # df = pd.concat([df, synthetic_df], ignore_index=True)
         # synthetic_df = self.create_synthetic_samples(df, "01-01-2023", "12-31-2023", 3)

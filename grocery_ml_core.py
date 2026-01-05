@@ -196,11 +196,8 @@ class GroceryMLCore:
     
     def build_trip_level_features(self, df):
         print("build_trip_level_features()");
-        grouped_df = ( df[["date"]]
-            .drop_duplicates()
-            .sort_values("date")
-            .reset_index(drop=True)
-        )
+        
+        grouped_df = ( df[["date"]].drop_duplicates() .sort_values("date") .reset_index(drop=True) )
     
         # grouped_df["daysSinceLastTrip_feat"] = TemporalFeatures.create_days_since_last_trip(grouped_df)
         # grouped_df["avgDaysBetweenTrips_feat"] = TemporalFeatures.compute_avg_days_between_trips(grouped_df)
