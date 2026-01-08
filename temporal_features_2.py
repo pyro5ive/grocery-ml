@@ -2,6 +2,7 @@ import numpy as np
 import pytz
 import datetime
 from math import exp
+import pandas as pd
 
 class TemporalFeatures:
 
@@ -135,8 +136,18 @@ class TemporalFeatures:
         return targetDf["date"].diff().dt.days.fillna(0)
     #######################################################
     @staticmethod
-    def compute_avg_days_between_trips(grouped_df):
-        return grouped_df["daysSinceLastTrip_raw"].replace(0, np.nan).expanding().mean().fillna(0)    
+    def compute_days_since_last_trip_value(df, prediction_date, date_col: str = "date"):
+        prediction_date_ts = pd.to_datetime(prediction_date)
+        last_trip_date = pd.to_datetime(df[date_col]).max()
+
+        if pd.isna(last_trip_date):
+            return None
+
+        return int((prediction_date_ts - last_trip_date).days)
+    ########################################################
+    @staticmethod
+    def compute_avg_days_between_trips(targetDf):
+        return targetDf["daysSinceLastTrip_raw"].replace(0, np.nan).expanding().mean().fillna(0)    
     #######################################################
     @staticmethod
     def compute_trip_due_ratio(targetDf):

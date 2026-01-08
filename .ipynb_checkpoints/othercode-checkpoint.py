@@ -189,3 +189,13 @@ other code
         # df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]] = (
         #     df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]].fillna(0.0)
         # ) 
+
+
+              # ============================================================
+        # MERGE HABIT FEATURES
+        # ============================================================
+        # habit_df = build_habit_features(combined_df)
+        # df = df.merge(habit_df, on="itemId",how="left")
+        # df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]] = (
+        #     df[["habitFrequency_feat", "habitSpan_feat", "habitDecay_feat"]].fillna(0.0)
+        # ) 

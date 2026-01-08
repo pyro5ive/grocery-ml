@@ -42,7 +42,10 @@ class WallmartRecptParser:
             ~df["Product Description"].str.contains("Athletic", case=False, na=False)  
         ]
 
-        df = df.rename(columns={"Order Date": "date","Product Description": "item"})
+        df = df.rename(columns={"Order Date": "date",
+                                "Product Description": "item",
+                                "Product Quantity": "qty"
+                               })
         df["date"] = pd.to_datetime(df["date"])
         
         return df

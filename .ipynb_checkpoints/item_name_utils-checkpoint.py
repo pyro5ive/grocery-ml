@@ -116,20 +116,20 @@ class ItemNameUtils:
     def strip_prefixes_from_column(df, col_name: str, prefixes: list[str]):
         if col_name not in df.columns:
             raise ValueError(f"Column '{col_name}' not found")
-
+    
         if not prefixes:
             return df
-
-        # build regex like: ^(kandl|foo|bar)\s*
-        escaped = [p.strip() for p in prefixes]
-        pattern = r"^(" + "|".join(escaped) + r")\s*"
-
+    
+        escaped = sorted([re.escape(p.strip()) for p in prefixes], key=len, reverse=True)
+        pattern = r"^(" + "|".join(escaped) + r")"
+    
         df[col_name] = (
             df[col_name]
-            .str.replace(pattern, "", regex=True, case=False)
-            .str.strip()
-        )
-
+                .str.replace(pattern, "", regex=True, case=False)
+                .str.strip()
+                .str.lstrip("-")
+    )
+    
         return df
      ###########################################################
     

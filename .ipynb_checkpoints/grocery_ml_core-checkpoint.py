@@ -69,16 +69,16 @@ class GroceryMLCore:
         self.itemNameUtils.canonicalize_items(df, patterns, "gatorade-powerade-sports-drink")
         #
         patterns = [ "tyson","chicken-cutlet", "chicken-leg", "chicken-thigh", "chicken-thighs"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "chicken")
+        self.itemNameUtils.canonicalize_items(df, patterns, "chicken-thigh-leg-cutlet-tyson")
         #
-        patterns = ["steak","ribs", "pork"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "red-meat")
+        patterns = ["steak","ribs", "pork", "ground-beef"]
+        self.itemNameUtils.canonicalize_items(df, patterns, "steak-ribs-pork-ground-beef-cano")
         #
         patterns = ["jimmy-dean",]
-        self.itemNameUtils.canonicalize_items(df, patterns, "frozen-breakfast")
+        self.itemNameUtils.canonicalize_items(df, patterns, "frozen-breakfast-jimmy-dean-cano")
         #
         patterns = ["shampoo", "conditioner"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "shampoo")     
+        self.itemNameUtils.canonicalize_items(df, patterns, "shampoo-conditioner-cano")     
         #
         patterns = ["soap"]
         self.itemNameUtils.canonicalize_items(df, patterns, "soap")     
@@ -92,11 +92,11 @@ class GroceryMLCore:
         patterns = ["topcare", "top-care"]
         self.itemNameUtils.canonicalize_items(df, patterns, "otcmeds")
            
-        patterns = ["little-debbie" , "hugbi-pies", "-hugbi-pies", "candy", "tastykake"]
+        patterns = ["little-debbie" , "hugbi-pies", "hubig" "-hugbi-pies", "candy", "tastykake"]
         self.itemNameUtils.canonicalize_items(df, patterns, "junk-food")
         #
-        patterns  = ["cereal", "kellogg-raisn-bran", "kellogg-raisin-bra"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "cereal")
+        patterns  = ["cereal", "kellogg-raisn-bran", "kellogg-raisin-bra", "apl-jck"]
+        self.itemNameUtils.canonicalize_items(df, patterns, "cereal-raisn-bran-apl-jck_cano")
         #
         patterns = ["minute-maid-drink", "minute-maid-drinks", "minute-maid-lmnade"]
         self.itemNameUtils.canonicalize_items(df, patterns, "minute-maid-drink")
@@ -193,25 +193,40 @@ class GroceryMLCore:
     
         return df
     ##############################################################################################
+    def create_is_self_checkout_feature(self):
+        self._combined_df["isSelfCheckout_feat"]  = 0;
+        ## TODO: check casiher value
+    ##############################################################################################
+    # def build_trip_level_features(self, df):
+    #     print("build_trip_level_features()");
+        
+    #     grouped_df = ( df[["date"]].drop_duplicates() .sort_values("date") .reset_index(drop=True) )
     
-    def build_trip_level_features(self, df):
-        print("build_trip_level_features()");
-        grouped_df = ( df[["date"]]
-            .drop_duplicates()
-            .sort_values("date")
-            .reset_index(drop=True)
-        )
+    #     #
+    #     #
+    #     # grouped_df =  TemporalFeatures.add_dst_since_until_features(grouped_df);
+    #     # TemporalFeatures.compute_trip_due_ratio(grouped_df);
+    #     # grouped_df = TemporalFeatures.create_date_features(grouped_df)
+    #     #
+    #     return grouped_df;
+    ###########################################################################
+    def _build_trip_interveral_feautres(self, df):
+        
+        print("_build_trip_interveral_feautres()");
+        grouped_df = ( df[["date"]].drop_duplicates() .sort_values("date") .reset_index(drop=True) )
+        grouped_df["daysSinceLastTrip_raw"] = TemporalFeatures.create_days_since_last_trip(grouped_df)
+        grouped_df["avgDaysBetweenTrips_raw"] = TemporalFeatures.compute_avg_days_between_trips(grouped_df)
+        return grouped_df
+    ###########################################################################
+    def _build_holiday_features(self, df):
+        print("_build_holiday_features()");
+        
+        grouped_df = ( df[["date"]].drop_duplicates() .sort_values("date") .reset_index(drop=True) )
     
-        # grouped_df["daysSinceLastTrip_feat"] = TemporalFeatures.create_days_since_last_trip(grouped_df)
-        # grouped_df["avgDaysBetweenTrips_feat"] = TemporalFeatures.compute_avg_days_between_trips(grouped_df)
-        #
-        # grouped_df["daysUntilNextHoliday_feat"]   = grouped_df["date"].apply(HolidayFeatures.compute_days_until_next_holiday)
-        # grouped_df["daysSinceLastHoliday_feat"]   = grouped_df["date"].apply(HolidayFeatures.compute_days_since_last_holiday)
-        # grouped_df["holidayProximityIndex_feat"]  = grouped_df["date"].apply(HolidayFeatures.compute_holiday_proximity_index)
-        #
-        grouped_df["daysUntilSchoolStart_feat"]   = grouped_df["date"].apply(SchoolFeatures.compute_days_until_school_start)
-        grouped_df["daysUntilSchoolEnd_feat"]     = grouped_df["date"].apply(SchoolFeatures.compute_days_until_school_end)
-        grouped_df["schoolSeasonIndex_feat"]      = grouped_df["date"].apply(SchoolFeatures.compute_school_season_index)
+        grouped_df["daysUntilNextHoliday_raw"]   = grouped_df["date"].apply(HolidayFeatures.compute_days_until_next_holiday)
+        grouped_df["daysSinceLastHoliday_raw"]   = grouped_df["date"].apply(HolidayFeatures.compute_days_since_last_holiday)
+        grouped_df["holidayProximityIndex_feat"]  = grouped_df["date"].apply(HolidayFeatures.compute_holiday_proximity_index)
+        
         #
         # grouped_df =  TemporalFeatures.add_dst_since_until_features(grouped_df);
         # TemporalFeatures.compute_trip_due_ratio(grouped_df);
@@ -219,6 +234,16 @@ class GroceryMLCore:
         #
         return grouped_df;
     ###########################################################################
+    def _build_school_schedule_features(self, df):
+        print("_build_school_schedule_features()");
+        
+        grouped_df = ( df[["date"]].drop_duplicates() .sort_values("date") .reset_index(drop=True) )
+    
+        grouped_df["daysUntilSchoolStart_raw"]   = grouped_df["date"].apply(SchoolFeatures.compute_days_until_school_start)
+        grouped_df["daysUntilSchoolEnd_raw"]     = grouped_df["date"].apply(SchoolFeatures.compute_days_until_school_end)
+        grouped_df["schoolSeasonIndex_feat"]      = grouped_df["date"].apply(SchoolFeatures.compute_school_season_index)
+        return grouped_df;
+    ##############################################################################################
     ## TODO:build_purchase_item_freq_cols  is broken 
     # def build_purchase_item_freq_cols(self, df):
 
@@ -298,6 +323,7 @@ class GroceryMLCore:
 
         # fill mssing source cols: 
         df_full["source"] = df_full["source"].fillna("_neg_sample_").astype(str)
+        df_full["cashier_raw"] = df_full["cashier_raw"].fillna("_neg_sample_").astype(str)
         
         return df_full.copy()
     ###########################################################################################
@@ -312,9 +338,9 @@ class GroceryMLCore:
                     "date": result["date"],
                     "time": result["time"],
                     #"manager": result["manager"],
-                    #"cashier": result["cashier"],
-                    "item": r["item"]
-                    #"qty": r["qty"],
+                    "cashier_raw": result["cashier"],
+                    "item": r["item"],
+                    #"qty_raw": r["qty"],
                     #"reg": r["reg"],
                     #"youPay": r["youPay"],
                     #"reportedItemsSold": result["reported"],
@@ -329,9 +355,9 @@ class GroceryMLCore:
         
         additional_rcpts_df = WinnDixieRecptParser.remove_duplicate_receipt_files(additional_rcpts_df)
         
-        #additional_rcpts_df["item"] = additional_rcpts_df["item"].str.replace(r"^know-and-love\s*", "", regex=True, case=False).str.strip()
-        additional_rcpts_df["item"] = additional_rcpts_df["item"].str.replace(r"^seg\s*", "", regex=True, case=False).str.strip()
-        additional_rcpts_df["item"] = additional_rcpts_df["item"].str.replace(r"^kandl\s*", "", regex=True, case=False).str.strip()
+        # #additional_rcpts_df["item"] = additional_rcpts_df["item"].str.replace(r"^know-and-love\s*", "", regex=True, case=False).str.strip()
+        # additional_rcpts_df["item"] = additional_rcpts_df["item"].str.replace(r"^seg\s*", "", regex=True, case=False).str.strip()
+        # additional_rcpts_df["item"] = additional_rcpts_df["item"].str.replace(r"^kandl\s*", "", regex=True, case=False).str.strip()
 
         additional_rcpts_df = additional_rcpts_df.sort_values(by=["date", "time"]).reset_index(drop=True)
         additional_rcpts_df = additional_rcpts_df.drop(columns=["time"])
@@ -348,9 +374,9 @@ class GroceryMLCore:
                     "date": result["date"],
                     "time": result["time"],
                     #"manager": result["manager"],
-                    #"cashier": result["cashier"],
-                    "item": r["item"]
-                    #"qty": r["qty"],
+                    "cashier_raw": result["cashier"],
+                    "item": r["item"],
+                    #"qty_raw": r["qty"],
                     #"reg": r["reg"],
                     #"youPay": r["youPay"],
                     #"reportedItemsSold": result["reported"],
@@ -365,10 +391,11 @@ class GroceryMLCore:
         
         winndixie_df = WinnDixieRecptParser.remove_duplicate_receipt_files(winndixie_df)
         
-        winndixie_df["item"] = winndixie_df["item"].str.replace(r"^know-and-love\s*", "", regex=True, case=False).str.strip()
-        winndixie_df["item"] = winndixie_df["item"].str.replace(r"^seg\s*", "", regex=True, case=False).str.strip()
-        winndixie_df["item"] = winndixie_df["item"].str.replace(r"^kandl\s*", "", regex=True, case=False).str.strip()
-        winndixie_df["source"] = "winndixie";
+        # winndixie_df["item"] = winndixie_df["item"].str.replace(r"^know-and-love\s*", "", regex=True, case=False).str.strip()
+        # winndixie_df["item"] = winndixie_df["item"].str.replace(r"^seg\s*", "", regex=True, case=False).str.strip()
+        # winndixie_df["item"] = winndixie_df["item"].str.replace(r"^kandl\s*", "", regex=True, case=False).str.strip()
+
+        # winndixie_df["source"] = "winndixie-{";
         winndixie_df = winndixie_df.sort_values(by=["date", "time"]).reset_index(drop=True)
         winndixie_df = winndixie_df.drop(columns=["time"])
         return winndixie_df;
