@@ -1,45 +1,38 @@
 import pandas as pd
+import numpy as np
+
 class SchoolFeatures:
-    
+
     @staticmethod
-    def compute_days_until_school_start(d):
-        d = pd.to_datetime(d)
-        start = pd.Timestamp(d.year, 8, 15)
-        if d <= start:
-            return (start - d).days
-        else:
-            next_start = pd.Timestamp(d.year + 1, 8, 15)
-            return (next_start - d).days
+    def compute_days_until_school_start(dates: pd.Series) -> pd.Series:
+        dates = pd.to_datetime(dates)
+        start = pd.to_datetime({"year": dates.dt.year, "month": 8, "day": 15})
+        start = start.where(dates <= start, start + pd.DateOffset(years=1))
+        return (start - dates).dt.days
     ####################################################################
 
     @staticmethod
-    def compute_days_until_school_end(d):
-        d = pd.to_datetime(d)
-        end = pd.Timestamp(d.year, 5, 31)
-        if d <= end:
-            return (end - d).days
-        else:
-            next_end = pd.Timestamp(d.year + 1, 5, 31)
-            return (next_end - d).days
+    def compute_days_until_school_end(dates: pd.Series) -> pd.Series:
+        dates = pd.to_datetime(dates)
+        end = pd.to_datetime({"year": dates.dt.year, "month": 5, "day": 31})
+        end = end.where(dates <= end, end + pd.DateOffset(years=1))
+        return (end - dates).dt.days
     ####################################################################
 
     @staticmethod
-    def compute_school_season_index(d):
-        """
-        Smooth 0→1 curve inside school season.
-        <0 before season, >1 after.
-        Good for neural nets.
-        """
-        d = pd.to_datetime(d)
-        start = pd.Timestamp(d.year, 8, 15)
-        end   = pd.Timestamp(d.year, 5, 31)
-    
-        # If date is after Dec, school season continues in Jan–May.
-        if d < start:
-            return -((start - d).days) / 365.0
-        elif start <= d <= end:
-            return (d - start).days / (end - start).days
-        else:
-            return (d - end).days / 365.0
-    
+    def compute_school_season_index(dates: pd.Series) -> pd.Series:
+        dates = pd.to_datetime(dates)
+
+        start = pd.to_datetime({"year": dates.dt.year, "month": 8, "day": 15})
+        end = pd.to_datetime({"year": dates.dt.year, "month": 5, "day": 31})
+        season_len = (end - start).dt.days
+        idx = pd.Series(0.0, index=dates.index)
+        before = dates < start
+        during = (dates >= start) & (dates <= end)
+        after = dates > end
+        idx[before] = -((start[before] - dates[before]).dt.days) / 365.0
+        idx[during] = ((dates[during] - start[during]).dt.days) / season_len[during]
+        idx[after] = ((dates[after] - end[after]).dt.days) / 365.0
+
+        return idx
     ####################################################################

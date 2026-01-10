@@ -1,3 +1,4 @@
+import os
 import time
 import pandas as pd
 from pathlib import Path
@@ -32,116 +33,74 @@ class GroceryMLCore:
     itemNameUtils = None; 
     weatherService = None; 
     
+    brand_prefixes = [
+        "great-value-",
+        "gv-",
+        "seg-",
+        "se-grocers-",
+        "marketside-",
+        "sam-s-choice-",
+        "equate-",
+        "parent-s-choice-",
+        "member-s-mark-",
+        "kirkland-",
+        "know-and-love-",
+        "walmart-",
+        "kgl-",
+        "kand1",
+        "kandl",
+        "wr-",
+        ]
+        
+    exclude_items = [
+        "shirt", "joggers", "underwear", "sandals", "socks",
+        "toy", "doll", "game", "plush", "fleece",
+        "cleaner", "shorts", "pants", "mens", 
+        "birthday", "christmas", "halloween",
+        "greeting-cards", "greeting", "hallmark", "sleeves"
+        ]
+    
     def __init__(self):
         pass;
         self.itemNameUtils = ItemNameUtils();
         self.weatherService = NwsWeatherService();
-   ###########################################################################################
-    def validate_no_empty_columns(self, df):
-        # if ANY column has at least one missing value
-        print("validate_no_empty_columns()");
-        bad_cols = [c for c in df.columns if df[c].isna().any()]
+    ###########################################################################################
+    def validate_no_empty_columns(self, df, exclude_cols=None):
+        print("validate_no_empty_columns()")
+        if exclude_cols is None:
+            exclude_cols = []
+        #
+        bad_cols = [
+            c for c in df.columns
+            if c not in exclude_cols and df[c].isna().any()
+        ]
+    
         if bad_cols:
             raise ValueError(f"Columns contain empty values: {bad_cols}")
-  ###########################################################################################
- 
-    def canonicalize(self, df):
-    
-        patterns = ["prairie-farm-milk","kleinpeter-milk", "kl-milk", "Milk, Fat Free,", "Fat-Free Milk"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "milk")
-        #
-        patterns = ["Bunny Bread", "sandwich-bread", "White Sandwich Bread", "bunny-bread","se-grocers-bread","seg-sandwich-bread", "seg-white-bread"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "bread")
-        #
-        patterns = ["white-bread"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "bread")
-        #
-        patterns = ["blue-bell", "ice-cream", "icescream"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "icecream")
-        
-        patterns = ["dandw-cheese", "kraft-cheese", "se-grocers-cheese", "know-and-love-cheese"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "cheese")
-        #
-        patterns = ["blue-plate-mayo", "blue-plate-mynnase"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "mayo")
-        #
-        patterns = ["gatorade", "powerade", "sports-drink"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "gatorade-powerade-sports-drink")
-        #
-        patterns = [ "tyson","chicken-cutlet", "chicken-leg", "chicken-thigh", "chicken-thighs"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "chicken-thigh-leg-cutlet-tyson")
-        #
-        patterns = ["steak","ribs", "pork", "ground-beef"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "steak-ribs-pork-ground-beef-cano")
-        #
-        patterns = ["jimmy-dean",]
-        self.itemNameUtils.canonicalize_items(df, patterns, "frozen-breakfast-jimmy-dean-cano")
-        #
-        patterns = ["shampoo", "conditioner"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "shampoo-conditioner-cano")     
-        #
-        patterns = ["soap"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "soap")     
-
-        patterns = ["chobani-yogrt-flip", "chobani-yogurt", "yogurt"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "yogurt")
-        #
-        patterns = ["coca-cola", "coca-cola-cola", "cocacola-soda", "coke", "cola"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "coke")
-        #
-        patterns = ["topcare", "top-care"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "otcmeds")
-           
-        patterns = ["little-debbie" , "hugbi-pies", "hubig" "-hugbi-pies", "candy", "tastykake"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "junk-food")
-        #
-        patterns  = ["cereal", "kellogg-raisn-bran", "kellogg-raisin-bra", "apl-jck"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "cereal-raisn-bran-apl-jck_cano")
-        #
-        patterns = ["minute-maid-drink", "minute-maid-drinks", "minute-maid-lmnade"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "minute-maid-drink")
-        #
-        patterns = ["egglands-best-egg", "egglands-best-eggs", "eggs"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "eggs")
-        #
-        patterns = ["sprklng-water", "sparkling-ice-wtr", "sparkling-ice", "sparkling-water"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "sparkling-ice")
-        #
-        patterns = ["drinking-water", "purified-drinking",]
-        self.itemNameUtils.canonicalize_items(df, patterns, "drinking-water")
-        #       
-        patterns = ["ground-beef"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "ground-beef")
-        #
-        patterns = ["monster-energy", "monster-enrgy", "monster"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "monster-energy")
-        #
-        patterns = ["smuckers", "jelly"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "jelly")
-        ### TODO: use nlp libs to remove plural word
-        patterns = ["cat-litter", "cats-litter"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "cat-litter")
-        #
-        patterns = ["pizza"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "pizza")
-        #
-        patterns = ["pringles"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "pringles")
-        
-        
-        patterns = ["dr-pepper"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "dr-pepper")                                      
-        #
-        patterns = ["aluminum-foil", "foil"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "aluminum-foil")                                      
-        #
-        patterns = ["sour-cream"]
-        self.itemNameUtils.canonicalize_items(df, patterns, "sour-cream")
-    
-        return df;
+    ###########################################################################################
+    def log_feature(self, values: pd.Series) -> pd.Series:
+        # guard: negatives are clipped, zeros allowed
+        values = values.clip(lower=0)
+        return np.log1p(values)
+    ###########################################################################################
+    def normalize_item_names(self, df):
+        df = self.itemNameUtils.remove_items_matching_terms(df, "item", self.exclude_items);
+        # self._combined_df["itemName_lemma"] = self._combined_df["item"].apply(self.lemmatize_item_name)
+        df = self.itemNameUtils.strip_prefixes_from_column(df ,"item", self.brand_prefixes);
+        df["item"] = df["item"].apply(self.itemNameUtils.clean_item_name)
+        df = self.itemNameUtils.canonicalize(df)
+        return df
+    ###########################################################################################
+    def drop_raw_columns(self, df: pd.DataFrame) -> pd.DataFrame:
+        raw_cols = [c for c in df.columns if c.endswith("_raw")]
+        return df.drop(columns=raw_cols)
     ###########################################################################################
     def get_feature_col_names(self, df):
-        """Returns feature columns before normalization."""
+        """Returns feature columns before normalization. Throws if raw columns are detected."""
+        raw_like = [c for c in df.columns if c.endswith("_feat") and "raw" in c]
+        if raw_like:
+            raise ValueError(f"Raw columns detected in feature set: {raw_like}")
+        #
         return [c for c in df.columns if c.endswith("_feat")]
     ###########################################################################################
     def create_item_supply_level_feat(self, df):
@@ -149,8 +108,8 @@ class GroceryMLCore:
     
         try:
             ratio = np.where(
-                df["avgDaysBetweenItemPurchases_raw"] > 0,
-                df["daysSinceThisItemLastPurchased_raw"] / df["avgDaysBetweenItemPurchases_raw"],
+                df["avgDaysBetweenItemPurchases_feat"] > 0,
+                df["daysSinceThisItemLastPurchased_raw"] / df["avgDaysBetweenItemPurchases_feat"],
                 0.0
             )
     
@@ -194,56 +153,22 @@ class GroceryMLCore:
         return df
     ##############################################################################################
     def create_is_self_checkout_feature(self):
-        self._combined_df["isSelfCheckout_raw"]  = 0;
+        self._combined_df["isSelfCheckout_feat"]  = 0;
         ## TODO: check casiher value
     ##############################################################################################
-    # def build_trip_level_features(self, df):
-    #     print("build_trip_level_features()");
-        
-    #     grouped_df = ( df[["date"]].drop_duplicates() .sort_values("date") .reset_index(drop=True) )
-    
-    #     #
-    #     #
-    #     # grouped_df =  TemporalFeatures.add_dst_since_until_features(grouped_df);
-    #     # TemporalFeatures.compute_trip_due_ratio(grouped_df);
-    #     # grouped_df = TemporalFeatures.create_date_features(grouped_df)
-    #     #
-    #     return grouped_df;
-    ###########################################################################
-    def _build_trip_interveral_feautres(self, df):
-        
-        print("_build_trip_interveral_feautres()");
-        grouped_df = ( df[["date"]].drop_duplicates() .sort_values("date") .reset_index(drop=True) )
-        grouped_df["daysSinceLastTrip_raw"] = TemporalFeatures.create_days_since_last_trip(grouped_df)
-        grouped_df["avgDaysBetweenTrips_raw"] = TemporalFeatures.compute_avg_days_between_trips(grouped_df)
-        return grouped_df
-    ###########################################################################
-    def _build_holiday_features(self, df):
-        print("_build_holiday_features()");
-        
-        grouped_df = ( df[["date"]].drop_duplicates() .sort_values("date") .reset_index(drop=True) )
-    
-        grouped_df["daysUntilNextHoliday_raw"]   = grouped_df["date"].apply(HolidayFeatures.compute_days_until_next_holiday)
-        grouped_df["daysSinceLastHoliday_raw"]   = grouped_df["date"].apply(HolidayFeatures.compute_days_since_last_holiday)
-        grouped_df["holidayProximityIndex_feat"]  = grouped_df["date"].apply(HolidayFeatures.compute_holiday_proximity_index)
-        
-        #
-        # grouped_df =  TemporalFeatures.add_dst_since_until_features(grouped_df);
-        # TemporalFeatures.compute_trip_due_ratio(grouped_df);
-        # grouped_df = TemporalFeatures.create_date_features(grouped_df)
-        #
-        return grouped_df;
-    ###########################################################################
-    def _build_school_schedule_features(self, df):
-        print("_build_school_schedule_features()");
-        
-        grouped_df = ( df[["date"]].drop_duplicates() .sort_values("date") .reset_index(drop=True) )
-    
-        grouped_df["daysUntilSchoolStart_raw"]   = grouped_df["date"].apply(SchoolFeatures.compute_days_until_school_start)
-        grouped_df["daysUntilSchoolEnd_raw"]     = grouped_df["date"].apply(SchoolFeatures.compute_days_until_school_end)
-        grouped_df["schoolSeasonIndex_feat"]      = grouped_df["date"].apply(SchoolFeatures.compute_school_season_index)
-        return grouped_df;
+    def drop_rare_purchases(self, df):
+        print("drop_rare_purchases()")
+        df = df[df["itemPurchaseCount_raw"] != 1].reset_index(drop=True)
+        return df;
+    ###########################################################################################
+    def build_trip_interveral_feautres(self, df):
+        print("build_trip_interveral_feautres()")
+        trip_df = (df[["date"]] .drop_duplicates() .sort_values("date") .reset_index(drop=True))
+        trip_df["daysSinceLastTrip_feat"] = TemporalFeatures.create_days_since_last_trip(trip_df)
+        trip_df["avgDaysBetweenTrips_feat"] = TemporalFeatures.compute_avg_days_between_trips(trip_df)
+        return df.merge(trip_df, on="date", how="left")
     ##############################################################################################
+
     ## TODO:build_purchase_item_freq_cols  is broken 
     # def build_purchase_item_freq_cols(self, df):
 
@@ -322,7 +247,6 @@ class GroceryMLCore:
 
         # fill mssing source cols: 
         df_full["source"] = df_full["source"].fillna("_neg_sample_").astype(str)
-        df_full["cashier_raw"] = df_full["cashier_raw"].fillna("_neg_sample_").astype(str)
         
         return df_full.copy()
     ###########################################################################################
@@ -337,9 +261,9 @@ class GroceryMLCore:
                     "date": result["date"],
                     "time": result["time"],
                     #"manager": result["manager"],
-                    "cashier_raw": result["cashier"],
+                    #"cashier": result["cashier"],
                     "item": r["item"],
-                    #"qty_raw": r["qty"],
+                    "qty": r["qty"],
                     #"reg": r["reg"],
                     #"youPay": r["youPay"],
                     #"reportedItemsSold": result["reported"],
@@ -360,6 +284,7 @@ class GroceryMLCore:
 
         additional_rcpts_df = additional_rcpts_df.sort_values(by=["date", "time"]).reset_index(drop=True)
         additional_rcpts_df = additional_rcpts_df.drop(columns=["time"])
+
         return additional_rcpts_df;
     ###########################################################################################
     def build_winn_dixie_df(self, path):
@@ -373,9 +298,9 @@ class GroceryMLCore:
                     "date": result["date"],
                     "time": result["time"],
                     #"manager": result["manager"],
-                    "cashier_raw": result["cashier"],
+                   # "cashier": result["cashier"],
                     "item": r["item"],
-                    #"qty_raw": r["qty"],
+                    "qty": r["qty"],
                     #"reg": r["reg"],
                     #"youPay": r["youPay"],
                     #"reportedItemsSold": result["reported"],
@@ -397,6 +322,7 @@ class GroceryMLCore:
         # winndixie_df["source"] = "winndixie-{";
         winndixie_df = winndixie_df.sort_values(by=["date", "time"]).reset_index(drop=True)
         winndixie_df = winndixie_df.drop(columns=["time"])
+        
         return winndixie_df;
     ###########################################################################################
     def export_df_to_excel_table(self, df, base_path_without_ext, sheet_name="Data"):
@@ -448,12 +374,6 @@ class GroceryMLCore:
         df.to_parquet(file_path, index=True)
         print(f"  PARQUET done: {file_path}")
     ###########################################################################################
-    def export_dataframes_with_exp_name(self, dataframes, path):
-        for name, df in dataframes.items():
-            base = os.path.join(path, f"{name}")
-            self.export_df_to_excel_table(df, base, sheet_name=f"{name}")
-            #self.export_dataframe_to_csv(df, base)
-    ###########################################################################################    
     def write_json(self, obj, path):
         f = open(path, "w")
         json.dump(obj, f, indent=2)

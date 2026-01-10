@@ -132,7 +132,9 @@ class GroceryML:
         self._combined_df = self._combined_df[self._combined_df["itemPurchaseCount_raw"] != 1].reset_index(drop=True)
         #
         ######## trip level ######
-        self._build_trip_level_feats();
+        self._combined_df = self._build_trip_level_feats(self._combined_df);
+        self._combined_df = self.groceryMLCore._build_trip_interveral_feautres(self._combined_df)
+        
         #
         self._drop_rare_purchases()
         #df = df.drop(columns=["source"]) 
@@ -142,24 +144,18 @@ class GroceryML:
         self.groceryMLCore.export_df_to_excel_table(self._combined_df, "./combined_df_debug", sheet_name="combined_df")
         return self._combined_df
     ###########################################################################################
-    def _build_trip_level_feats(self):
+    
+    def _build_trip_level_feats(self, df):
+        df["daysUntilSchoolStart_raw"] = SchoolFeatures.compute_days_until_school_start(df["date"])
+        df["daysUntilSchoolEnd_raw"] = SchoolFeatures.compute_days_until_school_end(df["date"])
+        df["schoolSeasonIndex_feat"] = SchoolFeatures.compute_school_season_index(df["date"])
+        df["daysUntilNextHoliday_raw"] = HolidayFeatures.compute_days_until_next_holiday(df["date"])
+        df["daysSinceLastHoliday_raw"] = HolidayFeatures.compute_days_since_last_holiday(df["date"])
+        df["holidayProximity_feat"] = HolidayFeatures.compute_holiday_proximity_index(df["date"])
         
-        holiday_df = self.groceryMLCore._build_holiday_features(self._combined_df);
-        trip_df = self.groceryMLCore._build_trip_interveral_feautres(self._combined_df);
-        school_df = self.groceryMLCore._build_school_schedule_features(self._combined_df);
-        
-        if holiday_df is None: 
-            raise RuntimeError("holiday_df is nul")
-        if trip_df is None: 
-            raise RuntimeError("trip_df is nul")
-        if school_df is None: 
-            raise RuntimeError("school_df is nul")
-            
-        self._combined_df = self._combined_df.merge(holiday_df, on="date", how="left")
-        self._combined_df = self._combined_df.merge(trip_df, on="date", how="left")
-        self._combined_df = self._combined_df.merge(school_df, on="date", how="left")
         # df_weather = WeatherFeatures.BuildWeather(r"data\training\weather\VisualCrossing-70062 2000-01-01 to 2025-12-14.csv").reset_index()
-        # self._combined_df = self._combined_df.merge(df_weather, on="date", how="left")
+        # df = df.merge(df_weather, on="date", how="left")
+        return df;
     ###########################################################################################
     def _build_sources(self, data_sources: Dict):
         print("_build_sources()");
@@ -184,8 +180,8 @@ class GroceryML:
         
         self._combined_df = self.itemNameUtils.remove_items_matching_terms(self._combined_df, "item", self.exclude_items);
         # self._combined_df["itemName_lemma"] = self._combined_df["item"].apply(self.itemNameUtils.lemmatize_item_name)
-        self._combined_df["item"] = self._combined_df["item"].apply(ItemNameUtils.clean_item_name)
         self._combined_df = ItemNameUtils.strip_prefixes_from_column(self._combined_df ,"item", self.brand_prefixes);
+        self._combined_df["item"] = self._combined_df["item"].apply(ItemNameUtils.clean_item_name)
         self._combined_df = self.groceryMLCore.canonicalize(self._combined_df)
     ###########################################################################################
         #def drop_rare_items(self):
@@ -482,7 +478,6 @@ class GroceryML:
         latest_rows_df["daysUntilNextHoliday_raw"]   = latest_rows_df["date"].apply(HolidayFeatures.compute_days_until_next_holiday)
         latest_rows_df["daysSinceLastHoliday_raw"]   = latest_rows_df["date"].apply(HolidayFeatures.compute_days_since_last_holiday)
         latest_rows_df["holidayProximityIndex_feat"]  = latest_rows_df["date"].apply(HolidayFeatures.compute_holiday_proximity_index)
-        
 
         # ensure no leakage
         if "didBuy_target" in latest_rows_df.columns:

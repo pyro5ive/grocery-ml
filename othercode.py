@@ -5,6 +5,22 @@ other code
         # self.combined_df = self.drop_rare_items_with_zero_freq(self.combined_df, "freq_30_feat")
         # self.combined_df = self.drop_rare_items_with_zero_freq(self.combined_df, "freq_90_feat")
 
+    def drop_rare_items_with_zero_freq(self, df, freq_col):
+        mask = ~(
+            (df["itemTotalPurchaseCount_feat"] == 1) &
+            (df[freq_col] == 0)
+        )
+        return df[mask].copy()
+    ###########################################################################################
+    def build_freq_ratios(self):
+        (
+            self.combined_df["freq7_over30_feat"],
+            self.combined_df["freq30_over365_feat"],
+        ) = TemporalFeatures.compute_freq_ratios(
+            self.combined_df["freq_7_feat"],
+            self.combined_df["freq_30_feat"],
+            self.combined_df["freq_365_feat"],
+        )
 
 
    def build_habit_frequency_for_training(self):

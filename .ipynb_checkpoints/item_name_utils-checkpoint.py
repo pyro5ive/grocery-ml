@@ -9,7 +9,99 @@ class ItemNameUtils:
         self.id_to_item = None
         self.nlp = spacy.load("en_core_web_sm")
     ###########################################################################################
+    def canonicalize(self, df):
+        patterns = ["prairie-farm-milk","kleinpeter-milk", "kl-milk", "Milk, Fat Free,", "Fat-Free Milk"]
+        self.canonicalize_items(df, patterns, "milk")
+        #
+        patterns = ["Bunny Bread", "sandwich-bread", "White Sandwich Bread", "bunny-bread","se-grocers-bread","seg-sandwich-bread", "seg-white-bread"]
+        self.canonicalize_items(df, patterns, "bread")
+        #
+        patterns = ["white-bread"]
+        self.canonicalize_items(df, patterns, "bread")
+        #
+        patterns = ["blue-bell", "ice-cream", "icescream"]
+        self.canonicalize_items(df, patterns, "icecream")
+        
+        patterns = ["dandw-cheese", "kraft-cheese", "se-grocers-cheese", "know-and-love-cheese"]
+        self.canonicalize_items(df, patterns, "cheese")
+        #
+        patterns = ["blue-plate-mayo", "blue-plate-mynnase"]
+        self.canonicalize_items(df, patterns, "mayo")
+        #
+        patterns = ["gatorade", "powerade", "sports-drink"]
+        self.canonicalize_items(df, patterns, "gatorade-powerade-sports-drink")
+        #
+        patterns = [ "tyson","chicken-cutlet", "chicken-leg", "chicken-thigh", "chicken-thighs"]
+        self.canonicalize_items(df, patterns, "chicken-thigh-leg-cutlet-tyson")
+        #
+        patterns = ["steak","ribs", "pork", "ground-beef"]
+        self.canonicalize_items(df, patterns, "steak-ribs-pork-ground-beef-cano")
+        #
+        patterns = ["jimmy-dean",]
+        self.canonicalize_items(df, patterns, "frozen-breakfast-jimmy-dean-cano")
+        #
+        patterns = ["shampoo", "conditioner"]
+        self.canonicalize_items(df, patterns, "shampoo-conditioner-cano")     
+        #
+        patterns = ["soap"]
+        self.canonicalize_items(df, patterns, "soap")     
 
+        patterns = ["chobani-yogrt-flip", "chobani-yogurt", "yogurt"]
+        self.canonicalize_items(df, patterns, "yogurt")
+        #
+        patterns = ["coca-cola", "coca-cola-cola", "cocacola-soda", "coke", "cola"]
+        self.canonicalize_items(df, patterns, "coke")
+        #
+        patterns = ["topcare", "top-care"]
+        self.canonicalize_items(df, patterns, "otcmeds")
+        #
+        patterns = ["little-debbie" , "hugbi-pies", "hubig" "-hugbi-pies", "candy", "tastykake"]
+        self.canonicalize_items(df, patterns, "junk-food")
+        #
+        patterns  = ["cereal", "kellogg-raisn-bran", "kellogg-raisin-bra", "apl-jck"]
+        self.canonicalize_items(df, patterns, "cereal-raisn-bran-apl-jck_cano")
+        #
+        patterns = ["minute-maid-drink", "minute-maid-drinks", "minute-maid-lmnade"]
+        self.canonicalize_items(df, patterns, "minute-maid-drink")
+        #
+        patterns = ["egglands-best-egg", "egglands-best-eggs", "eggs"]
+        self.canonicalize_items(df, patterns, "eggs")
+        #
+        patterns = ["sprklng-water", "sparkling-ice-wtr", "sparkling-ice", "sparkling-water"]
+        self.canonicalize_items(df, patterns, "sparkling-ice")
+        #
+        patterns = ["drinking-water", "purified-drinking",]
+        self.canonicalize_items(df, patterns, "drinking-water")
+        #       
+        patterns = ["ground-beef"]
+        self.canonicalize_items(df, patterns, "ground-beef")
+        #
+        patterns = ["monster-energy", "monster-enrgy", "monster"]
+        self.canonicalize_items(df, patterns, "monster-energy")
+        #
+        patterns = ["smuckers", "jelly"]
+        self.canonicalize_items(df, patterns, "jelly")
+        ### TODO: use nlp libs to remove plural word
+        patterns = ["cat-litter", "cats-litter"]
+        self.canonicalize_items(df, patterns, "cat-litter")
+        #
+        patterns = ["pizza"]
+        self.canonicalize_items(df, patterns, "pizza")
+        #
+        patterns = ["pringles"]
+        self.canonicalize_items(df, patterns, "pringles")
+        #
+        patterns = ["dr-pepper"]
+        self.canonicalize_items(df, patterns, "dr-pepper")                                      
+        #
+        patterns = ["aluminum-foil", "foil"]
+        self.canonicalize_items(df, patterns, "aluminum-foil")                                      
+        #
+        patterns = ["sour-cream"]
+        self.canonicalize_items(df, patterns, "sour-cream")
+    
+        return df;
+    ###########################################################################################
     def canonicalize_items(self, df, patterns, canonical_name):
         """
         For each pattern in `patterns`, find rows where `item` contains the pattern
@@ -17,7 +109,8 @@ class ItemNameUtils:
         """
         for p in patterns:
             mask = df["item"].str.contains(p, case=False, na=False, regex=False)
-            df.loc[mask, "item"] = canonical_name    
+            df.loc[mask, "item"] = canonical_name  
+        return df
     ###########################################################################################
     def remove_items_matching_terms(self, df, text_column, exclude_terms):
         """
@@ -43,7 +136,8 @@ class ItemNameUtils:
     
         return df.loc[mask].reset_index(drop=True)
     ############################################################################################
-    
+
+    ############################################################################################
     def create_item_ids(self, df, allow_new_items=False):
         # initialize maps if needed
         if self.item_to_id is None or self.id_to_item is None:

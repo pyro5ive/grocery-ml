@@ -37,7 +37,7 @@ class TemporalFeatures:
         Higher values mean 'recently bought' → stronger penalty.
         Lower values mean 'long time ago' → weaker penalty.
         """  
-        df["recentPurchasePenalty_raw"] = ( df["daysSinceThisItemLastPurchased_raw"] / df["avgDaysBetweenItemPurchases_raw"] ).replace([float("inf"), -float("inf")], 0).fillna(0)
+        df["recentPurchasePenalty_raw"] = ( df["daysSinceThisItemLastPurchased_raw"] / df["avgDaysBetweenItemPurchases_feat"] ).replace([float("inf"), -float("inf")], 0).fillna(0)
     
         df["recentPurchasePenalty_raw"] = df["recentPurchasePenalty_raw"].apply(
             lambda x: exp(-x)
@@ -97,21 +97,21 @@ class TemporalFeatures:
     ############################################################
     
     @staticmethod
-    def compute_days_since_last_purchase_for_item(df, reference_date_col="date"):
+    def compute_days_since_last_purchase_for_item(df, colName: str, reference_date_col="date"):
         df = df.sort_values(["itemId", reference_date_col]).reset_index(drop=True)
-        df["daysSinceThisItemLastPurchased_raw"] = np.nan
+        df[colName] = np.nan
         last_purchase_date = {}
         for i in range(len(df)):
             itemId = df.at[i, "itemId"]
             current_date = df.at[i, reference_date_col]
             if itemId in last_purchase_date:
-                df.at[i, "daysSinceThisItemLastPurchased_raw"] = (current_date - last_purchase_date[itemId]).days
+                df.at[i, colName] = (current_date - last_purchase_date[itemId]).days
             else:
-                df.at[i, "daysSinceThisItemLastPurchased_raw"] = np.nan
+                df.at[i, colName] = np.nan
             if "didBuy_target" in df.columns and df.at[i, "didBuy_target"] == 1:
                 last_purchase_date[itemId] = current_date
     
-        df["daysSinceThisItemLastPurchased_raw"] = df["daysSinceThisItemLastPurchased_raw"].fillna(0)
+        df[colName] = df[colName].fillna(0)
         return df
     ############################################################
     @staticmethod
@@ -119,13 +119,13 @@ class TemporalFeatures:
         df = df.sort_values(["itemId", "date"]).reset_index(drop=True)
         purchase_gap = df.where(df["didBuy_target"] == 1).groupby("itemId")["date"].diff().dt.days
         avg_gap = purchase_gap.groupby(df["itemId"]).expanding().mean().reset_index(level=0, drop=True)
-        df["avgDaysBetweenItemPurchases_raw"] = avg_gap.groupby(df["itemId"]).ffill().fillna(0)
+        df["avgDaysBetweenItemPurchases_feat"] = avg_gap.groupby(df["itemId"]).ffill().fillna(0)
 
         return df
     #######################################################
     @staticmethod
     def compute_item_due_ratio(df, cap=3.0):
-        ratio = df["daysSinceThisItemLastPurchased_raw"] / df["avgDaysBetweenItemPurchases_raw"]
+        ratio = df["daysSinceThisItemLastPurchased_raw"] / df["avgDaysBetweenItemPurchases_feat"]
         ratio = ratio.replace([np.inf, -np.inf], np.nan).fillna(0)
         return ratio.clip(0, cap)
     ##########################################################################################
@@ -147,16 +147,16 @@ class TemporalFeatures:
     ########################################################
     @staticmethod
     def compute_avg_days_between_trips(targetDf):
-        return targetDf["daysSinceLastTrip_raw"].replace(0, np.nan).expanding().mean().fillna(0)    
+        return targetDf["daysSinceLastTrip_feat"].replace(0, np.nan).expanding().mean().fillna(0)    
     #######################################################
     @staticmethod
     def compute_trip_due_ratio(targetDf):
-        targetDf["tripDueRatio_feat"] = (targetDf["daysSinceLastTrip_raw"] / targetDf["avgDaysBetweenTrips_raw"]).fillna(0)
+        targetDf["tripDueRatio_feat"] = (targetDf["daysSinceLastTrip_feat"] / targetDf["avgDaysBetweenTrips_feat"]).fillna(0)
     ###########################################################################################
     @staticmethod
     def create_date_features(grouped):
         dt = grouped["date"]
-        grouped["year_raw"]    = dt.dt.year
+        grouped["year_feat"]    = dt.dt.year
         grouped["month_cyc_raw"]   = dt.dt.month
         grouped["day_cyc_raw"]     = dt.dt.day
         grouped["dow_cyc_raw"]     = dt.dt.dayofweek
@@ -245,8 +245,8 @@ class TemporalFeatures:
         """
         import pandas as pd
     
-        df["daysSinceDstChange_raw"] = 0
-        df["daysUntilDstChange_raw"] = 0
+        df["daysSinceDstChange_feat"] = 0
+        df["daysUntilDstChange_feat"] = 0
     
         for i, row in df.iterrows():
             d = pd.to_datetime(row[date_col])
