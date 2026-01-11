@@ -22,6 +22,7 @@ from sklearn.metrics import silhouette_score
 
 
 ### Domain
+from excel_export_merger import ExcelExportMerger
 from grocery_ml_core import GroceryMLCore
 from school_features import SchoolFeatures
 from weather_features import WeatherFeatures
@@ -39,6 +40,7 @@ from weather_service import NwsWeatherService;
 class GroceryML:
 
 
+    expNameParts: str = None
     _combined_df: pd.DataFrame = None 
     training_df: pd.DataFrame = None
     live_df: pd.DataFrame = None
@@ -64,6 +66,8 @@ class GroceryML:
         self.itemNameUtils = ItemNameUtils();
         self.weatherService = NwsWeatherService();
         self.groceryMLCore = GroceryMLCore();
+        self.excelMerger = ExcelExportMerger();
+        
     ###########################################################################################        
     def build_training_df(self):
         self.training_df =  self._build_combined_df(self.trainingSources)
@@ -356,10 +360,12 @@ class GroceryML:
         return model, combined_df_frozen
     ###########################################################################################
     def run_experiment(self, training_df,  modelBuildParams, modelTrainParams, baseDir):
-        exp_dir_path = self.create_experiment_dir(modelBuildParams, modelTrainParams, baseDir);
+        
+        self.expNameParts = self.create_exp_name_parts(modelBuildParams, modelTrainParams);
+        exp_dir_path = self.create_experiment_dir(self.expNameParts, baseDir);
         
         self.tensorboard = self.create_tensorboard(f"./{exp_dir_path}/tensorflow/logs/")
-        print(f"run_experiment()  baseDir: {exp_dir_path}  ");
+        print(f"run_experiment()  exp_dir: {exp_dir_path}  ");
         print(f"run_experiment()  when: {datetime.now()} params: {modelTrainParams}  ");
         
         #training_df = self.groceryMLCore.drop_raw_columns(training_df)
@@ -393,7 +399,7 @@ class GroceryML:
             ##"raw_latest_rows_df": raw_latest_rows_df,
             "predictions": prediction_df,
         }
-        
+        # self.excelMerger.add_dataframe(prediction_df, sheet_name = exp_name_parts, output_dir =  baseDir)
         self.save_experiment(model, training_df, dataframes, history,  modelBuildParams, modelTrainParams, exp_dir_path)
     ###########################################################################################
     def build_prediction_input(self, prediction_date, norm_params):
@@ -402,8 +408,7 @@ class GroceryML:
         # build / refresh live source
         self.build_live_df()
         raw_latest_rows_df = self._build_latest_rows_df(self.live_df);
-        # if "source" in raw_latest_rows_df.columns:
-        raw_latest_rows_df.drop(columns=["source"], inplace=True)   
+        
         
         # force prediction date
         raw_latest_rows_df["date"] = prediction_date
@@ -439,9 +444,9 @@ class GroceryML:
         x_features = normalized_latest_rows_df[normalized_feature_cols].to_numpy(np.float32)
         x_item_idx = normalized_latest_rows_df["itemId"].to_numpy(np.int32)
         #
-        # self.groceryMLCore.export_df_to_excel_table(normalized_latest_rows_df, "normalized_latest_rows_df.xlsx", ".")
-        # self.groceryMLCore.export_df_to_excel_table(latest_rows_df, "latest_rows_df.xlsx", ".")
         print("build_prediction_input() is done")
+        # if "source" in raw_latest_rows_df.columns:
+        raw_latest_rows_df.drop(columns=["source"], inplace=True)
         
         return {
             #"raw_latest_rows_df": raw_latest_rows_df,
@@ -450,52 +455,89 @@ class GroceryML:
             "x_item_idx": x_item_idx,
             # "normalized_feature_cols": normalized_feature_cols
         }  
+    
     ###########################################################################################
     def save_experiment(self, model, training_df, extra_dataframes, history, build_params, train_params, exp_dir):
         name_parts = []
 
         print("Exporting extra_dataframes:")
-        self.export_dataframes_with_exp_name(extra_dataframes, exp_dir)
-        
+       
+        self.export_dataframes_to_excel(extra_dataframes, exp_dir, self.expNameParts)
+        # TODO: self.export_dataframes_to_csv(extra_dataframes, exp_dir, expNameParts)
+               
         self.save_model(model, training_df, history, exp_dir)
         self.groceryMLCore.write_json(build_params, os.path.join(exp_dir, "build_params.json"))
         self.groceryMLCore.write_json(train_params, os.path.join(exp_dir, "train_params.json"))
         
         print("Saved experiment →", exp_dir)  
-    ###########################################################################################
-    def create_experiment_dir(self,  build_params, train_params, base_dir):
+    ###########################################################################################    
+    def create_exp_name_parts(self, build_params, train_params):
+        """
+        Build the full experiment name, including a short unique suffix.
+        """
         name_parts = []
 
         if "embedding_dim" in build_params:
             name_parts.append(f"e{build_params['embedding_dim']}")
-
         if "layers" in build_params:
             layer_units = "-".join(str(layer["units"]) for layer in build_params["layers"])
             name_parts.append(f"l{layer_units}")
-
         if "epochs" in train_params:
             name_parts.append(f"ep{train_params['epochs']}")
-
         if "output_activation" in build_params:
-            name_parts.append(f"oa_{build_params['output_activation']}")
-
-        base_name = "__".join(name_parts) if name_parts else "exp_unlabeled"
-
-        short_id = str(abs(hash(time.time())))[:6]
-        exp_name = f"{base_name}__{short_id}"
-
+            oa = str(build_params["output_activation"])[:3]
+            name_parts.append(oa)
+        if "learning_rate" in train_params:
+            name_parts.append(f"lr{train_params['learning_rate']}")
+        
+        base_name = "_".join(name_parts) if name_parts else "exp_unlabeled"
+        short_id = str(abs(hash(time.time())))[:3]
+        full_name = f"{base_name}_{short_id}"
+        if len(full_name) > 31: full_name = full_name[:31]
+        return full_name
+    ###########################################################################################    
+    def create_experiment_dir(self, exp_name, base_dir):
         exp_dir_name = os.path.join(base_dir, exp_name)
         print(f"Creating dir: {exp_dir_name}")
         os.makedirs(exp_dir_name, exist_ok=True)
-
-        #return exp_name, exp_dir
         return exp_dir_name
+    ###########################################################################################    
+    
+    
+    # ###########################################################################################
+    # def create_experiment_dir(self,  build_params, train_params, base_dir):
+    #     name_parts = []
+
+    #     if "embedding_dim" in build_params:
+    #         name_parts.append(f"e{build_params['embedding_dim']}")
+
+    #     if "layers" in build_params:
+    #         layer_units = "-".join(str(layer["units"]) for layer in build_params["layers"])
+    #         name_parts.append(f"l{layer_units}")
+
+    #     if "epochs" in train_params:
+    #         name_parts.append(f"ep{train_params['epochs']}")
+
+    #     if "output_activation" in build_params:
+    #         name_parts.append(f"oa_{build_params['output_activation']}")
+
+    #     base_name = "__".join(name_parts) if name_parts else "exp_unlabeled"
+
+    #     short_id = str(abs(hash(time.time())))[:6]
+    #     exp_name = f"{base_name}__{short_id}"
+
+    #     exp_dir_name = os.path.join(base_dir, exp_name)
+    #     print(f"Creating dir: {exp_dir_name}")
+    #     os.makedirs(exp_dir_name, exist_ok=True)
+
+    #     #return exp_name, exp_dir
+    #     return exp_dir_name
     ###########################################################################################
-    def export_dataframes_with_exp_name(self, dataframes, path):
+    def export_dataframes_to_excel(self, dataframes, path, nameParts):
+        print("grocery_ml_tensorflow.export_dataframes_to_excel()");
         for name, df in dataframes.items():
-            base = os.path.join(path, f"{name}")
-            self.groceryMLCore.export_df_to_excel_table(df, base, sheet_name=f"{name}")
-            #self.export_dataframe_to_csv(df, base)
+            base = os.path.join(path, f"{name}-{nameParts}")
+            self.groceryMLCore.export_df_to_excel_table(df, base, sheet_name=f"{nameParts}")
     ########################################################################################### 
     def RunPredictionsOnly(self, model_dir, prediction_date):
         """
