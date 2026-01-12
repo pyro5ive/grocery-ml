@@ -202,70 +202,14 @@ class TemporalFeatures:
     
         return group
     ####################################################################################################
-    # @staticmethod
-    # def add_is_daylight_savings_raw(df, date_col="date"):
-    #     local_tz = pytz.timezone("America/Chicago")
-    #     df["isDayLightSavingsTime_feat"] = df[date_col].apply(
-    #         lambda d: 1 if local_tz.localize(pd.to_datetime(d)).dst() != pd.Timedelta(0) else 0
-    #     )
-    #     return df
-    # #####################################################################################################
-    # @staticmethod
-    # def add_dst_proximity_index(df, date_col="date"):
-    #     """
-    #     Adds dstProximityIndex_raw:
-    #     distance in days to the *nearest DST boundary*
-    #     (start or end), signed so models can sense transitions.
-    #     """
-    #     df["dstProximityIndex_feat"] = 0
-
-    #     for i, row in df.iterrows():
-    #         d = pd.to_datetime(row[date_col])
-
-    #         # DST boundaries in US/Central for that year
-    #         year = d.year
-    #         dst_start = pd.to_datetime(f"{year}-03-08") + pd.offsets.Week(weekday=6)  # 2nd Sunday March
-    #         dst_end   = pd.to_datetime(f"{year}-11-01") + pd.offsets.Week(weekday=6)  # 1st Sunday Nov
-
-    #         # nearest boundary distance
-    #         dist_to_start = (dst_start - d).days
-    #         dist_to_end   = (dst_end - d).days
-    #         nearest = dist_to_start if abs(dist_to_start) < abs(dist_to_end) else dist_to_end
-
-    #         df.at[i, "dstProximityIndex_feat"] = nearest
-
-    #     return df
-    ####################################################################################################
     @staticmethod
-    def add_dst_since_until_features(df, date_col="date"):
-        """
-        Adds:
-          daysSinceDstChange_raw : days since last DST boundary (0 if boundary day)
-          daysUntilDstChange_raw : days until next DST boundary (0 if boundary day)
-        """
-        import pandas as pd
-    
-        df["daysSinceDstChange_feat"] = 0
-        df["daysUntilDstChange_feat"] = 0
-    
-        for i, row in df.iterrows():
-            d = pd.to_datetime(row[date_col])
-            year = d.year
-    
-            # DST change dates in US/Central
-            dst_start = pd.to_datetime(f"{year}-03-08") + pd.offsets.Week(weekday=6)
-            dst_end   = pd.to_datetime(f"{year}-11-01") + pd.offsets.Week(weekday=6)
-    
-            # pick last boundary and next boundary
-            last_boundary  = dst_start if d >= dst_start else pd.to_datetime(f"{year-1}-11-01") + pd.offsets.Week(weekday=6)
-            next_boundary1 = dst_end   if d < dst_end   else pd.to_datetime(f"{year+1}-03-08") + pd.offsets.Week(weekday=6)
-            next_boundary2 = dst_start if d < dst_start else pd.to_datetime(f"{year+1}-11-01") + pd.offsets.Week(weekday=6)
-            next_boundary  = next_boundary1 if next_boundary1 > d else next_boundary2
-    
-            df.at[i, "daysSinceDstChange_raw"] = (d - last_boundary).days
-            df.at[i, "daysUntilDstChange_raw"] = (next_boundary - d).days
-    
-        return df
+    def is_dst_series(date_series: pd.Series, tz="America/Chicago") -> pd.Series:
+        s = pd.to_datetime(date_series)
+        return s.map(
+            lambda d: 1 if pytz.timezone(tz).localize(d).dst() != pd.Timedelta(0) else 0
+        )
+    #####################################################################################################
+   
     ####################################################################################################
 
   

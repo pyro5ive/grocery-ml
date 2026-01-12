@@ -116,7 +116,7 @@ class GroceryML:
         #
         self._combined_df = self.groceryMLCore.drop_rare_purchases(self._combined_df)
         
-        #df = df.drop(columns=["source"]) 
+
         self.groceryMLCore.validate_no_empty_columns(self._combined_df, ["qty"])
         print("self._build_combined_df() done")
         # ts = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
@@ -135,6 +135,9 @@ class GroceryML:
         df["daysUntilSchoolEnd_log_feat"] = self.groceryMLCore.log_feature(df["daysUntilSchoolEnd_raw"])
         df["daysUntilNextHoliday_log_feat"] = self.groceryMLCore.log_feature(df["daysUntilNextHoliday_raw"])
         df["daysSinceLastHoliday_log_feat"] = self.groceryMLCore.log_feature(df["daysSinceLastHoliday_raw"])
+
+        df["isDayLightSavingsTime_feat"] = TemporalFeatures.is_dst_series(df["date"])
+        
         return df;
     ###########################################################################################
     def _build_sources(self, data_sources: Dict):
@@ -301,7 +304,8 @@ class GroceryML:
         x_feat_tr, x_feat_te, x_item_tr, x_item_te, y_tr, y_te = train_test_split(
             x_feat, x_item, y, test_size=0.2, random_state=42
         )
-        
+
+     
         history = model.fit(
             [x_feat_tr, x_item_tr],
             y_tr,
@@ -309,7 +313,7 @@ class GroceryML:
             epochs=train_params["epochs"],
             batch_size=train_params.get("batch_size", 32),
             verbose=0,
-            callbacks=[self.tensorboard]
+            callbacks=[self.tensorboard] + train_params["callbacks"]
         )
     
         return history
@@ -399,6 +403,8 @@ class GroceryML:
             ##"raw_latest_rows_df": raw_latest_rows_df,
             "predictions": prediction_df,
         }
+        self.last_val_auc = history.history.get("val_auc", [None])[-1]
+        self.last_val_mae = history.history.get("val_mae", [None])[-1]
         # self.excelMerger.add_dataframe(prediction_df, sheet_name = exp_name_parts, output_dir =  baseDir)
         self.save_experiment(model, training_df, dataframes, history,  modelBuildParams, modelTrainParams, exp_dir_path)
     ###########################################################################################
@@ -408,8 +414,7 @@ class GroceryML:
         # build / refresh live source
         self.build_live_df()
         raw_latest_rows_df = self._build_latest_rows_df(self.live_df);
-        
-        
+               
         # force prediction date
         raw_latest_rows_df["date"] = prediction_date
         # recompute days since last purchase using live_df as history
@@ -437,7 +442,8 @@ class GroceryML:
         raw_latest_rows_df["itemId"] = raw_latest_rows_df["itemId"].astype("category")
         
         #raw_latest_rows_df = self.groceryMLCore.drop_raw_columns(raw_latest_rows_df)
-        # raw_latest_rows_df.drop(columns=["didBuy_target"], inplace=True)
+        raw_latest_rows_df.drop(columns=["didBuy_target"], inplace=True)
+        raw_latest_rows_df.drop(columns=["source"], inplace=True)
         
         normalized_latest_rows_df = self.normalize_features(raw_latest_rows_df, norm_params);
         normalized_feature_cols = self.get_normalized_feature_col_names(normalized_latest_rows_df);
@@ -445,9 +451,8 @@ class GroceryML:
         x_item_idx = normalized_latest_rows_df["itemId"].to_numpy(np.int32)
         #
         print("build_prediction_input() is done")
-        # if "source" in raw_latest_rows_df.columns:
-        raw_latest_rows_df.drop(columns=["source"], inplace=True)
-        
+       
+               
         return {
             #"raw_latest_rows_df": raw_latest_rows_df,
             "normalized_latest_rows_df": normalized_latest_rows_df,
