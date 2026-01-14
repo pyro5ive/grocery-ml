@@ -17,32 +17,23 @@ class TemporalFeatures:
     #######################################################
     @staticmethod
     def get_period_for_column(col_name):
-        """
-        Returns the cycle period for a cyclical feature column.
-        """
-
-        if col_name == "month_cyc_raw":
-            return 12
-
-        if col_name == "day_cyc_raw":
-            return 31
-
-        if col_name == "dow_cyc_raw":
-            return 7
-
+        if col_name == "dow_cyc_feat": return 7
+        if col_name == "month_cyc_feat": return 12
+        if col_name == "day_cyc_feat": return 31
+        if col_name == "doy_cyc_feat":return 365
         raise ValueError(f"Unknown cyclical feature column: {col_name}")
-    ###############################################
-    def compute_recent_purchase_penalty(df):
-        """
-        Higher values mean 'recently bought' → stronger penalty.
-        Lower values mean 'long time ago' → weaker penalty.
-        """  
-        df["recentPurchasePenalty_raw"] = ( df["daysSinceThisItemLastPurchased_raw"] / df["avgDaysBetweenItemPurchases_feat"] ).replace([float("inf"), -float("inf")], 0).fillna(0)
-    
-        df["recentPurchasePenalty_raw"] = df["recentPurchasePenalty_raw"].apply(
-            lambda x: exp(-x)
-        )
-        #return df; 
+    # ###############################################
+    # def compute_recent_purchase_penalty(df):
+    #     """
+    #     Higher values mean 'recently bought' → stronger penalty.
+    #     Lower values mean 'long time ago' → weaker penalty.
+    #     """  
+    #     df["recentPurchasePenalty_raw"] = ( 
+    #         df["daysSinceThisItemLastPurchased_raw"] / df["avgDaysBetweenItemPurchases_feat"] ).replace([float("inf"), -float("inf")], 0).fillna(0)    
+    #     df["recentPurchasePenalty_raw"] = df["recentPurchasePenalty_raw"].apply(
+    #         lambda x: exp(-x)
+    #     )
+    #     #return df; 
    ################################################
     @staticmethod
     def compute_expected_gap_ewma_feat(df, alpha=0.3):
@@ -95,21 +86,53 @@ class TemporalFeatures:
     
         return df
     ############################################################
-    
     @staticmethod
     def compute_days_since_last_purchase_for_item(df, colName: str, reference_date_col="date"):
+        return TemporalFeatures.compute_days_since_last_purchase_for_item_inclusive(
+            df,
+            colName,
+            reference_date_col
+        )
+    ############################################################
+    @staticmethod
+    def compute_days_since_last_purchase_for_item_exclusive(df, colName: str, reference_date_col="date"):
         df = df.sort_values(["itemId", reference_date_col]).reset_index(drop=True)
         df[colName] = np.nan
         last_purchase_date = {}
+    
         for i in range(len(df)):
             itemId = df.at[i, "itemId"]
             current_date = df.at[i, reference_date_col]
+    
             if itemId in last_purchase_date:
                 df.at[i, colName] = (current_date - last_purchase_date[itemId]).days
             else:
                 df.at[i, colName] = np.nan
+    
             if "didBuy_target" in df.columns and df.at[i, "didBuy_target"] == 1:
                 last_purchase_date[itemId] = current_date
+    
+        df[colName] = df[colName].fillna(0)
+        return df
+    ############################################################
+    @staticmethod
+    def compute_days_since_last_purchase_for_item_inclusive(df, colName: str, reference_date_col="date"):
+        df = df.sort_values(["itemId", reference_date_col]).reset_index(drop=True)
+        df[colName] = np.nan
+        last_purchase_date = {}
+    
+        for i in range(len(df)):
+            itemId = df.at[i, "itemId"]
+            current_date = df.at[i, reference_date_col]
+    
+            if "didBuy_target" in df.columns and df.at[i, "didBuy_target"] == 1:
+                last_purchase_date[itemId] = current_date
+                df.at[i, colName] = 0
+            else:
+                if itemId in last_purchase_date:
+                    df.at[i, colName] = (current_date - last_purchase_date[itemId]).days
+                else:
+                    df.at[i, colName] = np.nan
     
         df[colName] = df[colName].fillna(0)
         return df
@@ -147,22 +170,22 @@ class TemporalFeatures:
     ########################################################
     @staticmethod
     def compute_avg_days_between_trips(targetDf):
-        return targetDf["daysSinceLastTrip_feat"].replace(0, np.nan).expanding().mean().fillna(0)    
+        return targetDf["daysSinceLastTrip_raw"].replace(0, np.nan).expanding().mean().fillna(0)    
     #######################################################
     @staticmethod
     def compute_trip_due_ratio(targetDf):
-        targetDf["tripDueRatio_feat"] = (targetDf["daysSinceLastTrip_feat"] / targetDf["avgDaysBetweenTrips_feat"]).fillna(0)
+        targetDf["tripDueRatio_feat"] = (targetDf["daysSinceLastTrip_raw"] / targetDf["avgDaysBetweenTrips_feat"]).fillna(0)
     ###########################################################################################
     @staticmethod
-    def create_date_features(grouped):
-        dt = grouped["date"]
-        grouped["year_feat"]    = dt.dt.year
-        grouped["month_cyc_raw"]   = dt.dt.month
-        grouped["day_cyc_raw"]     = dt.dt.day
-        grouped["dow_cyc_raw"]     = dt.dt.dayofweek
-        grouped["doy_raw"]     = dt.dt.dayofyear
-        grouped["quarter_feat"] = dt.dt.quarter
-        return grouped;
+    def create_date_features(df):
+        dt = df["date"]
+        df["year_feat"]       = dt.dt.year
+        df["month_cyc_feat"]  = dt.dt.month
+        df["day_cyc_feat"]    = dt.dt.day
+        df["dow_cyc_feat"]    = dt.dt.dayofweek
+        df["doy_feat"]        = dt.dt.dayofyear
+        df["quarter_feat"]    = dt.dt.quarter
+        return df
     #######################################################
     @staticmethod
     def encode_sin_cos(value, period):
@@ -207,9 +230,7 @@ class TemporalFeatures:
         s = pd.to_datetime(date_series)
         return s.map(
             lambda d: 1 if pytz.timezone(tz).localize(d).dst() != pd.Timedelta(0) else 0
-        )
-    #####################################################################################################
-   
+        )  
     ####################################################################################################
 
   
