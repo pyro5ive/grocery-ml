@@ -104,7 +104,7 @@ class GroceryML:
         self._combined_df["item_due_ratio_feat"] = TemporalFeatures.compute_item_due_ratio(self._combined_df)  
         # item purchase count
         self._combined_df = self.groceryMLCore.add_item_total_purchase_count_feat(self._combined_df, "itemPurchaseCount_raw");     
-        self._combined_df["itemPurchaseCount_log_feat"] = self.groceryMLCore.log_feature(self._combined_df["itemPurchaseCount_raw"]);
+        # self._combined_df["itemPurchaseCount_log_feat"] = self.groceryMLCore.log_feature(self._combined_df["itemPurchaseCount_raw"]);
         
         #TemporalFeatures.compute_recent_purchase_penalty(self._combined_df)                
         #self._combined_df = self.groceryMLCore.build_purchase_item_freq_cols(self._combined_df)
@@ -125,12 +125,15 @@ class GroceryML:
         return self._combined_df;
     ###########################################################################################
     def _build_trip_level_feats(self, df):
-        df["daysUntilSchoolStart_raw"] = SchoolFeatures.compute_days_until_school_start(df["date"])
-        df["daysUntilSchoolEnd_raw"] = SchoolFeatures.compute_days_until_school_end(df["date"])
-        df["schoolSeasonIndex_feat"] = SchoolFeatures.compute_school_season_index(df["date"])
-        df["daysUntilNextHoliday_raw"] = HolidayFeatures.compute_days_until_next_holiday(df["date"])
-        df["daysSinceLastHoliday_raw"] = HolidayFeatures.compute_days_since_last_holiday(df["date"])
-        df["holidayProximity_feat"] = HolidayFeatures.compute_holiday_proximity_index(df["date"])
+
+        df = self.groceryMLCore.build_school_schedule_features(df);
+        df = self.groceryMLCore.build_holiday_features(df);
+        # df["daysUntilSchoolStart_raw"] = SchoolFeatures.compute_days_until_school_start(df["date"])
+        # df["daysUntilSchoolEnd_raw"] = SchoolFeatures.compute_days_until_school_end(df["date"])
+        # df["schoolSeasonIndex_feat"] = SchoolFeatures.compute_school_season_index(df["date"])
+        # df["daysUntilNextHoliday_raw"] = HolidayFeatures.compute_days_until_next_holiday(df["date"])
+        # df["daysSinceLastHoliday_raw"] = HolidayFeatures.compute_days_since_last_holiday(df["date"])
+        # df["holidayProximity_feat"] = HolidayFeatures.compute_holiday_proximity_index(df["date"])
 
         df["daysUntilSchoolStart_log_feat"] = self.groceryMLCore.log_feature(df["daysUntilSchoolStart_raw"])
         df["daysUntilSchoolEnd_log_feat"] = self.groceryMLCore.log_feature(df["daysUntilSchoolEnd_raw"])
@@ -286,55 +289,7 @@ class GroceryML:
         return norm_cols + binary_feat_cols
     ###########################################################################################
     
-    # def get_normalized_feature_col_names(self, df):
-    #     """Returns normalized feature columns used for model input."""
-    #     return [c for c in df.columns if c.endswith("_norm") and not c.endswith("_raw_norm")]
-    # ########################################################################################### 
-    # def get_target_col(self, df):
-    #     """Returns the single target column. Throws if missing or ambiguous."""
-    #     target_cols = [c for c in df.columns if c.endswith("_target")]
-    #     if len(target_cols) != 1:
-    #         raise ValueError(f"Expected exactly one target column, found: {target_cols}")
-    #     return target_cols[0]
-    # ########################################################################################### 
-    # def fit_normalization_params(self, df):
-    #     params = {}
-    #     feature_cols = self.groceryMLCore.get_feature_col_names(df);
-    #     cyc_cols = [c for c in feature_cols if c.endswith("_cyc_feat")]
-    #     num_cols = [c for c in feature_cols if c not in cyc_cols]
-        
-    #     for col in num_cols:
-    #         params[col] = {"mean": df[col].mean(),"std": df[col].std()}
-    
-    #     for col in cyc_cols:
-    #         params[col] = {"period": TemporalFeatures.get_period_for_column(col)}
-    
-    #     return params
-    # ###########################################################################################
-    # def normalize_features(self, df, norm_params):
-    #     print("normalize_features()");
-    #     normalized_df = df.copy()
-    #     for col, cfg in norm_params.items():
-    #         if col.endswith("_cyc_feat"):
-    #             sin_col, cos_col = TemporalFeatures.encode_sin_cos(df[col], cfg["period"])
-    #             normalized_df[f"{col}_sin_norm"] = sin_col
-    #             normalized_df[f"{col}_cos_norm"] = cos_col
-    #             normalized_df.drop(columns=[col], inplace=True)
-    
-    #         else:
-    #             mean_val = cfg["mean"]
-    #             std_val = cfg["std"]
-    #             norm_col = col.replace("_feat", "_norm")
-    
-    #             if std_val == 0:
-    #                 normalized_df[norm_col] = 0.0
-    #             else:
-    #                 normalized_df[norm_col] = (df[col] - mean_val) / std_val
-    
-    #             normalized_df.drop(columns=[col], inplace=True)
-    
-    #     return normalized_df
-    ###########################################################################################    
+
     def build_and_compile_model(self, feat_cols_count, item_count, build_params):
 
         num_in = layers.Input(shape=(feat_cols_count,))
@@ -455,7 +410,56 @@ class GroceryML:
 
         print("[load_model_artifacts] done")
         return model, combined_df_frozen
-    ###########################################################################################
+    ###########################################################################################   
+    def run_experiment_with_consecutive_predictions(self, training_df, modelBuildParams, modelTrainParams, baseDir, start_date, days):
+        self.expNameParts = self.create_exp_name_parts(modelBuildParams, modelTrainParams)
+        exp_dir_path = self.create_experiment_dir(self.expNameParts, baseDir)
+        self.tensorboard = self.create_tensorboard(f"{exp_dir_path}/tensorflow/logs/")
+        print(f"run_experiment_with_consecutive_predictions() exp_dir: {exp_dir_path}")
+        print(f"when: {datetime.now()} params: {modelTrainParams}")
+    
+        target_cols = self.get_target_col(training_df)
+        norm_params = self.fit_normalization_params(training_df)
+        normalized_training_df = self.normalize_features(training_df, norm_params)
+        model_feature_cols = self.get_model_feature_col_names(normalized_training_df)
+        model = self.build_and_compile_model(
+            len(model_feature_cols),
+            int(normalized_training_df["itemId"].max()) + 1,
+            modelBuildParams
+        )
+        history = self.train_model(
+            model,
+            normalized_training_df,
+            model_feature_cols,
+            target_cols,
+            modelTrainParams
+        )
+    
+        prediction_results = []
+        for offset in range(days):
+            prediction_date = start_date + pd.Timedelta(days=offset)
+            artifacts = self.build_prediction_input(prediction_date, norm_params)
+            y = model.predict([artifacts["x_features"], artifacts["x_item_idx"]])
+            df = artifacts["normalized_latest_rows_df"]
+            df.insert(0, "prediction_date", prediction_date)
+            df.insert(3, "readyToBuy_probability", y)
+            df = self.itemNameUtils.map_item_ids_to_names(
+                df.sort_values("readyToBuy_probability", ascending=False).reset_index(drop=True)
+            )
+            prediction_results.append(df)
+    
+        all_predictions_df = pd.concat(prediction_results, axis=0, ignore_index=True)
+        #
+    
+        self.last_val_mse = history.history.get("val_mse", [None])[-1]
+        self.last_val_auc = history.history.get("val_auc", [None])[-1]
+        self.last_val_mae = history.history.get("val_mae", [None])[-1]
+    
+        self.save_experiment(model,training_df, {
+                "normalized_training_df": normalized_training_df,
+                "consecutive_predictions": all_predictions_df
+            },history,modelBuildParams,modelTrainParams,exp_dir_path)
+    ############################################################################################   
     def run_experiment(self, training_df,  modelBuildParams, modelTrainParams, baseDir):
         
         self.expNameParts = self.create_exp_name_parts(modelBuildParams, modelTrainParams);
@@ -525,7 +529,7 @@ class GroceryML:
         raw_latest_rows_df = TemporalFeatures.create_date_features(raw_latest_rows_df);
         
         raw_latest_rows_df["itemId"] = raw_latest_rows_df["itemId"].astype("category")
-        raw_latest_rows_df.drop(columns=["source"], inplace=True)
+        raw_latest_rows_df.drop(columns=["source", "didBuy_target", "qty"], inplace=True)
         
         normalized_latest_rows_df = self.normalize_features(raw_latest_rows_df, norm_params)
         model_feature_cols = self.get_model_feature_col_names(normalized_latest_rows_df)
@@ -533,63 +537,6 @@ class GroceryML:
         x_item_idx = normalized_latest_rows_df["itemId"].to_numpy(np.int32)
         return {"normalized_latest_rows_df": normalized_latest_rows_df, "x_features": x_features, "x_item_idx": x_item_idx}
     ###########################################################################################
-
-
-    
-    # def build_prediction_input(self, prediction_date, norm_params):
-    #     print(f"build_prediction_input() prediction_date={prediction_date}")
-        
-    #     # build / refresh live source
-    #     self.build_live_df()
-    #     raw_latest_rows_df = self._build_latest_rows_df(self.live_df);
-             
-    #     # force prediction date
-    #     raw_latest_rows_df["date"] = prediction_date
-    #     # recompute days since last purchase using live_df as history
-    #     tmp_df = pd.concat([self.live_df, raw_latest_rows_df], ignore_index=True)
-    #     tmp_df = TemporalFeatures.compute_days_since_last_purchase_for_item(tmp_df, "daysSinceThisItemLastPurchased_raw")
-    #     raw_latest_rows_df = (tmp_df.sort_values("date")  .groupby("itemId") .tail(1) .reset_index(drop=True))
-    #     # carry forward avg days between purchases (from live_df)
-    #     last_avg_vals = (
-    #         self.live_df[self.live_df["didBuy_target"] == 1]
-    #         .sort_values("date")
-    #         .groupby("itemId")
-    #         .tail(1)["avgDaysBetweenItemPurchases_feat"]
-    #         .values
-    #     )
-    #     raw_latest_rows_df["avgDaysBetweenItemPurchases_feat"] = last_avg_vals
-    #     raw_latest_rows_df = self.groceryMLCore.create_item_supply_level_feat(raw_latest_rows_df)
-
-    #     # trp_level
-    #     raw_latest_rows_df = self._build_trip_level_feats(raw_latest_rows_df)
-    #     raw_latest_rows_df["daysSinceLastTrip_feat"] = TemporalFeatures.compute_days_since_last_trip_value(self.live_df, prediction_date)
-    #     raw_latest_rows_df["avgDaysBetweenTrips_feat"] = (self.live_df.sort_values("date").tail(1)["avgDaysBetweenTrips_feat"].iloc[0])
-    #     raw_latest_rows_df["item_due_ratio_feat"] = TemporalFeatures.compute_item_due_ratio(raw_latest_rows_df)
-
-    #     # ensure itemId matches training expectations
-    #     raw_latest_rows_df["itemId"] = raw_latest_rows_df["itemId"].astype("category")
-        
-    #     #raw_latest_rows_df = self.groceryMLCore.drop_raw_columns(raw_latest_rows_df)
-    #     raw_latest_rows_df.drop(columns=["didBuy_target"], inplace=True)
-    #     raw_latest_rows_df.drop(columns=["source"], inplace=True)
-        
-    #     normalized_latest_rows_df = self.normalize_features(raw_latest_rows_df, norm_params);
-    #     normalized_feature_cols = self.get_normalized_feature_col_names(normalized_latest_rows_df);
-    #     x_features = normalized_latest_rows_df[normalized_feature_cols].to_numpy(np.float32)
-    #     x_item_idx = normalized_latest_rows_df["itemId"].to_numpy(np.int32)
-    #     #
-    #     print("build_prediction_input() is done")
-       
-               
-    #     return {
-    #         #"raw_latest_rows_df": raw_latest_rows_df,
-    #         "normalized_latest_rows_df": normalized_latest_rows_df,
-    #         "x_features": x_features,
-    #         "x_item_idx": x_item_idx,
-    #         # "normalized_feature_cols": normalized_feature_cols
-    #     }  
-    
-    # ###########################################################################################
     def save_experiment(self, model, training_df, extra_dataframes, history, build_params, train_params, exp_dir):
         name_parts = []
 
@@ -635,35 +582,7 @@ class GroceryML:
         os.makedirs(exp_dir_name, exist_ok=True)
         return exp_dir_name
         
-    
-    # ###########################################################################################
-    # def create_experiment_dir(self,  build_params, train_params, base_dir):
-    #     name_parts = []
-
-    #     if "embedding_dim" in build_params:
-    #         name_parts.append(f"e{build_params['embedding_dim']}")
-
-    #     if "layers" in build_params:
-    #         layer_units = "-".join(str(layer["units"]) for layer in build_params["layers"])
-    #         name_parts.append(f"l{layer_units}")
-
-    #     if "epochs" in train_params:
-    #         name_parts.append(f"ep{train_params['epochs']}")
-
-    #     if "output_activation" in build_params:
-    #         name_parts.append(f"oa_{build_params['output_activation']}")
-
-    #     base_name = "__".join(name_parts) if name_parts else "exp_unlabeled"
-
-    #     short_id = str(abs(hash(time.time())))[:6]
-    #     exp_name = f"{base_name}__{short_id}"
-
-    #     exp_dir_name = os.path.join(base_dir, exp_name)
-    #     print(f"Creating dir: {exp_dir_name}")
-    #     os.makedirs(exp_dir_name, exist_ok=True)
-
-    #     #return exp_name, exp_dir
-    #     return exp_dir_name
+ 
     ###########################################################################################
     def export_dataframes_to_excel(self, dataframes, path, nameParts):
         print("grocery_ml_tensorflow.export_dataframes_to_excel()");
@@ -748,4 +667,146 @@ class GroceryML:
     
         print("build_wit_input_df() done")
         return df_norm
- 
+    ##########################################################################################
+
+
+
+        
+
+    
+    # def build_prediction_input(self, prediction_date, norm_params):
+    #     print(f"build_prediction_input() prediction_date={prediction_date}")
+        
+    #     # build / refresh live source
+    #     self.build_live_df()
+    #     raw_latest_rows_df = self._build_latest_rows_df(self.live_df);
+             
+    #     # force prediction date
+    #     raw_latest_rows_df["date"] = prediction_date
+    #     # recompute days since last purchase using live_df as history
+    #     tmp_df = pd.concat([self.live_df, raw_latest_rows_df], ignore_index=True)
+    #     tmp_df = TemporalFeatures.compute_days_since_last_purchase_for_item(tmp_df, "daysSinceThisItemLastPurchased_raw")
+    #     raw_latest_rows_df = (tmp_df.sort_values("date")  .groupby("itemId") .tail(1) .reset_index(drop=True))
+    #     # carry forward avg days between purchases (from live_df)
+    #     last_avg_vals = (
+    #         self.live_df[self.live_df["didBuy_target"] == 1]
+    #         .sort_values("date")
+    #         .groupby("itemId")
+    #         .tail(1)["avgDaysBetweenItemPurchases_feat"]
+    #         .values
+    #     )
+    #     raw_latest_rows_df["avgDaysBetweenItemPurchases_feat"] = last_avg_vals
+    #     raw_latest_rows_df = self.groceryMLCore.create_item_supply_level_feat(raw_latest_rows_df)
+
+    #     # trp_level
+    #     raw_latest_rows_df = self._build_trip_level_feats(raw_latest_rows_df)
+    #     raw_latest_rows_df["daysSinceLastTrip_feat"] = TemporalFeatures.compute_days_since_last_trip_value(self.live_df, prediction_date)
+    #     raw_latest_rows_df["avgDaysBetweenTrips_feat"] = (self.live_df.sort_values("date").tail(1)["avgDaysBetweenTrips_feat"].iloc[0])
+    #     raw_latest_rows_df["item_due_ratio_feat"] = TemporalFeatures.compute_item_due_ratio(raw_latest_rows_df)
+
+    #     # ensure itemId matches training expectations
+    #     raw_latest_rows_df["itemId"] = raw_latest_rows_df["itemId"].astype("category")
+        
+    #     #raw_latest_rows_df = self.groceryMLCore.drop_raw_columns(raw_latest_rows_df)
+    #     raw_latest_rows_df.drop(columns=["didBuy_target"], inplace=True)
+    #     raw_latest_rows_df.drop(columns=["source"], inplace=True)
+        
+    #     normalized_latest_rows_df = self.normalize_features(raw_latest_rows_df, norm_params);
+    #     normalized_feature_cols = self.get_normalized_feature_col_names(normalized_latest_rows_df);
+    #     x_features = normalized_latest_rows_df[normalized_feature_cols].to_numpy(np.float32)
+    #     x_item_idx = normalized_latest_rows_df["itemId"].to_numpy(np.int32)
+    #     #
+    #     print("build_prediction_input() is done")
+       
+               
+    #     return {
+    #         #"raw_latest_rows_df": raw_latest_rows_df,
+    #         "normalized_latest_rows_df": normalized_latest_rows_df,
+    #         "x_features": x_features,
+    #         "x_item_idx": x_item_idx,
+    #         # "normalized_feature_cols": normalized_feature_cols
+    #     }  
+    
+
+
+
+    # def get_normalized_feature_col_names(self, df):
+    #     """Returns normalized feature columns used for model input."""
+    #     return [c for c in df.columns if c.endswith("_norm") and not c.endswith("_raw_norm")]
+    # ########################################################################################### 
+    # def get_target_col(self, df):
+    #     """Returns the single target column. Throws if missing or ambiguous."""
+    #     target_cols = [c for c in df.columns if c.endswith("_target")]
+    #     if len(target_cols) != 1:
+    #         raise ValueError(f"Expected exactly one target column, found: {target_cols}")
+    #     return target_cols[0]
+    # ########################################################################################### 
+    # def fit_normalization_params(self, df):
+    #     params = {}
+    #     feature_cols = self.groceryMLCore.get_feature_col_names(df);
+    #     cyc_cols = [c for c in feature_cols if c.endswith("_cyc_feat")]
+    #     num_cols = [c for c in feature_cols if c not in cyc_cols]
+        
+    #     for col in num_cols:
+    #         params[col] = {"mean": df[col].mean(),"std": df[col].std()}
+    
+    #     for col in cyc_cols:
+    #         params[col] = {"period": TemporalFeatures.get_period_for_column(col)}
+    
+    #     return params
+    # ###########################################################################################
+    # def normalize_features(self, df, norm_params):
+    #     print("normalize_features()");
+    #     normalized_df = df.copy()
+    #     for col, cfg in norm_params.items():
+    #         if col.endswith("_cyc_feat"):
+    #             sin_col, cos_col = TemporalFeatures.encode_sin_cos(df[col], cfg["period"])
+    #             normalized_df[f"{col}_sin_norm"] = sin_col
+    #             normalized_df[f"{col}_cos_norm"] = cos_col
+    #             normalized_df.drop(columns=[col], inplace=True)
+    
+    #         else:
+    #             mean_val = cfg["mean"]
+    #             std_val = cfg["std"]
+    #             norm_col = col.replace("_feat", "_norm")
+    
+    #             if std_val == 0:
+    #                 normalized_df[norm_col] = 0.0
+    #             else:
+    #                 normalized_df[norm_col] = (df[col] - mean_val) / std_val
+    
+    #             normalized_df.drop(columns=[col], inplace=True)
+    
+    #     return normalized_df
+    ###########################################################################################    
+
+
+       
+    # ###########################################################################################
+    # def create_experiment_dir(self,  build_params, train_params, base_dir):
+    #     name_parts = []
+
+    #     if "embedding_dim" in build_params:
+    #         name_parts.append(f"e{build_params['embedding_dim']}")
+
+    #     if "layers" in build_params:
+    #         layer_units = "-".join(str(layer["units"]) for layer in build_params["layers"])
+    #         name_parts.append(f"l{layer_units}")
+
+    #     if "epochs" in train_params:
+    #         name_parts.append(f"ep{train_params['epochs']}")
+
+    #     if "output_activation" in build_params:
+    #         name_parts.append(f"oa_{build_params['output_activation']}")
+
+    #     base_name = "__".join(name_parts) if name_parts else "exp_unlabeled"
+
+    #     short_id = str(abs(hash(time.time())))[:6]
+    #     exp_name = f"{base_name}__{short_id}"
+
+    #     exp_dir_name = os.path.join(base_dir, exp_name)
+    #     print(f"Creating dir: {exp_dir_name}")
+    #     os.makedirs(exp_dir_name, exist_ok=True)
+
+    #     #return exp_name, exp_dir
+    #     return exp_dir_name

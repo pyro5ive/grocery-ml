@@ -88,7 +88,7 @@ class TemporalFeatures:
     ############################################################
     @staticmethod
     def compute_days_since_last_purchase_for_item(df, colName: str, reference_date_col="date"):
-        return TemporalFeatures.compute_days_since_last_purchase_for_item_inclusive(
+        return TemporalFeatures.compute_days_since_last_purchase_for_item_exclusive(
             df,
             colName,
             reference_date_col
