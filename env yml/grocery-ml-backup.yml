@@ -1,0 +1,123 @@
+name: grocery-ml
+channels:
+  - defaults
+  - conda-forge
+
+dependencies:
+  - python=3.10.19
+
+  # --- core scientific / ML ---
+  - numpy=1.23
+  - pandas
+  - scipy
+  - scikit-learn
+  - numba
+  - llvmlite
+  - joblib
+  - threadpoolctl
+  - shap
+  - slicer
+  - salib
+  - pyarrow
+  - h5py
+
+  # --- plotting / viz ---
+  - matplotlib
+  - contourpy
+  - cycler
+  - kiwisolver
+  - pillow
+  - plotly
+
+  # --- web / api ---
+  - fastapi
+  - starlette
+  - uvicorn
+  - flask
+  - flask-cors
+  - waitress
+  - dash
+  - dash-cytoscape
+
+  # --- data / misc ---
+  - sqlalchemy
+  - alembic
+  - mako
+  - sqlparse
+  - python-dotenv
+  - requests
+  - requests-oauthlib
+  - oauthlib
+  - urllib3
+  - pytz
+  - tzdata
+  - holidays
+  - arrow
+  - jsonschema
+  - jsonpointer
+  - rpds-py
+
+  # --- google / grpc ---
+  - google-auth
+  - google-auth-oauthlib
+  - grpcio
+  - protobuf=3.19.6
+
+  # --- mlflow ---
+  - mlflow
+
+  # --- jupyter / dev ---
+  - ipython
+  - ipykernel
+  - jupyter-client
+  - jupyter-lsp
+  - debugpy
+
+  # --- utils ---
+  - click
+  - cloudpickle
+  - dill
+  - multiprocess
+  - tqdm
+  - psutil
+  - packaging
+  - platformdirs
+  - importlib-metadata
+  - zipp
+  - typing-extensions
+  - termcolor
+  - wrapt
+  - cachetools
+  - cryptography
+  - greenlet
+  - gevent
+  - gitpython
+  - gitdb
+  - smmap
+  - docker
+  - huey
+  - prometheus-client
+
+  # --- dash deps bundled but harmless to keep ---
+  - retrying
+
+  # --- pip-only / problematic-on-conda ---
+  - pip
+  - pip:
+      - annotated-doc==0.0.4
+      - google-pasta==0.2.0
+      - mlflow-skinny==3.8.0
+      - mlflow-tracing==3.8.0
+      - narwhals==2.14.0
+      - rfc3987-syntax==1.1.0
+
+      # TensorFlow stack (Windows, pip-only)
+      - tensorflow==2.11.1
+      - tensorflow-estimator==2.11.0
+      - tensorflow-intel==2.11.1
+      - tensorflow-io-gcs-filesystem==0.31.0
+      - tensorboard==2.9.1
+      - tensorboard-data-server==0.6.1
+      - tensorboard-plugin-wit==1.8.1
+
+prefix: C:\ProgramData\miniconda3\envs\grocery-ml

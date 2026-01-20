@@ -70,10 +70,14 @@ class GroceryML:
         
     ###########################################################################################        
     def build_training_df(self):
+        print("Building Training DF: Start")
         self.training_df =  self._build_combined_df(self.trainingSources)
+        print("Building Training DF: Done")
     ###########################################################################################        
     def build_live_df(self):
+        print("Building Live DF: Start")
         self.live_df = self._build_combined_df(self.liveSources)
+        print("Building Live DF: Done")
     ###########################################################################################        
     def _build_combined_df(self, data_sources: Dict):
      
@@ -89,19 +93,26 @@ class GroceryML:
         # df = pd.concat([df, synthetic_df], ignore_index=True)
 
         self._combined_df = self.groceryMLCore.create_didBuy_target_col(self._combined_df, "didBuy_target");
-        ######## Item level ########
+
         # neg samples
         self._combined_df = self.groceryMLCore.insert_negative_samples(self._combined_df);
-        #    
+        self._combined_df.info()
+        self._combined_df = self.groceryMLCore.create_full_calendar_and_merge(self._combined_df);
+        self._combined_df.info()
+        
+        ######## Item level ########
         self._combined_df = TemporalFeatures.compute_days_since_last_purchase_for_item(self._combined_df,"daysSinceThisItemLastPurchased_raw")      
         self._combined_df["daysSinceThisItemLastPurchased_log_feat"] = self.groceryMLCore.log_feature(self._combined_df["daysSinceThisItemLastPurchased_raw"])
         #
         self._combined_df = TemporalFeatures.compute_expected_gap_ewma_feat(self._combined_df);
-        self._combined_df = TemporalFeatures.compute_avg_days_between_item_purchases(self._combined_df)  
+        self._combined_df = TemporalFeatures.compute_avg_days_between_item_purchases(self._combined_df, "avgDaysBetweenItemPurchases_feat")
+         # self._combined_df = TemporalFeatures.compute_avg_days_between_item_purchases(self._combined_df)  
+        
         # item supply level
         self._combined_df = self.groceryMLCore.create_item_supply_level_feat(self._combined_df);
         # item due ratio
         self._combined_df["item_due_ratio_feat"] = TemporalFeatures.compute_item_due_ratio(self._combined_df)  
+        
         # item purchase count
         self._combined_df = self.groceryMLCore.add_item_total_purchase_count_feat(self._combined_df, "itemPurchaseCount_raw");     
         # self._combined_df["itemPurchaseCount_log_feat"] = self.groceryMLCore.log_feature(self._combined_df["itemPurchaseCount_raw"]);
@@ -126,15 +137,14 @@ class GroceryML:
     ###########################################################################################
     def _build_trip_level_feats(self, df):
 
+        print("_build_trip_level_feats()")
+        # print("DF BEFORE.......")
+        # print(df.info())
         df = self.groceryMLCore.build_school_schedule_features(df);
         df = self.groceryMLCore.build_holiday_features(df);
-        # df["daysUntilSchoolStart_raw"] = SchoolFeatures.compute_days_until_school_start(df["date"])
-        # df["daysUntilSchoolEnd_raw"] = SchoolFeatures.compute_days_until_school_end(df["date"])
-        # df["schoolSeasonIndex_feat"] = SchoolFeatures.compute_school_season_index(df["date"])
-        # df["daysUntilNextHoliday_raw"] = HolidayFeatures.compute_days_until_next_holiday(df["date"])
-        # df["daysSinceLastHoliday_raw"] = HolidayFeatures.compute_days_since_last_holiday(df["date"])
-        # df["holidayProximity_feat"] = HolidayFeatures.compute_holiday_proximity_index(df["date"])
-
+        # print("DF AFTER....")
+        # print(df.info())
+        
         df["daysUntilSchoolStart_log_feat"] = self.groceryMLCore.log_feature(df["daysUntilSchoolStart_raw"])
         df["daysUntilSchoolEnd_log_feat"] = self.groceryMLCore.log_feature(df["daysUntilSchoolEnd_raw"])
         df["daysUntilNextHoliday_log_feat"] = self.groceryMLCore.log_feature(df["daysUntilNextHoliday_raw"])
@@ -287,9 +297,7 @@ class GroceryML:
                 binary_feat_cols.append(c)
     
         return norm_cols + binary_feat_cols
-    ###########################################################################################
-    
-
+    ##########################################################################################
     def build_and_compile_model(self, feat_cols_count, item_count, build_params):
 
         num_in = layers.Input(shape=(feat_cols_count,))
@@ -366,7 +374,6 @@ class GroceryML:
     
         return history
     ###########################################################################################
-
     def save_model(self, model, training_df, history, base_dir):
        """
        Save core artifacts directly into base_dir:
@@ -510,7 +517,9 @@ class GroceryML:
     def build_prediction_input(self, prediction_date, norm_params):
         print(f"build_prediction_input() prediction_date={prediction_date}")
         self.build_live_df()
-        raw_latest_rows_df = self.live_df.sort_values("date").groupby("itemId").tail(1).reset_index(drop=True)
+        # ts = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+        # self.groceryMLCore.export_df_to_excel_table(self.live_df, f"./live_df-{ts}") 
+        raw_latest_rows_df = self._build_latest_rows_df(self.live_df)
         raw_latest_rows_df["date"] = prediction_date
         
         ### ITEM level  daysSinceThisItemLastPurchased
@@ -518,16 +527,19 @@ class GroceryML:
         tmp_df = TemporalFeatures.compute_days_since_last_purchase_for_item(tmp_df, "daysSinceThisItemLastPurchased_raw")
         raw_latest_rows_df = tmp_df.sort_values("date").groupby("itemId").tail(1).reset_index(drop=True)
         raw_latest_rows_df["daysSinceThisItemLastPurchased_log_feat"] = self.groceryMLCore.log_feature(raw_latest_rows_df["daysSinceThisItemLastPurchased_raw"])
+        raw_latest_rows_df = TemporalFeatures.compute_avg_days_between_item_purchases(raw_latest_rows_df, "avgDaysBetweenItemPurchases_feat")
+        
         ### ITEM level
         raw_latest_rows_df = self.groceryMLCore.create_item_supply_level_feat(raw_latest_rows_df)
         raw_latest_rows_df["item_due_ratio_feat"] = TemporalFeatures.compute_item_due_ratio(raw_latest_rows_df)
 
         # TRIP level
+        raw_latest_rows_df = self._build_trip_level_feats(raw_latest_rows_df );
+        
         raw_latest_rows_df["daysSinceLastTrip_raw"] = TemporalFeatures.compute_days_since_last_trip_value(self.live_df, prediction_date)
         raw_latest_rows_df["avgDaysBetweenTrips_feat"] = self.live_df.sort_values("date").tail(1)["avgDaysBetweenTrips_feat"].iloc[0]
     
         raw_latest_rows_df = TemporalFeatures.create_date_features(raw_latest_rows_df);
-        
         raw_latest_rows_df["itemId"] = raw_latest_rows_df["itemId"].astype("category")
         raw_latest_rows_df.drop(columns=["source", "didBuy_target", "qty"], inplace=True)
         
@@ -581,8 +593,6 @@ class GroceryML:
         print(f"Creating dir: {exp_dir_name}")
         os.makedirs(exp_dir_name, exist_ok=True)
         return exp_dir_name
-        
- 
     ###########################################################################################
     def export_dataframes_to_excel(self, dataframes, path, nameParts):
         print("grocery_ml_tensorflow.export_dataframes_to_excel()");
@@ -627,7 +637,8 @@ class GroceryML:
         return prediction_df
     ###########################################################################################
     def _build_latest_rows_df(self, sourcedf):
-         # latest PURCHASE per item only (from live_df)
+         # latest PURCHASE per item only 
+        print("_build_latest_rows_df: start")
         latest_rows_df = (
             sourcedf[sourcedf["didBuy_target"] == 1]
             .sort_values("date")
@@ -636,6 +647,7 @@ class GroceryML:
             .copy()
             .reset_index(drop=True)
         )
+        print("_build_latest_rows_df: done")
         return latest_rows_df;
     ##########################################################################################
     def build_wit_input_df(self, model_dir):
@@ -668,145 +680,8 @@ class GroceryML:
         print("build_wit_input_df() done")
         return df_norm
     ##########################################################################################
+   
 
 
-
-        
 
     
-    # def build_prediction_input(self, prediction_date, norm_params):
-    #     print(f"build_prediction_input() prediction_date={prediction_date}")
-        
-    #     # build / refresh live source
-    #     self.build_live_df()
-    #     raw_latest_rows_df = self._build_latest_rows_df(self.live_df);
-             
-    #     # force prediction date
-    #     raw_latest_rows_df["date"] = prediction_date
-    #     # recompute days since last purchase using live_df as history
-    #     tmp_df = pd.concat([self.live_df, raw_latest_rows_df], ignore_index=True)
-    #     tmp_df = TemporalFeatures.compute_days_since_last_purchase_for_item(tmp_df, "daysSinceThisItemLastPurchased_raw")
-    #     raw_latest_rows_df = (tmp_df.sort_values("date")  .groupby("itemId") .tail(1) .reset_index(drop=True))
-    #     # carry forward avg days between purchases (from live_df)
-    #     last_avg_vals = (
-    #         self.live_df[self.live_df["didBuy_target"] == 1]
-    #         .sort_values("date")
-    #         .groupby("itemId")
-    #         .tail(1)["avgDaysBetweenItemPurchases_feat"]
-    #         .values
-    #     )
-    #     raw_latest_rows_df["avgDaysBetweenItemPurchases_feat"] = last_avg_vals
-    #     raw_latest_rows_df = self.groceryMLCore.create_item_supply_level_feat(raw_latest_rows_df)
-
-    #     # trp_level
-    #     raw_latest_rows_df = self._build_trip_level_feats(raw_latest_rows_df)
-    #     raw_latest_rows_df["daysSinceLastTrip_feat"] = TemporalFeatures.compute_days_since_last_trip_value(self.live_df, prediction_date)
-    #     raw_latest_rows_df["avgDaysBetweenTrips_feat"] = (self.live_df.sort_values("date").tail(1)["avgDaysBetweenTrips_feat"].iloc[0])
-    #     raw_latest_rows_df["item_due_ratio_feat"] = TemporalFeatures.compute_item_due_ratio(raw_latest_rows_df)
-
-    #     # ensure itemId matches training expectations
-    #     raw_latest_rows_df["itemId"] = raw_latest_rows_df["itemId"].astype("category")
-        
-    #     #raw_latest_rows_df = self.groceryMLCore.drop_raw_columns(raw_latest_rows_df)
-    #     raw_latest_rows_df.drop(columns=["didBuy_target"], inplace=True)
-    #     raw_latest_rows_df.drop(columns=["source"], inplace=True)
-        
-    #     normalized_latest_rows_df = self.normalize_features(raw_latest_rows_df, norm_params);
-    #     normalized_feature_cols = self.get_normalized_feature_col_names(normalized_latest_rows_df);
-    #     x_features = normalized_latest_rows_df[normalized_feature_cols].to_numpy(np.float32)
-    #     x_item_idx = normalized_latest_rows_df["itemId"].to_numpy(np.int32)
-    #     #
-    #     print("build_prediction_input() is done")
-       
-               
-    #     return {
-    #         #"raw_latest_rows_df": raw_latest_rows_df,
-    #         "normalized_latest_rows_df": normalized_latest_rows_df,
-    #         "x_features": x_features,
-    #         "x_item_idx": x_item_idx,
-    #         # "normalized_feature_cols": normalized_feature_cols
-    #     }  
-    
-
-
-
-    # def get_normalized_feature_col_names(self, df):
-    #     """Returns normalized feature columns used for model input."""
-    #     return [c for c in df.columns if c.endswith("_norm") and not c.endswith("_raw_norm")]
-    # ########################################################################################### 
-    # def get_target_col(self, df):
-    #     """Returns the single target column. Throws if missing or ambiguous."""
-    #     target_cols = [c for c in df.columns if c.endswith("_target")]
-    #     if len(target_cols) != 1:
-    #         raise ValueError(f"Expected exactly one target column, found: {target_cols}")
-    #     return target_cols[0]
-    # ########################################################################################### 
-    # def fit_normalization_params(self, df):
-    #     params = {}
-    #     feature_cols = self.groceryMLCore.get_feature_col_names(df);
-    #     cyc_cols = [c for c in feature_cols if c.endswith("_cyc_feat")]
-    #     num_cols = [c for c in feature_cols if c not in cyc_cols]
-        
-    #     for col in num_cols:
-    #         params[col] = {"mean": df[col].mean(),"std": df[col].std()}
-    
-    #     for col in cyc_cols:
-    #         params[col] = {"period": TemporalFeatures.get_period_for_column(col)}
-    
-    #     return params
-    # ###########################################################################################
-    # def normalize_features(self, df, norm_params):
-    #     print("normalize_features()");
-    #     normalized_df = df.copy()
-    #     for col, cfg in norm_params.items():
-    #         if col.endswith("_cyc_feat"):
-    #             sin_col, cos_col = TemporalFeatures.encode_sin_cos(df[col], cfg["period"])
-    #             normalized_df[f"{col}_sin_norm"] = sin_col
-    #             normalized_df[f"{col}_cos_norm"] = cos_col
-    #             normalized_df.drop(columns=[col], inplace=True)
-    
-    #         else:
-    #             mean_val = cfg["mean"]
-    #             std_val = cfg["std"]
-    #             norm_col = col.replace("_feat", "_norm")
-    
-    #             if std_val == 0:
-    #                 normalized_df[norm_col] = 0.0
-    #             else:
-    #                 normalized_df[norm_col] = (df[col] - mean_val) / std_val
-    
-    #             normalized_df.drop(columns=[col], inplace=True)
-    
-    #     return normalized_df
-    ###########################################################################################    
-
-
-       
-    # ###########################################################################################
-    # def create_experiment_dir(self,  build_params, train_params, base_dir):
-    #     name_parts = []
-
-    #     if "embedding_dim" in build_params:
-    #         name_parts.append(f"e{build_params['embedding_dim']}")
-
-    #     if "layers" in build_params:
-    #         layer_units = "-".join(str(layer["units"]) for layer in build_params["layers"])
-    #         name_parts.append(f"l{layer_units}")
-
-    #     if "epochs" in train_params:
-    #         name_parts.append(f"ep{train_params['epochs']}")
-
-    #     if "output_activation" in build_params:
-    #         name_parts.append(f"oa_{build_params['output_activation']}")
-
-    #     base_name = "__".join(name_parts) if name_parts else "exp_unlabeled"
-
-    #     short_id = str(abs(hash(time.time())))[:6]
-    #     exp_name = f"{base_name}__{short_id}"
-
-    #     exp_dir_name = os.path.join(base_dir, exp_name)
-    #     print(f"Creating dir: {exp_dir_name}")
-    #     os.makedirs(exp_dir_name, exist_ok=True)
-
-    #     #return exp_name, exp_dir
-    #     return exp_dir_name

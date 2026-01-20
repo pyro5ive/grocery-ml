@@ -123,7 +123,7 @@ class ItemNameUtils:
         lowered_terms = []
         for term in exclude_terms:
             lowered_terms.append(term.lower())
-    
+
         mask = []
         for value in df[text_column]:
             text_value = value.lower()
@@ -135,8 +135,6 @@ class ItemNameUtils:
             mask.append(not found)
     
         return df.loc[mask].reset_index(drop=True)
-    ############################################################################################
-
     ############################################################################################
     def create_item_ids(self, df, allow_new_items=False):
         # initialize maps if needed

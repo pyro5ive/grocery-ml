@@ -137,12 +137,31 @@ class TemporalFeatures:
         df[colName] = df[colName].fillna(0)
         return df
     ############################################################
+#     @staticmethod
+#     def compute_avg_days_between_item_purchases_series(df):
+#         print("compute_avg_days_between_item_purchases_series(): start");
+#         dfSorted = df.sort_values(["itemId", "date"])
+        
+#         purchase_dates = dfSorted["date"].where(dfSorted["didBuy_target"] == 1)
+#         purchase_gap = purchase_dates.groupby(dfSorted["itemId"]).diff().dt.days
+    
+#         avg_gap = purchase_gap.groupby(dfSorted["itemId"]).expanding().mean()
+#         avg_gap = avg_gap.reset_index(level=0, drop=True)
+    
+#         avg_gap = avg_gap.groupby(dfSorted["itemId"]).ffill().fillna(0)
+    
+#         result = avg_gap.reindex(dfSorted.index)
+#         result = result.reindex(df.index)
+#         print("compute_avg_days_between_item_purchases_series(): done");
+#         return result
+# #
+    ############################################################    
     @staticmethod
-    def compute_avg_days_between_item_purchases(df):
+    def compute_avg_days_between_item_purchases(df, colName: str):
         df = df.sort_values(["itemId", "date"]).reset_index(drop=True)
         purchase_gap = df.where(df["didBuy_target"] == 1).groupby("itemId")["date"].diff().dt.days
         avg_gap = purchase_gap.groupby(df["itemId"]).expanding().mean().reset_index(level=0, drop=True)
-        df["avgDaysBetweenItemPurchases_feat"] = avg_gap.groupby(df["itemId"]).ffill().fillna(0)
+        df[colName] = avg_gap.groupby(df["itemId"]).ffill().fillna(0)
 
         return df
     #######################################################

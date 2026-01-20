@@ -24,11 +24,14 @@ from wallmart_rcpt_parser import WallmartRecptParser
 from winn_dixie_recpt_parser import WinnDixieRecptParser 
 from hidden_layer_param_builder import HiddenLayerParamSetBuilder
 from weather_service import NwsWeatherService;
-
+from usda import UsdaCategoryEncoder
+from usda import UsdaFoodDataService
 
 
 class GroceryMLCore:
- 
+
+    usdaCatEncoder = None;
+    usdaApiService = None;
     itemNameUtils = None; 
     weatherService = None;
     brand_prefixes = [
@@ -63,6 +66,10 @@ class GroceryMLCore:
         pass;
         self.itemNameUtils = ItemNameUtils();
         self.weatherService = NwsWeatherService();
+        self.usdaApiService =  UsdaFoodDataService();
+        self.usdaCatEncoder = UsdaCategoryEncoder(self.usdaApiService);
+        
+
    ###########################################################################################
     def validate_no_empty_columns(self, df, exclude_cols=None):
         print("validate_no_empty_columns()")
@@ -89,7 +96,7 @@ class GroceryMLCore:
     ###########################################################################################
     def normalize_item_names(self, df):
         df = self.itemNameUtils.remove_items_matching_terms(df, "item", self.exclude_items);
-        # self._combined_df["itemName_lemma"] = self._combined_df["item"].apply(self.lemmatize_item_name)
+        # elf._combined_df["itemName_lemma"] = self._combined_df["item"].apply(self.lemmatize_item_name)
         df = self.itemNameUtils.strip_prefixes_from_column(df ,"item", self.brand_prefixes);
         df["item"] = df["item"].apply(self.itemNameUtils.clean_item_name)
         df = self.itemNameUtils.canonicalize(df)
@@ -104,10 +111,11 @@ class GroceryMLCore:
         ]
     ###########################################################################################
     def build_trip_interveral_feautres(self, df):
-        print("build_trip_interveral_feautres()")
+        print("build_trip_interveral_feautres(): start")
         trip_df = (df[["date"]] .drop_duplicates() .sort_values("date") .reset_index(drop=True))
         trip_df["daysSinceLastTrip_raw"] = TemporalFeatures.create_days_since_last_trip(trip_df)
         trip_df["avgDaysBetweenTrips_feat"] = TemporalFeatures.compute_avg_days_between_trips(trip_df)
+        print("build_trip_interveral_feautres(): done")
         return df.merge(trip_df, on="date", how="left")
     ##############################################################################################
     def create_item_supply_level_feat(self, df):
@@ -134,39 +142,30 @@ class GroceryMLCore:
         df[colName] = 1
         return df; 
     ##############################################################################################
-    
     def add_item_total_purchase_count_feat(self, df, feature_name: str):
         """
-        Counts total purchases per item (didBuy_target == 1)
-        and assigns that count to all rows for the item.
-        Throws if any item has zero purchases.
+        Adds a history-only cumulative purchase count per item.
+        For each row, the count reflects how many times the item
+        has been purchased up to and including that day.
         """
+    
         print("add_item_total_purchase_count_feat()")
     
-        item_counts = (
-            df.loc[df["didBuy_target"] == 1]
-              .groupby("itemId")["itemId"]
-              .count()
+        # Ensure correct temporal order per item
+        df = df.sort_values(["itemId", "date"]).copy()
+    
+        # History-only cumulative count
+        df[feature_name] = (
+            df.groupby("itemId")["didBuy_target"]
+              .cumsum()
+              .astype(int)
         )
-    
-        df[feature_name] = df["itemId"].map(item_counts)
-    
-        if df[feature_name].isna().any():
-            missing_ids = df.loc[df[feature_name].isna(), "itemId"].unique()
-            raise ValueError(f"Found itemId(s) with zero purchases: {missing_ids}")
-    
-        df[feature_name] = df[feature_name].astype(int)
     
         return df
     ##############################################################################################
-    def create_is_self_checkout_feature(self):
-        self._combined_df["isSelfCheckout_raw"]  = 0;
-        ## TODO: check casiher value
-    ##############################################################################################
-
     def build_holiday_features(self, df):
         print("build_holiday_features()")
-    
+        df = df.drop(columns=["daysUntilNextHoliday_raw","daysSinceLastHoliday_raw","holidayProximity_feat"], errors="ignore")
         grouped_df = (
             df[["date"]]
             .drop_duplicates()
@@ -183,14 +182,15 @@ class GroceryMLCore:
    ##############################################################################################
 
     def build_school_schedule_features(self, df):
-        print("build_school_schedule_features()")
-    
+        print("build_school_schedule_features(): start")
+        
+        df = df.drop(columns=["daysUntilSchoolStart_raw","daysUntilSchoolEnd_raw","schoolSeasonIndex_feat"], errors="ignore")
         grouped_df = (df[["date"]].drop_duplicates().sort_values("date").reset_index(drop=True))
-    
         grouped_df["daysUntilSchoolStart_raw"] = SchoolFeatures.compute_days_until_school_start(grouped_df["date"])
         grouped_df["daysUntilSchoolEnd_raw"] = SchoolFeatures.compute_days_until_school_end(grouped_df["date"])
         grouped_df["schoolSeasonIndex_feat"] = SchoolFeatures.compute_school_season_index(grouped_df["date"])
         df = df.merge(grouped_df, on="date", how="left")
+        print("build_school_schedule_features(): done")
         return df
     ##############################################################################################
     ## TODO:build_purchase_item_freq_cols  is broken 
@@ -244,7 +244,6 @@ class GroceryMLCore:
     
         # ensure purchase flag exists
         df = df.copy()
-        df["didBuy_target"] = 1
     
         # itemId → item name lookup
         item_lookup = (
@@ -283,46 +282,42 @@ class GroceryMLCore:
     
         # fill source fields for negatives
         df_full["source"] = df_full["source"].fillna("_neg_sample_").astype(str)
-
-    
+        
         return df_full
     ###########################################################################################            
-    # def insert_negative_samples(self, df):
-    #     print("insert_negative_samples()")
-        
-    #     # keep a lookup of itemId -> item name (each itemId maps to exactly one name)
-    #     item_lookup = (
-    #         df[["itemId", "item"]]
-    #         .drop_duplicates(subset=["itemId"])
-    #     )
-
-    #     targetColName = "didBuy_target";
-    #     df["didBuy_target"] = 1
-
-    #     # 2. full grid
-    #     all_items = df["itemId"].unique()
-    #     all_dates = df["date"].unique()
-    #     full = (
-    #         pd.MultiIndex.from_product([all_dates, all_items], names=["date", "itemId"])
-    #         .to_frame(index=False)
-    #     )
+    def create_full_calendar_and_merge(self, df, days: int = 365) -> pd.DataFrame:
+        df = df.copy()
+        df["date"] = pd.to_datetime(df["date"]).dt.normalize()
     
-    #     df_full = full.merge(df,  on=["date", "itemId"], how="left")
-        
-    #     # 4. fill missing didBuy
-    #     df_full["didBuy_target"] = df_full["didBuy_target"].fillna(0).astype(int)
+        # lookup that already exists in source df
+        item_lookup = df[["itemId", "item"]].drop_duplicates("itemId")
     
-    #     # 5. fill missing item names using lookup
-    #     df_full = df_full.merge(item_lookup, on="itemId", how="left", suffixes=("", "_lookup"))
-    #     df_full["item"] = df_full["item"].fillna(df_full["item_lookup"])
-    #     df_full = df_full.drop(columns=["item_lookup"])
-
-    #     # fill mssing source cols: 
-    #     df_full["source"] = df_full["source"].fillna("_neg_sample_").astype(str)
-    #     df_full["cashier_raw"] = df_full["cashier_raw"].fillna("_neg_sample_").astype(str)
-        
-    #     return df_full.copy()
-    # ###########################################################################################
+        max_date = df["date"].max()
+        min_date = max_date - pd.Timedelta(days=days - 1)
+    
+        calendar = (
+            item_lookup[["itemId"]]
+            .merge(
+                pd.DataFrame({"date": pd.date_range(min_date, max_date, freq="D")}),
+                how="cross"
+            )
+        )
+    
+        merged = calendar.merge(df, on=["itemId", "date"], how="left")
+    
+        # fill required fields
+        merged["didBuy_target"] = merged["didBuy_target"].fillna(0).astype(int)
+        merged["source"] = merged["source"].fillna("_neg_sample_")
+    
+        # restore item deterministically (no NaNs possible)
+        merged = merged.merge(item_lookup, on="itemId", how="left", suffixes=("", "_lk"))
+        merged["item"] = merged["item"].fillna(merged["item_lk"])
+        merged = merged.drop(columns=["item_lk"])
+    
+        merged = merged.sort_values(["itemId", "date"]).reset_index(drop=True)
+    
+        return merged[["date", "source", "itemId", "item", "qty", "didBuy_target"]]
+    ############################################################################################
     def build_winn_dixie_additional_text_rcpts_df(self, folderPath):
         recptParser = WinnDixieRecptParser()
         rows = []
