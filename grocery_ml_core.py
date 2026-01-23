@@ -13,6 +13,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 from sklearn.metrics import silhouette_score
+import logging
 #
 from school_features import SchoolFeatures
 from weather_features import WeatherFeatures
@@ -26,7 +27,10 @@ from hidden_layer_param_builder import HiddenLayerParamSetBuilder
 from weather_service import NwsWeatherService;
 from usda import UsdaCategoryEncoder
 from usda import UsdaFoodDataService
+import item_name_constants
 
+
+logger = logging.getLogger(__name__)
 
 class GroceryMLCore:
 
@@ -34,42 +38,14 @@ class GroceryMLCore:
     usdaApiService = None;
     itemNameUtils = None; 
     weatherService = None;
-    brand_prefixes = [
-        "great-value-",
-        "gv-",
-        "seg-",
-        "se-grocers-",
-        "marketside-",
-        "sam-s-choice-",
-        "equate-",
-        "parent-s-choice-",
-        "member-s-mark-",
-        "kirkland-",
-        "know-and-love-",
-        "walmart-",
-        "kgl-",
-        "kand1",
-        "kandl",
-        "wr-",
-        ]
-        
-    exclude_items = [
-        "shirt", "joggers", "underwear", "sandals", "socks",
-        "toy", "doll", "game", "plush", "fleece",
-        "cleaner", "shorts", "pants", "mens", 
-        "birthday", "christmas", "halloween",
-        "greeting-cards", "greeting", "hallmark", "sleeves"
-        ]
-    
-    
+    targetColName = "didBuy_target"
+ 
     def __init__(self):
         pass;
         self.itemNameUtils = ItemNameUtils();
         self.weatherService = NwsWeatherService();
         self.usdaApiService =  UsdaFoodDataService();
         self.usdaCatEncoder = UsdaCategoryEncoder(self.usdaApiService);
-        
-
    ###########################################################################################
     def validate_no_empty_columns(self, df, exclude_cols=None):
         print("validate_no_empty_columns()")
@@ -95,13 +71,12 @@ class GroceryMLCore:
         return np.log1p(values)
     ###########################################################################################
     def normalize_item_names(self, df):
-        df = self.itemNameUtils.remove_items_matching_terms(df, "item", self.exclude_items);
+        df = self.itemNameUtils.remove_items_matching_terms(df, "item", item_name_constants.EXCLUDED_ITEMS);
         # elf._combined_df["itemName_lemma"] = self._combined_df["item"].apply(self.lemmatize_item_name)
-        df = self.itemNameUtils.strip_prefixes_from_column(df ,"item", self.brand_prefixes);
+        df = self.itemNameUtils.strip_prefixes_from_column(df ,"item", item_name_constants.BRAND_PREFIXES);
         df["item"] = df["item"].apply(self.itemNameUtils.clean_item_name)
         df = self.itemNameUtils.canonicalize(df)
         return df
- 
     ###########################################################################################
     def get_feature_col_names(self, df):
         """Returns feature columns before normalization."""
@@ -155,17 +130,15 @@ class GroceryMLCore:
         df = df.sort_values(["itemId", "date"]).copy()
     
         # History-only cumulative count
-        df[feature_name] = (
-            df.groupby("itemId")["didBuy_target"]
-              .cumsum()
-              .astype(int)
-        )
+        df[feature_name] = (df.groupby("itemId")["didBuy_target"] .cumsum() .astype(int) )
     
         return df
     ##############################################################################################
     def build_holiday_features(self, df):
         print("build_holiday_features()")
-        df = df.drop(columns=["daysUntilNextHoliday_raw","daysSinceLastHoliday_raw","holidayProximity_feat"], errors="ignore")
+    
+        df = df.drop(columns=[c for c in df.columns if c.endswith("_holiday_feat")], errors="ignore")
+    
         grouped_df = (
             df[["date"]]
             .drop_duplicates()
@@ -173,13 +146,31 @@ class GroceryMLCore:
             .reset_index(drop=True)
         )
     
-        grouped_df["daysUntilNextHoliday_raw"] = HolidayFeatures.compute_days_until_next_holiday(grouped_df["date"])
-        grouped_df["daysSinceLastHoliday_raw"] = HolidayFeatures.compute_days_since_last_holiday(grouped_df["date"])
-        grouped_df["holidayProximity_feat"] = HolidayFeatures.compute_holiday_proximity_index(grouped_df["date"])
+        holiday_feats = HolidayFeatures.build_federal_holiday_flag_and_proximity_features(grouped_df["date"])
+        holiday_feats["date"] = grouped_df["date"].values
     
-        df = df.merge(grouped_df, on="date", how="left")
+        df = df.merge(holiday_feats, on="date", how="left")
         return df
-   ##############################################################################################
+    ##############################################################################################
+    #  def build_holiday_features(self, df):
+   #      print("build_holiday_features()")
+   #      df = df.drop(columns=[c for c in df.columns if c.endswith("_holiday_feat")], errors="ignore")
+   #      grouped_df = (
+   #          df[["date"]]
+   #          .drop_duplicates()
+   #          .sort_values("date")
+   #          .reset_index(drop=True)
+   #      )
+
+   #      grouped_df = HolidayFeatures.build_federal_holiday_flag_and_proximity_features(grouped_df["date"])
+        
+   #      # grouped_df["daysUntilNextHoliday_raw"] = HolidayFeatures.compute_days_until_next_holiday(grouped_df["date"])
+   #      # grouped_df["daysSinceLastHoliday_raw"] = HolidayFeatures.compute_days_since_last_holiday(grouped_df["date"])
+   #      # grouped_df["holidayProximity_feat"] = HolidayFeatures.compute_holiday_proximity_index(grouped_df["date"])
+    
+   #      df = df.merge(grouped_df, on="date", how="left")
+   #      return df
+   # ##############################################################################################
 
     def build_school_schedule_features(self, df):
         print("build_school_schedule_features(): start")
@@ -430,9 +421,9 @@ class GroceryMLCore:
     ###########################################################################################    
     def export_dataframe_to_csv(self, df, base_path_without_ext):
         file_path = f"{base_path_without_ext}.csv"
-        print(f"Writing CSV: {file_path}")
+        logger.info("Exporting DF to CSV  path=%s", file_path)
         df.to_csv(file_path, index=True)
-        print(f"  CSV done: {file_path}")
+        logger.info("Exporting DF to CSV Complete  path=%s", file_path)
     ###########################################################################################    
     def export_dataframe_to_parquet(self, df, base_path_without_ext):
         file_path = f"{base_path_without_ext}.parquet"

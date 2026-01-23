@@ -11,6 +11,7 @@ import gc
 import tensorflow as tf
 from tensorflow.keras import layers, models
 from tensorflow.keras.callbacks import TensorBoard
+import logging
 
 from sklearn.model_selection import train_test_split
 import numpy as np
@@ -27,6 +28,7 @@ from grocery_ml_core import GroceryMLCore
 from school_features import SchoolFeatures
 from weather_features import WeatherFeatures
 from item_name_utils import ItemNameUtils
+from item_id_mapper import ItemIdMapper
 from temporal_features_2 import TemporalFeatures
 from data_creator import DataCreator
 from holiday_features import HolidayFeatures
@@ -39,11 +41,10 @@ from weather_service import NwsWeatherService;
 
 class GroceryML:
 
-
     expNameParts: str = None
     _combined_df: pd.DataFrame = None 
-    training_df: pd.DataFrame = None
-    live_df: pd.DataFrame = None
+    _training_df: pd.DataFrame = None
+    _live_df: pd.DataFrame = None
     groceryMLCore: GroceryMLCore = None;
     itemNameUtils = None; 
     weatherService = None; 
@@ -63,20 +64,24 @@ class GroceryML:
         
     def __init__(self):
         pass;
+        self.itemIdMapper = ItemIdMapper();
         self.itemNameUtils = ItemNameUtils();
         self.weatherService = NwsWeatherService();
         self.groceryMLCore = GroceryMLCore();
         self.excelMerger = ExcelExportMerger();
-        
     ###########################################################################################        
     def build_training_df(self):
         print("Building Training DF: Start")
         self.training_df =  self._build_combined_df(self.trainingSources)
+        # ts = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+        # self.groceryMLCore.export_dataframe_to_csv(self.training_df, f"training_df_{ts}");
         print("Building Training DF: Done")
     ###########################################################################################        
     def build_live_df(self):
         print("Building Live DF: Start")
         self.live_df = self._build_combined_df(self.liveSources)
+        # ts = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+        # self.groceryMLCore.export_dataframe_to_csv(self.live_df, f"live_df_{ts}");
         print("Building Live DF: Done")
     ###########################################################################################        
     def _build_combined_df(self, data_sources: Dict):
@@ -85,7 +90,7 @@ class GroceryML:
         self._build_sources(data_sources);
         # item name and id operations
         self._combined_df = self.groceryMLCore.normalize_item_names(self._combined_df);
-        self._combined_df = self.itemNameUtils.create_item_ids(self._combined_df, allow_new_items=True)
+        self._combined_df = self.itemIdMapper.create_item_ids(self._combined_df)
                     
         # synthetic_df = DataCreator.build_synthetic_rows_until(408, 24, "01/01/2020", "12/31/2020")
         # df = pd.concat([df, synthetic_df], ignore_index=True)
@@ -96,10 +101,8 @@ class GroceryML:
 
         # neg samples
         self._combined_df = self.groceryMLCore.insert_negative_samples(self._combined_df);
-        self._combined_df.info()
         self._combined_df = self.groceryMLCore.create_full_calendar_and_merge(self._combined_df);
-        self._combined_df.info()
-        
+                
         ######## Item level ########
         self._combined_df = TemporalFeatures.compute_days_since_last_purchase_for_item(self._combined_df,"daysSinceThisItemLastPurchased_raw")      
         self._combined_df["daysSinceThisItemLastPurchased_log_feat"] = self.groceryMLCore.log_feature(self._combined_df["daysSinceThisItemLastPurchased_raw"])
@@ -138,17 +141,13 @@ class GroceryML:
     def _build_trip_level_feats(self, df):
 
         print("_build_trip_level_feats()")
-        # print("DF BEFORE.......")
-        # print(df.info())
         df = self.groceryMLCore.build_school_schedule_features(df);
         df = self.groceryMLCore.build_holiday_features(df);
-        # print("DF AFTER....")
-        # print(df.info())
         
         df["daysUntilSchoolStart_log_feat"] = self.groceryMLCore.log_feature(df["daysUntilSchoolStart_raw"])
         df["daysUntilSchoolEnd_log_feat"] = self.groceryMLCore.log_feature(df["daysUntilSchoolEnd_raw"])
-        df["daysUntilNextHoliday_log_feat"] = self.groceryMLCore.log_feature(df["daysUntilNextHoliday_raw"])
-        df["daysSinceLastHoliday_log_feat"] = self.groceryMLCore.log_feature(df["daysSinceLastHoliday_raw"])
+        # df["daysUntilNextHoliday_log_feat"] = self.groceryMLCore.log_feature(df["daysUntilNextHoliday_raw"])
+        # df["daysSinceLastHoliday_log_feat"] = self.groceryMLCore.log_feature(df["daysSinceLastHoliday_raw"])
 
         df["isDayLightSavingsTime_feat"] = TemporalFeatures.is_dst_series(df["date"])
         
@@ -209,6 +208,7 @@ class GroceryML:
     
         return pd.concat(dfs, ignore_index=True)
     ########################################################################################### 
+
     def is_binary_column(self, df, colName: str):
         col = df[colName]
         if col.dtype == bool: return True
@@ -448,9 +448,9 @@ class GroceryML:
             artifacts = self.build_prediction_input(prediction_date, norm_params)
             y = model.predict([artifacts["x_features"], artifacts["x_item_idx"]])
             df = artifacts["normalized_latest_rows_df"]
-            df.insert(0, "prediction_date", prediction_date)
+            # df.insert(0, "prediction_date", prediction_date)
             df.insert(3, "readyToBuy_probability", y)
-            df = self.itemNameUtils.map_item_ids_to_names(
+            df = self.itemIdMapper.map_item_ids_to_names(
                 df.sort_values("readyToBuy_probability", ascending=False).reset_index(drop=True)
             )
             prediction_results.append(df)
@@ -466,7 +466,7 @@ class GroceryML:
                 "normalized_training_df": normalized_training_df,
                 "consecutive_predictions": all_predictions_df
             },history,modelBuildParams,modelTrainParams,exp_dir_path)
-    ############################################################################################   
+    ############################################################################################
     def run_experiment(self, training_df,  modelBuildParams, modelTrainParams, baseDir):
         
         self.expNameParts = self.create_exp_name_parts(modelBuildParams, modelTrainParams);
@@ -501,7 +501,7 @@ class GroceryML:
         ### raw_latest_rows_df = prediction_time_artifacts["raw_latest_rows_df"]
         prediction_df.insert(3, "readyToBuy_proabability",  prediction_values_col)
         prediction_df = prediction_df.sort_values("readyToBuy_proabability", ascending=False).reset_index(drop=True)
-        prediction_df = self.itemNameUtils.map_item_ids_to_names(prediction_df)
+        prediction_df = self.itemIdMapper.map_item_ids_to_names(prediction_df)
         ##############################
         dataframes = {
             "normalized_training_df": normalized_training_df,
@@ -553,7 +553,6 @@ class GroceryML:
         name_parts = []
 
         print("Exporting extra_dataframes:")
-       
         self.export_dataframes_to_excel(extra_dataframes, exp_dir, self.expNameParts)
         # TODO: self.export_dataframes_to_csv(extra_dataframes, exp_dir, expNameParts)
                
@@ -631,7 +630,7 @@ class GroceryML:
 
         prediction_df = pred_input["prediction_df"].copy()
         prediction_df["prediction"] = predictions
-        prediction_df = self.itemNameUtils.map_item_ids_to_names(prediction_df)
+        prediction_df = self.itemIdMapper.map_item_ids_to_names(prediction_df)
         prediction_df = prediction_df.sort_values("prediction", ascending=False).reset_index(drop=True)
 
         return prediction_df
