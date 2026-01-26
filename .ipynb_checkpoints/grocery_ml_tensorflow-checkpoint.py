@@ -1,5 +1,6 @@
 
 import time
+from datetime import date
 import pandas as pd
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple
@@ -34,13 +35,14 @@ from data_creator import DataCreator
 from holiday_features import HolidayFeatures
 from wallmart_rcpt_parser import WallmartRecptParser
 from winn_dixie_recpt_parser import WinnDixieRecptParser 
-from hidden_layer_param_builder import HiddenLayerParamSetBuilder
 from weather_service import NwsWeatherService;
 # asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 
-class GroceryML:
+logger = logging.getLogger(__name__)
 
+class GroceryML:
+    
     expNameParts: str = None
     _combined_df: pd.DataFrame = None 
     _training_df: pd.DataFrame = None
@@ -52,14 +54,14 @@ class GroceryML:
         "walmart": r"data\training\walmart",
         "winndixie": r"data\training\winndixie\txt",
         "winndixieAdditional" : r"data\training\winndixie\additionalTxtRcpts",
-        "weather": r"data\live\weather\VisualCrossing-70062 2000-01-01 to 2025-12-14.csv"
+        "weather": r"data\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv"
     }
     
     liveSources  = {
         "walmart": r"data\live\walmart",
         "winndixie": r"data\live\winndixie\txt",
         "winndixieAdditional" : r"data\live\winndixie\additionalTxtRcpts",
-        "weather": r"data\live\weather\VisualCrossing-70062 2000-01-01 to 2025-12-14.csv"
+        "weather": r"data\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv"
     }
         
     def __init__(self):
@@ -71,22 +73,24 @@ class GroceryML:
         self.excelMerger = ExcelExportMerger();
     ###########################################################################################        
     def build_training_df(self):
-        print("Building Training DF: Start")
+        logger.info("Building Training DF: Start")
         self.training_df =  self._build_combined_df(self.trainingSources)
         # ts = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         # self.groceryMLCore.export_dataframe_to_csv(self.training_df, f"training_df_{ts}");
-        print("Building Training DF: Done")
+        logger.info("Building Training DF: Done")
     ###########################################################################################        
     def build_live_df(self):
-        print("Building Live DF: Start")
+        logger.info("Building Live DF: Start")
         self.live_df = self._build_combined_df(self.liveSources)
         # ts = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         # self.groceryMLCore.export_dataframe_to_csv(self.live_df, f"live_df_{ts}");
-        print("Building Live DF: Done")
+        logger.info("Building Live DF: Done")
     ###########################################################################################        
     def _build_combined_df(self, data_sources: Dict):
-     
-        print(f"_build_combined_df()")
+
+        self.dataSources = data_sources;
+        
+        logger.info(f"_build_combined_df()")
         self._build_sources(data_sources);
         # item name and id operations
         self._combined_df = self.groceryMLCore.normalize_item_names(self._combined_df);
@@ -98,11 +102,10 @@ class GroceryML:
         # df = pd.concat([df, synthetic_df], ignore_index=True)
 
         self._combined_df = self.groceryMLCore.create_didBuy_target_col(self._combined_df, "didBuy_target");
-
         # neg samples
         self._combined_df = self.groceryMLCore.insert_negative_samples(self._combined_df);
         self._combined_df = self.groceryMLCore.create_full_calendar_and_merge(self._combined_df);
-                
+
         ######## Item level ########
         self._combined_df = TemporalFeatures.compute_days_since_last_purchase_for_item(self._combined_df,"daysSinceThisItemLastPurchased_raw")      
         self._combined_df["daysSinceThisItemLastPurchased_log_feat"] = self.groceryMLCore.log_feature(self._combined_df["daysSinceThisItemLastPurchased_raw"])
@@ -124,58 +127,59 @@ class GroceryML:
         #self._combined_df = self.groceryMLCore.build_purchase_item_freq_cols(self._combined_df)
         # self.groceryMLCore.build_freq_ratios()
              
-        ######## trip level ######
+        #--------- trip level-----------------------#
         self._combined_df = self._build_trip_level_feats(self._combined_df);
-        self._combined_df = self.groceryMLCore.build_trip_interveral_feautres(self._combined_df)
-        #
         self._combined_df = self.groceryMLCore.drop_rare_purchases(self._combined_df)
-        
         self._combined_df = TemporalFeatures.create_date_features(self._combined_df);
-
         self.groceryMLCore.validate_no_empty_columns(self._combined_df, ["qty"])
-        print("self._build_combined_df() done")
+        logger.info("self._build_combined_df() done")
         # ts = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         # self.groceryMLCore.export_df_to_excel_table(self._combined_df, f"./combined_df_debug-{ts}", sheet_name="combined_df")
         return self._combined_df;
     ###########################################################################################
+    
+    
+    
+    
+    
     def _build_trip_level_feats(self, df):
 
-        print("_build_trip_level_feats()")
-        df = self.groceryMLCore.build_school_schedule_features(df);
-        df = self.groceryMLCore.build_holiday_features(df);
-        
+        logger.info("_build_trip_level_feats()")
+        df = self.groceryMLCore.build_school_schedule_features(df);      
         df["daysUntilSchoolStart_log_feat"] = self.groceryMLCore.log_feature(df["daysUntilSchoolStart_raw"])
         df["daysUntilSchoolEnd_log_feat"] = self.groceryMLCore.log_feature(df["daysUntilSchoolEnd_raw"])
-        # df["daysUntilNextHoliday_log_feat"] = self.groceryMLCore.log_feature(df["daysUntilNextHoliday_raw"])
-        # df["daysSinceLastHoliday_log_feat"] = self.groceryMLCore.log_feature(df["daysSinceLastHoliday_raw"])
 
         df["isDayLightSavingsTime_feat"] = TemporalFeatures.is_dst_series(df["date"])
         
+        # df = self.groceryMLCore.build_holiday_features(df);
+        df = self.groceryMLCore.create_weather_features(df);
+        df = self.groceryMLCore.build_trip_interveral_feautres(df)                
         return df;
     ###########################################################################################
-    def _build_sources(self, data_sources: Dict):
-        print("_build_sources()");
-        winndixie_df = self.groceryMLCore.build_winn_dixie_df(data_sources.get("winndixie"));
-        winndixie_add_txt_rpts_df =  self.groceryMLCore.build_winn_dixie_additional_text_rcpts_df(data_sources.get("winndixieAdditional"))
-        winndixie_df = pd.concat([winndixie_df, winndixie_add_txt_rpts_df], ignore_index=True)
-        #winndixie_df["isBulkVendor_feat"] = 0;        
-        #       
-        wallmart_df = WallmartRecptParser.build_wall_mart_df(data_sources.get("walmart"));
-        #wallmart_df["isBulkVendor_feat"] = 0;        
+
+    # def _build_sources(self, data_sources: Dict):
+    #     logger.info("_build_sources()");
+    #     # winndixie_df = self.groceryMLCore.build_winn_dixie_df(data_sources.get("winndixie"));
+    #     # winndixie_add_txt_rpts_df =  self.groceryMLCore.build_winn_dixie_additional_text_rcpts_df(data_sources.get("winndixieAdditional"))
+    #     # winndixie_df = pd.concat([winndixie_df, winndixie_add_txt_rpts_df], ignore_index=True)
+    #     #winndixie_df["isBulkVendor_feat"] = 0;        
+    #     #       
+    #     # wallmart_df = WallmartRecptParser.build_wall_mart_df(data_sources.get("walmart"));
+    #     # #wallmart_df["isBulkVendor_feat"] = 0;        
         
-        if winndixie_df is None:
-            raise RuntimeError("build_winn_dixie_df() returned None")
-        if winndixie_add_txt_rpts_df is None:
-            raise RuntimeError("build_winn_dixie_additional_text_rcpts_df() returned None")
-        #if wallmart_df is None:
-        #    raise RuntimeError("build_wall_mart_df() returned None")
+    #     # if winndixie_df is None:
+    #     #     raise RuntimeError("build_winn_dixie_df() returned None")
+    #     # if winndixie_add_txt_rpts_df is None:
+    #     #     raise RuntimeError("build_winn_dixie_additional_text_rcpts_df() returned None")
+    #     # #if wallmart_df is None:
+    #     # #    raise RuntimeError("build_wall_mart_df() returned None")
         
-        self._combined_df = pd.concat([winndixie_df, wallmart_df[["date", "item", "source", "qty"]]],ignore_index=True)        
-        #self._combined_df = winndixie_df[["date", "item", "source","qty"]].reset_index(drop=True)
+    #     self._combined_df = pd.concat([winndixie_df, wallmart_df[["date", "item", "source", "qty"]]],ignore_index=True)        
+    #     #self._combined_df = winndixie_df[["date", "item", "source","qty"]].reset_index(drop=True)
 
     ########################################################################################### 
     def create_synthetic_samples(self, df, startDate, stopDate, fuzzRangeDays=3):
-        print("create_synthetic_samples()")
+        logger.info("create_synthetic_samples()")
           
         df_sorted = df.sort_values(["itemId", "date"]).reset_index(drop=True)
     
@@ -208,16 +212,6 @@ class GroceryML:
     
         return pd.concat(dfs, ignore_index=True)
     ########################################################################################### 
-
-    def is_binary_column(self, df, colName: str):
-        col = df[colName]
-        if col.dtype == bool: return True
-        unique_vals = col.dropna().unique()
-        if len(unique_vals) <= 2 and set(unique_vals).issubset({0, 1}):
-            return True
-
-        return False
-    ###########################################################################################
     def get_normalized_feature_col_names(self, df):
         """Returns normalized feature columns used for model input."""
         return [c for c in df.columns if c.endswith("_norm") and not c.endswith("_raw_norm")]
@@ -236,7 +230,7 @@ class GroceryML:
         num_cols = [c for c in feature_cols if c not in cyc_cols]
     
         for col in num_cols:
-            if self.is_binary_column(df, col):
+            if self.groceryMLCore.is_binary_column(df, col):
                 continue
     
             params[col] = {
@@ -253,7 +247,7 @@ class GroceryML:
     #
     ###########################################################################################
     def normalize_features(self, df, norm_params):
-        print("normalize_features()")
+        logger.info("normalize_features()")
     
         normalized_df = df.copy()
     
@@ -293,7 +287,7 @@ class GroceryML:
     
         binary_feat_cols = []
         for c in df.columns:
-            if c.endswith("_feat") and self.is_binary_column(df, c):
+            if c.endswith("_feat") and self.groceryMLCore.is_binary_column(df, c):
                 binary_feat_cols.append(c)
     
         return norm_cols + binary_feat_cols
@@ -349,7 +343,7 @@ class GroceryML:
         return tensorboard;
     ###########################################################################################
     def train_model(self, model, df, feature_cols, target_col, train_params):
-        print("train_model()");
+        logger.info("train_model()");
         callbacks = []
         x_feat = df[feature_cols].to_numpy(np.float32)
         x_item = df["itemId"].to_numpy(np.int32)
@@ -381,49 +375,49 @@ class GroceryML:
        - model + weights
        - training history (json)
        """
-       print(f"[save_model] starting artifact save → {base_dir}")
+       logger.info(f"[save_model] starting artifact save → {base_dir}")
        
        # create base + model dirs in one shot
        modelDir = os.path.join(base_dir, "model")
        os.makedirs(modelDir, exist_ok=True)
 
-       print(f"[save_model] writing training_df snapshot (parquet, pre-normalized)")
+       logger.info(f"[save_model] writing training_df snapshot (parquet, pre-normalized)")
        training_df.to_parquet(os.path.join(modelDir, "training_df_frozen.parquet"), compression="snappy")
        #
-       print("[save_model] writing training history json")
+       logger.info("[save_model] writing training history json")
        self.groceryMLCore.write_json(history.history, os.path.join(modelDir, "history.json"))       
        #
-       print("[save_model] saving model directory files")
+       logger.info("[save_model] saving model directory files")
        model.save(modelDir)
-       print("[save_model] saving model weights (separate file)")
+       logger.info("[save_model] saving model weights (separate file)")
        model.save_weights(os.path.join(modelDir, "weights.h5"))
 
-       print(f"[save_model] all artifacts saved successfully → {modelDir}")
+       logger.info(f"[save_model] all artifacts saved successfully → {modelDir}")
     ###########################################################################################
     def load_model(self, model_dir):
         """
         Loads a trained model + frozen combined_df snapshot from disk.
         Returns (model, combined_df_frozen).
         """
-        print(f"[load_model_artifacts] loading artifacts from → {model_dir}")
+        logger.info(f"[load_model_artifacts] loading artifacts from → {model_dir}")
 
         model_sub_dir = os.path.join(model_dir, "model")
-        print(f"[load_model_artifacts] loading model → {model_sub_dir}")
+        logger.info(f"[load_model_artifacts] loading model → {model_sub_dir}")
         model = tf.keras.models.load_model(model_sub_dir)
 
         frozen_path = os.path.join(model_sub_dir, "training_df_frozen.parquet")
-        print(f"[load_model_artifacts] loading frozen combined_df → {frozen_path}")
+        logger.info(f"[load_model_artifacts] loading frozen combined_df → {frozen_path}")
         combined_df_frozen = pd.read_parquet(frozen_path)
 
-        print("[load_model_artifacts] done")
+        logger.info("[load_model_artifacts] done")
         return model, combined_df_frozen
     ###########################################################################################   
     def run_experiment_with_consecutive_predictions(self, training_df, modelBuildParams, modelTrainParams, baseDir, start_date, days):
         self.expNameParts = self.create_exp_name_parts(modelBuildParams, modelTrainParams)
         exp_dir_path = self.create_experiment_dir(self.expNameParts, baseDir)
         self.tensorboard = self.create_tensorboard(f"{exp_dir_path}/tensorflow/logs/")
-        print(f"run_experiment_with_consecutive_predictions() exp_dir: {exp_dir_path}")
-        print(f"when: {datetime.now()} params: {modelTrainParams}")
+        logger.info(f"run_experiment_with_consecutive_predictions() exp_dir: {exp_dir_path}")
+        logger.info(f"when: {datetime.now()} params: {modelTrainParams}")
     
         target_cols = self.get_target_col(training_df)
         norm_params = self.fit_normalization_params(training_df)
@@ -473,8 +467,8 @@ class GroceryML:
         exp_dir_path = self.create_experiment_dir(self.expNameParts, baseDir);
         
         self.tensorboard = self.create_tensorboard(f"{exp_dir_path}/tensorflow/logs/")
-        print(f"run_experiment()  exp_dir: {exp_dir_path}  ");
-        print(f"run_experiment()  when: {datetime.now()} params: {modelTrainParams}  ");
+        logger.info(f"run_experiment()  exp_dir: {exp_dir_path}  ");
+        logger.info(f"run_experiment()  when: {datetime.now()} params: {modelTrainParams}  ");
         
         #training_df = self.groceryMLCore.drop_raw_columns(training_df)
         #######################################################
@@ -495,7 +489,7 @@ class GroceryML:
         #################################################
         ###### test predictions  ########################
         prediction_time_artifacts = self.build_prediction_input(pd.Timestamp.now(), norm_params)
-        print("Running Model.Predict()");
+        logger.info("Running Model.Predict()");
         prediction_values_col = model.predict( [prediction_time_artifacts["x_features"], prediction_time_artifacts["x_item_idx"]])
         prediction_df = prediction_time_artifacts["normalized_latest_rows_df"]
         ### raw_latest_rows_df = prediction_time_artifacts["raw_latest_rows_df"]
@@ -514,13 +508,51 @@ class GroceryML:
         # self.excelMerger.add_dataframe(prediction_df, sheet_name = exp_name_parts, output_dir =  baseDir)
         self.save_experiment(model, training_df, dataframes, history,  modelBuildParams, modelTrainParams, exp_dir_path)
     ###########################################################################################
+    def fill_weather_for_prediction_df(self, df):
+        logger=logging.getLogger(__name__)
+        KENNER_LATITUDE=29.975579;KENNER_LONGITUDE=-90.223536
+        logger.info("Weather fill start rows=%s",len(df))
+        df["date"]=pd.to_datetime(df["date"]).dt.normalize()
+        for c in ["temp_feat","feelsLike_feat","humidity_feat","precip_feat"]:
+            if c not in df.columns: df[c]=None
+        dates=df["date"].dt.date.unique();logger.info("Weather fill unique dates=%s",len(dates))
+        weather_cache={}
+        for d in dates:
+            if d==date.today():
+                logger.info("Weather today %s",d)
+                w=self.weatherService.get_current_conditions(KENNER_LATITUDE,KENNER_LONGITUDE)
+                weather_cache[d]=(w["temp_c"],w["temp_c"],w["humidity_pct"],w["rain_mm_last_hour"] or 0.0)
+            else:
+                logger.info("Weather forecast %s",d)
+                forecast=self.weatherService.get_forecast_by_date(KENNER_LATITUDE,KENNER_LONGITUDE,d)
+                if not forecast:
+                    logger.warning("No weather for %s",d)
+                    weather_cache[d]=(None,None,None,None)
+                else:
+                    temp_c=(forecast[0]["temp_f"]-32)*5.0/9.0
+                    weather_cache[d]=(temp_c,temp_c,forecast[0]["humidity_pct"],0.0)
+        for i,row in df.iterrows():
+            v=weather_cache[row["date"].date()]
+            df.at[i,"temp_feat"]=v[0]
+            df.at[i,"feelsLike_feat"]=v[1]
+            df.at[i,"humidity_feat"]=v[2]
+            df.at[i,"precip_feat"]=v[3]
+        missing=df["temp_feat"].isna().sum()
+        if missing>0: logger.warning("Weather fill missing rows=%s",missing)
+        else: logger.info("Weather fill complete with no missing rows")
+        return df
+    ###########################################################################################
+
+
+    ###########################################################################################
     def build_prediction_input(self, prediction_date, norm_params):
-        print(f"build_prediction_input() prediction_date={prediction_date}")
-        self.build_live_df()
+        logger.info(f"build_prediction_input() prediction_date={prediction_date}")
+        self.build()
         # ts = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         # self.groceryMLCore.export_df_to_excel_table(self.live_df, f"./live_df-{ts}") 
         raw_latest_rows_df = self._build_latest_rows_df(self.live_df)
         raw_latest_rows_df["date"] = prediction_date
+        raw_latest_rows_df.info()
         
         ### ITEM level  daysSinceThisItemLastPurchased
         tmp_df = pd.concat([self.live_df, raw_latest_rows_df], ignore_index=True)
@@ -535,13 +567,13 @@ class GroceryML:
 
         # TRIP level
         raw_latest_rows_df = self._build_trip_level_feats(raw_latest_rows_df );
-        
         raw_latest_rows_df["daysSinceLastTrip_raw"] = TemporalFeatures.compute_days_since_last_trip_value(self.live_df, prediction_date)
         raw_latest_rows_df["avgDaysBetweenTrips_feat"] = self.live_df.sort_values("date").tail(1)["avgDaysBetweenTrips_feat"].iloc[0]
-    
         raw_latest_rows_df = TemporalFeatures.create_date_features(raw_latest_rows_df);
         raw_latest_rows_df["itemId"] = raw_latest_rows_df["itemId"].astype("category")
         raw_latest_rows_df.drop(columns=["source", "didBuy_target", "qty"], inplace=True)
+        
+        # raw_latest_rows_df = self.fill_weather_for_prediction_df(raw_latest_rows_df);
         
         normalized_latest_rows_df = self.normalize_features(raw_latest_rows_df, norm_params)
         model_feature_cols = self.get_model_feature_col_names(normalized_latest_rows_df)
@@ -549,10 +581,20 @@ class GroceryML:
         x_item_idx = normalized_latest_rows_df["itemId"].to_numpy(np.int32)
         return {"normalized_latest_rows_df": normalized_latest_rows_df, "x_features": x_features, "x_item_idx": x_item_idx}
     ###########################################################################################
+    def _build_latest_rows_df(self, sourcedf):
+         # latest PURCHASE per item only 
+        logger.info("_build_latest_rows_df: start")
+        latest_rows_df = (
+            # sourcedf[sourcedf["didBuy_target"] == 1]
+            sourcedf .sort_values("date") .groupby("itemId") .tail(1) .copy() .reset_index(drop=True) )
+        logger.info("_build_latest_rows_df: done")
+        return latest_rows_df;
+    ##########################################################################################
+
     def save_experiment(self, model, training_df, extra_dataframes, history, build_params, train_params, exp_dir):
         name_parts = []
 
-        print("Exporting extra_dataframes:")
+        logger.info("Exporting extra_dataframes:")
         self.export_dataframes_to_excel(extra_dataframes, exp_dir, self.expNameParts)
         # TODO: self.export_dataframes_to_csv(extra_dataframes, exp_dir, expNameParts)
                
@@ -560,7 +602,7 @@ class GroceryML:
         self.groceryMLCore.write_json(build_params, os.path.join(exp_dir, "build_params.json"))
         self.groceryMLCore.write_json(train_params, os.path.join(exp_dir, "train_params.json"))
         
-        print("Saved experiment →", exp_dir)  
+        logger.info("Saved experiment →", exp_dir)  
     ###########################################################################################    
     def create_exp_name_parts(self, build_params, train_params):
         """
@@ -589,33 +631,34 @@ class GroceryML:
     ###########################################################################################    
     def create_experiment_dir(self, exp_name, base_dir):
         exp_dir_name = os.path.join(base_dir, exp_name)
-        print(f"Creating dir: {exp_dir_name}")
+        logger.info(f"Creating dir: {exp_dir_name}")
         os.makedirs(exp_dir_name, exist_ok=True)
         return exp_dir_name
     ###########################################################################################
     def export_dataframes_to_excel(self, dataframes, path, nameParts):
-        print("grocery_ml_tensorflow.export_dataframes_to_excel()");
+        logger.info("grocery_ml_tensorflow.export_dataframes_to_excel()");
         for name, df in dataframes.items():
             base = os.path.join(path, f"{name}-{nameParts}")
             self.groceryMLCore.export_df_to_excel_table(df, base, sheet_name=f"{nameParts}")
     ########################################################################################### 
+ 
     def RunPredictionsOnly(self, model_dir, prediction_date):
         """
         Uses latest combined_df (with new receipts) to build prediction input,
         but restores frozen snapshot to compute normalization + filter unknown items.
         """
-        print(f"RunPredictionsOnly() prediction_date: {prediction_date}")
+        logger.info(f"RunPredictionsOnly() prediction_date: {prediction_date}")
 
         # load model + frozen snapshot
         model, combined_df_frozen = self.load_model(model_dir)
 
-        print("computing normalization parameters from frozen snapshot")
+        logger.info("computing normalization parameters from frozen snapshot")
         norm_params = self.fit_normalization_params(combined_df_frozen)
 
-        print("building prediction input (latest receipts)")
+        logger.info("building prediction input (latest receipts)")
         pred_input = self.build_prediction_input(prediction_date, norm_params)
 
-        print("filtering unseen itemIds")
+        logger.info("filtering unseen itemIds")
         known_ids = set(combined_df_frozen["itemId"].unique())
         mask = pred_input["prediction_df"]["itemId"].isin(known_ids)
 
@@ -623,9 +666,9 @@ class GroceryML:
         pred_input["x_item_idx"]     = pred_input["x_item_idx"][mask]
         pred_input["x_features"]     = pred_input["x_features"][mask]
 
-        print(f"kept {mask.sum()} rows out of {mask.size}")
+        logger.info(f"kept {mask.sum()} rows out of {mask.size}")
 
-        print("Running Model.Predict()")
+        logger.info("Running Model.Predict()")
         predictions = model.predict([pred_input["x_features"], pred_input["x_item_idx"]])
 
         prediction_df = pred_input["prediction_df"].copy()
@@ -635,25 +678,12 @@ class GroceryML:
 
         return prediction_df
     ###########################################################################################
-    def _build_latest_rows_df(self, sourcedf):
-         # latest PURCHASE per item only 
-        print("_build_latest_rows_df: start")
-        latest_rows_df = (
-            sourcedf[sourcedf["didBuy_target"] == 1]
-            .sort_values("date")
-            .groupby("itemId")
-            .tail(1)
-            .copy()
-            .reset_index(drop=True)
-        )
-        print("_build_latest_rows_df: done")
-        return latest_rows_df;
-    ##########################################################################################
+
     def build_wit_input_df(self, model_dir):
-        print("build_wit_input_df()")
+        logger.info("build_wit_input_df()")
         model, combined_df_frozen = self.load_model(model_dir)
     
-        print("fitting normalization params from frozen snapshot...")
+        logger.info("fitting normalization params from frozen snapshot...")
         norm_params = self.fit_normalization_params(combined_df_frozen)
         df_norm = self.normalize_features(combined_df_frozen.copy(), norm_params)
         
@@ -662,7 +692,7 @@ class GroceryML:
         x_item_idx = df_norm["itemId"].to_numpy(np.int32)
     
         # --- run predictions on ALL rows
-        print("running model.predict on entire normalized dataset...")
+        logger.info("running model.predict on entire normalized dataset...")
         preds = model.predict([x_features, x_item_idx], verbose=0).flatten()
     
         # --- attach predictions
@@ -676,7 +706,7 @@ class GroceryML:
         # drop_cols = ["source"]
         # df_norm = df_norm.drop(columns=[c for c in drop_cols if c in df_norm.columns])
     
-        print("build_wit_input_df() done")
+        logger.info("build_wit_input_df() done")
         return df_norm
     ##########################################################################################
    

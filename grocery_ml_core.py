@@ -23,7 +23,6 @@ from data_creator import DataCreator
 from holiday_features import HolidayFeatures
 from wallmart_rcpt_parser import WallmartRecptParser
 from winn_dixie_recpt_parser import WinnDixieRecptParser 
-from hidden_layer_param_builder import HiddenLayerParamSetBuilder
 from weather_service import NwsWeatherService;
 from usda import UsdaCategoryEncoder
 from usda import UsdaFoodDataService
@@ -48,7 +47,7 @@ class GroceryMLCore:
         self.usdaCatEncoder = UsdaCategoryEncoder(self.usdaApiService);
    ###########################################################################################
     def validate_no_empty_columns(self, df, exclude_cols=None):
-        print("validate_no_empty_columns()")
+        logger.info("validate_no_empty_columns()")
         if exclude_cols is None:
             exclude_cols = []
         #
@@ -60,8 +59,13 @@ class GroceryMLCore:
         if bad_cols:
             raise ValueError(f"Columns contain empty values: {bad_cols}")
   ###########################################################################################
+    def create_weather_features(self, df):
+        weatherDf = WeatherFeatures.create_weather_df_daily();
+        df = WeatherFeatures.merge_weather_features(weatherDf, df);
+        return df;
+    ###########################################################################################   
     def drop_rare_purchases(self, df):
-        print("drop_rare_purchases()")
+        logger.info("drop_rare_purchases()")
         df = df[df["itemPurchaseCount_raw"] != 1].reset_index(drop=True)
         return df;
     ###########################################################################################
@@ -86,15 +90,15 @@ class GroceryMLCore:
         ]
     ###########################################################################################
     def build_trip_interveral_feautres(self, df):
-        print("build_trip_interveral_feautres(): start")
+        logger.info("build_trip_interveral_feautres(): start")
         trip_df = (df[["date"]] .drop_duplicates() .sort_values("date") .reset_index(drop=True))
         trip_df["daysSinceLastTrip_raw"] = TemporalFeatures.create_days_since_last_trip(trip_df)
         trip_df["avgDaysBetweenTrips_feat"] = TemporalFeatures.compute_avg_days_between_trips(trip_df)
-        print("build_trip_interveral_feautres(): done")
+        logger.info("build_trip_interveral_feautres(): done")
         return df.merge(trip_df, on="date", how="left")
     ##############################################################################################
     def create_item_supply_level_feat(self, df):
-        print("create_item_supply_level_feat()")
+        logger.info("create_item_supply_level_feat()")
     
         try:
             ratio = np.where(
@@ -104,16 +108,15 @@ class GroceryMLCore:
             )
     
             df["itemSupplyLevel_feat"] = np.clip(1.0 - ratio, 0.0, 1.0)
-    
         except Exception as ex:
-            print("create_item_supply_level_feat() failed")
-            print(ex)
+            logger.info("create_item_supply_level_feat() failed")
+            logger.info(ex)
             raise
     
         return df
     ###########################################################################################
     def create_didBuy_target_col(self, df, colName):
-        print(f"creating target col: {colName}");
+        logger.info(f"creating target col: {colName}");
         df[colName] = 1
         return df; 
     ##############################################################################################
@@ -124,7 +127,7 @@ class GroceryMLCore:
         has been purchased up to and including that day.
         """
     
-        print("add_item_total_purchase_count_feat()")
+        logger.info("add_item_total_purchase_count_feat()")
     
         # Ensure correct temporal order per item
         df = df.sort_values(["itemId", "date"]).copy()
@@ -135,7 +138,7 @@ class GroceryMLCore:
         return df
     ##############################################################################################
     def build_holiday_features(self, df):
-        print("build_holiday_features()")
+        logger.info("build_holiday_features()")
     
         df = df.drop(columns=[c for c in df.columns if c.endswith("_holiday_feat")], errors="ignore")
     
@@ -152,28 +155,8 @@ class GroceryMLCore:
         df = df.merge(holiday_feats, on="date", how="left")
         return df
     ##############################################################################################
-    #  def build_holiday_features(self, df):
-   #      print("build_holiday_features()")
-   #      df = df.drop(columns=[c for c in df.columns if c.endswith("_holiday_feat")], errors="ignore")
-   #      grouped_df = (
-   #          df[["date"]]
-   #          .drop_duplicates()
-   #          .sort_values("date")
-   #          .reset_index(drop=True)
-   #      )
-
-   #      grouped_df = HolidayFeatures.build_federal_holiday_flag_and_proximity_features(grouped_df["date"])
-        
-   #      # grouped_df["daysUntilNextHoliday_raw"] = HolidayFeatures.compute_days_until_next_holiday(grouped_df["date"])
-   #      # grouped_df["daysSinceLastHoliday_raw"] = HolidayFeatures.compute_days_since_last_holiday(grouped_df["date"])
-   #      # grouped_df["holidayProximity_feat"] = HolidayFeatures.compute_holiday_proximity_index(grouped_df["date"])
-    
-   #      df = df.merge(grouped_df, on="date", how="left")
-   #      return df
-   # ##############################################################################################
-
     def build_school_schedule_features(self, df):
-        print("build_school_schedule_features(): start")
+        logger.info("build_school_schedule_features(): start")
         
         df = df.drop(columns=["daysUntilSchoolStart_raw","daysUntilSchoolEnd_raw","schoolSeasonIndex_feat"], errors="ignore")
         grouped_df = (df[["date"]].drop_duplicates().sort_values("date").reset_index(drop=True))
@@ -181,13 +164,13 @@ class GroceryMLCore:
         grouped_df["daysUntilSchoolEnd_raw"] = SchoolFeatures.compute_days_until_school_end(grouped_df["date"])
         grouped_df["schoolSeasonIndex_feat"] = SchoolFeatures.compute_school_season_index(grouped_df["date"])
         df = df.merge(grouped_df, on="date", how="left")
-        print("build_school_schedule_features(): done")
+        logger.info("build_school_schedule_features(): done")
         return df
     ##############################################################################################
     ## TODO:build_purchase_item_freq_cols  is broken 
     # def build_purchase_item_freq_cols(self, df):
 
-    #     print("build_purchase_item_freq_cols()");
+    #     logger.info("build_purchase_item_freq_cols()");
     #     freq_windows = [7, 15, 30, 90, 365]
     #     max_w = max(freq_windows)
     
@@ -231,7 +214,7 @@ class GroceryMLCore:
     #     return pd.concat(result_frames, ignore_index=True)
     ###########################################################################################    
     def insert_negative_samples(self, df):
-        print("insert_negative_samples()")
+        logger.info("insert_negative_samples()")
     
         # ensure purchase flag exists
         df = df.copy()
@@ -309,78 +292,78 @@ class GroceryMLCore:
     
         return merged[["date", "source", "itemId", "item", "qty", "didBuy_target"]]
     ############################################################################################
-    def build_winn_dixie_additional_text_rcpts_df(self, folderPath):
-        recptParser = WinnDixieRecptParser()
-        rows = []
-        for p in Path(folderPath).glob("*.txt"):
-            result = recptParser.parse(p.read_text(encoding="utf-8", errors="ignore"))
-            for r in result["items"]:
-                rows.append({
-                    "source": p.name,
-                    "date": result["date"],
-                    "time": result["time"],
-                    #"manager": result["manager"],
-                    #"cashier_raw": result["cashier"],
-                    "item": r["item"],
-                    "qty": r["qty"],
-                    #"reg": r["reg"],
-                    #"youPay": r["youPay"],
-                    #"reportedItemsSold": result["reported"],
-                    #"rowsMatchReported": result["validation"]["rowsMatchReported"],
-                    #"qtyMatchReported": result["validation"]["qtyMatchReported"],
-                })
+    # def build_winn_dixie_additional_text_rcpts_df(self, folderPath):
+    #     recptParser = WinnDixieRecptParser()
+    #     rows = []
+    #     for p in Path(folderPath).glob("*.txt"):
+    #         result = recptParser.parse(p.read_text(encoding="utf-8", errors="ignore"))
+    #         for r in result["items"]:
+    #             rows.append({
+    #                 "source": p.name,
+    #                 "date": result["date"],
+    #                 "time": result["time"],
+    #                 #"manager": result["manager"],
+    #                 #"cashier_raw": result["cashier"],
+    #                 "item": r["item"],
+    #                 "qty": r["qty"],
+    #                 #"reg": r["reg"],
+    #                 #"youPay": r["youPay"],
+    #                 #"reportedItemsSold": result["reported"],
+    #                 #"rowsMatchReported": result["validation"]["rowsMatchReported"],
+    #                 #"qtyMatchReported": result["validation"]["qtyMatchReported"],
+    #             })
     
-        additional_rcpts_df = pd.DataFrame(rows)
+    #     additional_rcpts_df = pd.DataFrame(rows)
         
-        additional_rcpts_df["date"] = pd.to_datetime(additional_rcpts_df["date"])
-        additional_rcpts_df["time"] = additional_rcpts_df["time"].astype(str)
+    #     additional_rcpts_df["date"] = pd.to_datetime(additional_rcpts_df["date"])
+    #     additional_rcpts_df["time"] = additional_rcpts_df["time"].astype(str)
         
-        additional_rcpts_df = WinnDixieRecptParser.remove_duplicate_receipt_files(additional_rcpts_df)
+    #     additional_rcpts_df = WinnDixieRecptParser.remove_duplicate_receipt_files(additional_rcpts_df)
         
-        # #additional_rcpts_df["item"] = additional_rcpts_df["item"].str.replace(r"^know-and-love\s*", "", regex=True, case=False).str.strip()
-        # additional_rcpts_df["item"] = additional_rcpts_df["item"].str.replace(r"^seg\s*", "", regex=True, case=False).str.strip()
-        # additional_rcpts_df["item"] = additional_rcpts_df["item"].str.replace(r"^kandl\s*", "", regex=True, case=False).str.strip()
+    #     # #additional_rcpts_df["item"] = additional_rcpts_df["item"].str.replace(r"^know-and-love\s*", "", regex=True, case=False).str.strip()
+    #     # additional_rcpts_df["item"] = additional_rcpts_df["item"].str.replace(r"^seg\s*", "", regex=True, case=False).str.strip()
+    #     # additional_rcpts_df["item"] = additional_rcpts_df["item"].str.replace(r"^kandl\s*", "", regex=True, case=False).str.strip()
 
-        additional_rcpts_df = additional_rcpts_df.sort_values(by=["date", "time"]).reset_index(drop=True)
-        additional_rcpts_df = additional_rcpts_df.drop(columns=["time"])
-        return additional_rcpts_df;
+    #     additional_rcpts_df = additional_rcpts_df.sort_values(by=["date", "time"]).reset_index(drop=True)
+    #     additional_rcpts_df = additional_rcpts_df.drop(columns=["time"])
+    #     return additional_rcpts_df;
     ###########################################################################################
-    def build_winn_dixie_df(self, path):
-        recptParser = WinnDixieRecptParser()
-        rows = []
-        for p in Path(path).glob("*.txt"):
-            result = recptParser.parse(p.read_text(encoding="utf-8", errors="ignore"))
-            for r in result["items"]:
-                rows.append({
-                    "source": p.name,
-                    "date": result["date"],
-                    "time": result["time"],
-                    #"manager": result["manager"],
-                    #"cashier_raw": result["cashier"],
-                    "item": r["item"],
-                    "qty": r["qty"],
-                    #"reg": r["reg"],
-                    #"youPay": r["youPay"],
-                    #"reportedItemsSold": result["reported"],
-                    #"rowsMatchReported": result["validation"]["rowsMatchReported"],
-                    #"qtyMatchReported": result["validation"]["qtyMatchReported"],
-                })
+    # def build_winn_dixie_df(self, path):
+    #     recptParser = WinnDixieRecptParser()
+    #     rows = []
+    #     for p in Path(path).glob("*.txt"):
+    #         result = recptParser.parse(p.read_text(encoding="utf-8", errors="ignore"))
+    #         for r in result["items"]:
+    #             rows.append({
+    #                 "source": p.name,
+    #                 "date": result["date"],
+    #                 "time": result["time"],
+    #                 #"manager": result["manager"],
+    #                 #"cashier_raw": result["cashier"],
+    #                 "item": r["item"],
+    #                 "qty": r["qty"],
+    #                 #"reg": r["reg"],
+    #                 #"youPay": r["youPay"],
+    #                 #"reportedItemsSold": result["reported"],
+    #                 #"rowsMatchReported": result["validation"]["rowsMatchReported"],
+    #                 #"qtyMatchReported": result["validation"]["qtyMatchReported"],
+    #             })
     
-        winndixie_df = pd.DataFrame(rows)
+    #     winndixie_df = pd.DataFrame(rows)
         
-        winndixie_df["date"] = pd.to_datetime(winndixie_df["date"])
-        winndixie_df["time"] = winndixie_df["time"].astype(str)
+    #     winndixie_df["date"] = pd.to_datetime(winndixie_df["date"])
+    #     winndixie_df["time"] = winndixie_df["time"].astype(str)
         
-        winndixie_df = WinnDixieRecptParser.remove_duplicate_receipt_files(winndixie_df)
+    #     winndixie_df = WinnDixieRecptParser.remove_duplicate_receipt_files(winndixie_df)
         
-        # winndixie_df["item"] = winndixie_df["item"].str.replace(r"^know-and-love\s*", "", regex=True, case=False).str.strip()
-        # winndixie_df["item"] = winndixie_df["item"].str.replace(r"^seg\s*", "", regex=True, case=False).str.strip()
-        # winndixie_df["item"] = winndixie_df["item"].str.replace(r"^kandl\s*", "", regex=True, case=False).str.strip()
+    #     # winndixie_df["item"] = winndixie_df["item"].str.replace(r"^know-and-love\s*", "", regex=True, case=False).str.strip()
+    #     # winndixie_df["item"] = winndixie_df["item"].str.replace(r"^seg\s*", "", regex=True, case=False).str.strip()
+    #     # winndixie_df["item"] = winndixie_df["item"].str.replace(r"^kandl\s*", "", regex=True, case=False).str.strip()
 
-        # winndixie_df["source"] = "winndixie-{";
-        winndixie_df = winndixie_df.sort_values(by=["date", "time"]).reset_index(drop=True)
-        winndixie_df = winndixie_df.drop(columns=["time"])
-        return winndixie_df;
+    #     # winndixie_df["source"] = "winndixie-{";
+    #     winndixie_df = winndixie_df.sort_values(by=["date", "time"]).reset_index(drop=True)
+    #     winndixie_df = winndixie_df.drop(columns=["time"])
+    #     return winndixie_df;
     ###########################################################################################
     def export_df_to_excel_table(self, df, base_path_without_ext, sheet_name="Data"):
         """
@@ -391,7 +374,7 @@ class GroceryMLCore:
         from openpyxl.worksheet.table import Table, TableStyleInfo
 
         file_path = f"{base_path_without_ext}.xlsx"
-        print(f"Writing XLSX: {file_path}")
+        logger.info(f"Writing XLSX: {file_path}")
 
         df.to_excel(file_path, sheet_name=sheet_name, index=False)
     
@@ -417,7 +400,7 @@ class GroceryMLCore:
         worksheet.add_table(table)
     
         workbook.save(file_path)
-        print(f"   XLSX Done: {file_path}")
+        logger.info(f"   XLSX Done: {file_path}")
     ###########################################################################################    
     def export_dataframe_to_csv(self, df, base_path_without_ext):
         file_path = f"{base_path_without_ext}.csv"
@@ -427,9 +410,9 @@ class GroceryMLCore:
     ###########################################################################################    
     def export_dataframe_to_parquet(self, df, base_path_without_ext):
         file_path = f"{base_path_without_ext}.parquet"
-        print(f"Writing PARQUET: {file_path}")
+        logger.info(f"Writing PARQUET: {file_path}")
         df.to_parquet(file_path, index=True)
-        print(f"  PARQUET done: {file_path}")
+        logger.info(f"  PARQUET done: {file_path}")
     ###########################################################################################
     def export_dataframes_with_exp_name(self, dataframes, path):
         for name, df in dataframes.items():
@@ -441,4 +424,13 @@ class GroceryMLCore:
         f = open(path, "w")
         json.dump(obj, f, indent=2)
         f.close()  
-    ###########################################################################################    
+    ###########################################################################################
+    def is_binary_column(self, df, colName: str):
+        col = df[colName]
+        if col.dtype == bool: return True
+        unique_vals = col.dropna().unique()
+        if len(unique_vals) <= 2 and set(unique_vals).issubset({0, 1}):
+            return True
+
+        return False
+    ###########################################################################################
