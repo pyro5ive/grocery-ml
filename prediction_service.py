@@ -7,7 +7,7 @@ class PredictionService:
         self.newPurchaseEventsDfBuilder = PurchaseEventsDfBuilder();
         self.historicalPurchaseEventsDfBuilder = PurchaseEventsDfBuilder();
         thisClassName = self.__class__.__name__
-        self.logger = logger if logger is not None else logging.getLogger(thisClassName)
+        self.logger = logging.getLogger(thisClassName)
     #########################################################################################
     
     def run_prediction(self, trainingDF, model, predictionDates):

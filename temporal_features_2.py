@@ -86,57 +86,57 @@ class TemporalFeatures:
     
         return df
     ############################################################
-    @staticmethod
-    def compute_days_since_last_purchase_for_item(df, colName: str, reference_date_col="date"):
-        return TemporalFeatures.compute_days_since_last_purchase_for_item_exclusive(
-            df,
-            colName,
-            reference_date_col
-        )
-    ############################################################
-    @staticmethod
-    def compute_days_since_last_purchase_for_item_exclusive(df, colName: str, reference_date_col="date"):
-        df = df.sort_values(["itemId", reference_date_col]).reset_index(drop=True)
-        df[colName] = np.nan
-        last_purchase_date = {}
+    # @staticmethod
+    # def compute_days_since_last_purchase_for_item(df, colName: str, reference_date_col="date"):
+    #     return TemporalFeatures.compute_days_since_last_purchase_for_item_exclusive(
+    #         df,
+    #         colName,
+    #         reference_date_col
+    #     )
+    # ############################################################
+    # @staticmethod
+    # def compute_days_since_last_purchase_for_item_exclusive(df, colName: str, reference_date_col="date"):
+    #     df = df.sort_values(["itemId", reference_date_col]).reset_index(drop=True)
+    #     df[colName] = np.nan
+    #     last_purchase_date = {}
     
-        for i in range(len(df)):
-            itemId = df.at[i, "itemId"]
-            current_date = df.at[i, reference_date_col]
+    #     for i in range(len(df)):
+    #         itemId = df.at[i, "itemId"]
+    #         current_date = df.at[i, reference_date_col]
     
-            if itemId in last_purchase_date:
-                df.at[i, colName] = (current_date - last_purchase_date[itemId]).days
-            else:
-                df.at[i, colName] = np.nan
+    #         if itemId in last_purchase_date:
+    #             df.at[i, colName] = (current_date - last_purchase_date[itemId]).days
+    #         else:
+    #             df.at[i, colName] = np.nan
     
-            if "didBuy_target" in df.columns and df.at[i, "didBuy_target"] == 1:
-                last_purchase_date[itemId] = current_date
+    #         if "didBuy_target" in df.columns and df.at[i, "didBuy_target"] == 1:
+    #             last_purchase_date[itemId] = current_date
     
-        df[colName] = df[colName].fillna(0)
-        return df
-    ############################################################
-    @staticmethod
-    def compute_days_since_last_purchase_for_item_inclusive(df, colName: str, reference_date_col="date"):
-        df = df.sort_values(["itemId", reference_date_col]).reset_index(drop=True)
-        df[colName] = np.nan
-        last_purchase_date = {}
+    #     df[colName] = df[colName].fillna(0)
+    #     return df
+    # ############################################################
+    # @staticmethod
+    # def compute_days_since_last_purchase_for_item_inclusive(df, colName: str, reference_date_col="date"):
+    #     df = df.sort_values(["itemId", reference_date_col]).reset_index(drop=True)
+    #     df[colName] = np.nan
+    #     last_purchase_date = {}
     
-        for i in range(len(df)):
-            itemId = df.at[i, "itemId"]
-            current_date = df.at[i, reference_date_col]
+    #     for i in range(len(df)):
+    #         itemId = df.at[i, "itemId"]
+    #         current_date = df.at[i, reference_date_col]
     
-            if "didBuy_target" in df.columns and df.at[i, "didBuy_target"] == 1:
-                last_purchase_date[itemId] = current_date
-                df.at[i, colName] = 0
-            else:
-                if itemId in last_purchase_date:
-                    df.at[i, colName] = (current_date - last_purchase_date[itemId]).days
-                else:
-                    df.at[i, colName] = np.nan
+    #         if "didBuy_target" in df.columns and df.at[i, "didBuy_target"] == 1:
+    #             last_purchase_date[itemId] = current_date
+    #             df.at[i, colName] = 0
+    #         else:
+    #             if itemId in last_purchase_date:
+    #                 df.at[i, colName] = (current_date - last_purchase_date[itemId]).days
+    #             else:
+    #                 df.at[i, colName] = np.nan
     
-        df[colName] = df[colName].fillna(0)
-        return df
-    ############################################################
+    #     df[colName] = df[colName].fillna(0)
+    #     return df
+    # ############################################################
 #     @staticmethod
 #     def compute_avg_days_between_item_purchases_series(df):
 #         print("compute_avg_days_between_item_purchases_series(): start");
@@ -187,9 +187,9 @@ class TemporalFeatures:
 
         return int((prediction_date_ts - last_trip_date).days)
     ########################################################
-    @staticmethod
-    def compute_avg_days_between_trips(targetDf):
-        return targetDf["daysSinceLastTrip_raw"].replace(0, np.nan).expanding().mean().fillna(0)    
+    # @staticmethod
+    # def compute_avg_days_between_trips(targetDf):
+    #     return targetDf["daysSinceLastTrip_raw"].replace(0, np.nan).expanding().mean().fillna(0)    
     #######################################################
     @staticmethod
     def compute_trip_due_ratio(targetDf):

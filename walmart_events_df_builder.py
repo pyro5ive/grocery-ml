@@ -14,9 +14,55 @@ class WalMartEventsDfBuilder:
     ############################################################
     def build_df(self): 
         self.logger.info("Building Walmart purchase events");
-        purchaseEventsDf = self.recptParser.build_wall_mart_df(data_sources.get("walmart"));
+        purchaseEventsDf = self._build_wall_mart_df(data_sources.get("walmart"));
 
 
         self.logger.info("Walmart purchase events builder is complete");
         return purchaseEventsDf
     ###########################################################
+
+      def _build_wall_mart_df(folder_path: str) -> pd.DataFrame:
+        """
+        Import all Walmart receipt CSV files from a folder.
+        Adds a 'source' column set to the CSV filename.
+        """
+        dataframes = []
+    
+        for file_name in os.listdir(folder_path):
+            if file_name.lower().endswith(".csv"):
+                file_path = os.path.join(folder_path, file_name)
+                dataframe = pd.read_csv(file_path)
+                dataframe["source"] = file_name
+                dataframes.append(dataframe)
+    
+        if len(dataframes) == 0:
+            return pd.DataFrame()
+    
+        df = pd.concat(dataframes, ignore_index=True)
+        
+        df["Product Description"] = (
+            df["Product Description"]
+            .str.replace("Great Value", "", regex=False)
+            .str.replace("Freshness Guaranteed", "", regex=False)
+            .str.strip()
+        )
+        
+        
+        ## remove some non-food items
+        df = df[
+            ~df["Product Description"].str.contains("Mainstays", case=False, na=False)
+            &
+            ~df["Product Description"].str.contains("Sizes", case=False, na=False)
+            &
+            ~df["Product Description"].str.contains("Pen+Gear", case=False, na=False, regex=False)
+            &
+            ~df["Product Description"].str.contains("Athletic", case=False, na=False)  
+        ]
+
+        df = df.rename(columns={"Order Date": "date",
+                                "Product Description": "item",
+                                "Product Quantity": "qty"
+                               })
+        df["date"] = pd.to_datetime(df["date"])
+        
+        return df
