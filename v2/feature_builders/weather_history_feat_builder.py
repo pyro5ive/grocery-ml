@@ -20,7 +20,7 @@ class WeatherHistory_FeatureBuilder:
         return outDf.merge(this.weatherDf, left_on=this.dateCol, right_index=True, how="left");
     #-----------------------------------------------------------------#
     
-    def _check_reqs(this):
+    def _check_reqs(this, df):
         if this.dateCol not in df.columns:
             raise RuntimeError(f"missing required date column {this.dateCol}");
     #-----------------------------------------------------------------#

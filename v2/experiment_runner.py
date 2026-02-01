@@ -36,6 +36,7 @@ class ExperimentRunner:
     
     def run(this):
         this._build_event_dfs();
+        this._build_targetCol();
         this._build_featues();
 
         this.trainingDf.info();
@@ -47,7 +48,17 @@ class ExperimentRunner:
         this.trainingDf = this.winndixieDfBuilder.build_df()
     #------------------------------------------------------------------------#
     
+    def _build_targetCol(this):
+        this.trainingDf["didBuy_target"] = 1;
+
+
     def _build_featues(this):
+        this.trainingDf = this.weatherHistoryFeatureBuilder.build_feature(this.trainingDf);
+        this.trainingDf = this.schoolSchedule_featureBuidler.build_feature(this.trainingDf);
+        this.trainingDf = this.payDayFeatueBuilder_angie.buildAll(this.trainingDf);
+        this.trainingDf = this.payDayFeatueBuilder_steve.buildAll(this.trainingDf);
+        # this.trainingDf = this.daysSinceLastPurchaseFeatureuBuilder.build_feature(this.trainingDf);
+        this.trainingDf.info();
         pass;
 
     #------------------------------------------------------------------------#
