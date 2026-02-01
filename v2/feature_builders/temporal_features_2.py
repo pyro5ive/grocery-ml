@@ -1,0 +1,256 @@
+import numpy as np
+import pytz
+import datetime
+from math import exp
+import pandas as pd
+
+class TemporalFeatures:
+
+    @staticmethod
+    def compute_freq_ratios(freq7, freq30, freq365, epsilon=1e-6):
+        """
+        Computes base frequency ratios only.
+        """
+        freq7_over30 = freq7 / (freq30 + epsilon)
+        freq30_over365 = freq30 / (freq365 + epsilon)
+        return freq7_over30, freq30_over365
+    #######################################################
+    @staticmethod
+    def get_period_for_column(col_name):
+        if col_name == "dow_cyc_feat": return 7
+        if col_name == "month_cyc_feat": return 12
+        if col_name == "day_cyc_feat": return 31
+        if col_name == "doy_cyc_feat":return 365
+        raise ValueError(f"Unknown cyclical feature column: {col_name}")
+    # ###############################################
+    # def compute_recent_purchase_penalty(df):
+    #     """
+    #     Higher values mean 'recently bought' → stronger penalty.
+    #     Lower values mean 'long time ago' → weaker penalty.
+    #     """  
+    #     df["recentPurchasePenalty_raw"] = ( 
+    #         df["daysSinceThisItemLastPurchased_raw"] / df["avgDaysBetweenItemPurchases_feat"] ).replace([float("inf"), -float("inf")], 0).fillna(0)    
+    #     df["recentPurchasePenalty_raw"] = df["recentPurchasePenalty_raw"].apply(
+    #         lambda x: exp(-x)
+    #     )
+    #     #return df; 
+   ################################################
+    @staticmethod
+    def compute_expected_gap_ewma_feat(df, alpha=0.3):
+        """
+        Computes an exponentially weighted moving average (EWMA)
+        of days between purchases, per item.
+    
+        - Only didBuy_target == 1 advances the EWMA
+        - Negative rows inherit the last known expected gap
+        - Alpha controls adaptation speed (0.2–0.4 typical)
+        """
+    
+        print("compute_expected_gap_ewma()");
+        df = df.sort_values(["itemId", "date"]).reset_index(drop=True)
+    
+        df["expectedDaysBetweenPurchases_ewma_feat"] = 0.0
+    
+        last_purchase_date_by_item = {}
+        ewma_gap_by_item = {}
+    
+        for i in range(len(df)):
+            itemId = df.at[i, "itemId"]
+            current_date = df.at[i, "date"]
+            didBuy = df.at[i, "didBuy_target"]
+    
+            if didBuy == 1:
+                if itemId in last_purchase_date_by_item:
+                    gap_days = (current_date - last_purchase_date_by_item[itemId]).days
+    
+                    if itemId in ewma_gap_by_item:
+                        prev_ewma = ewma_gap_by_item[itemId]
+                        new_ewma = (alpha * gap_days) + ((1.0 - alpha) * prev_ewma)
+                    else:
+                        new_ewma = float(gap_days)
+    
+                    ewma_gap_by_item[itemId] = new_ewma
+                    df.at[i, "expectedDaysBetweenPurchases_ewma_feat"] = new_ewma
+                else:
+                    # first purchase → no gap yet
+                    df.at[i, "expectedDaysBetweenPurchases_ewma_feat"] = 0.0
+    
+                last_purchase_date_by_item[itemId] = current_date
+    
+            else:
+                # carry forward last known EWMA
+                if itemId in ewma_gap_by_item:
+                    df.at[i, "expectedDaysBetweenPurchases_ewma_feat"] = ewma_gap_by_item[itemId]
+                else:
+                    df.at[i, "expectedDaysBetweenPurchases_ewma_feat"] = 0.0
+    
+        return df
+    ############################################################
+    # @staticmethod
+    # def compute_days_since_last_purchase_for_item(df, colName: str, reference_date_col="date"):
+    #     return TemporalFeatures.compute_days_since_last_purchase_for_item_exclusive(
+    #         df,
+    #         colName,
+    #         reference_date_col
+    #     )
+    # ############################################################
+    # @staticmethod
+    # def compute_days_since_last_purchase_for_item_exclusive(df, colName: str, reference_date_col="date"):
+    #     df = df.sort_values(["itemId", reference_date_col]).reset_index(drop=True)
+    #     df[colName] = np.nan
+    #     last_purchase_date = {}
+    
+    #     for i in range(len(df)):
+    #         itemId = df.at[i, "itemId"]
+    #         current_date = df.at[i, reference_date_col]
+    
+    #         if itemId in last_purchase_date:
+    #             df.at[i, colName] = (current_date - last_purchase_date[itemId]).days
+    #         else:
+    #             df.at[i, colName] = np.nan
+    
+    #         if "didBuy_target" in df.columns and df.at[i, "didBuy_target"] == 1:
+    #             last_purchase_date[itemId] = current_date
+    
+    #     df[colName] = df[colName].fillna(0)
+    #     return df
+    # ############################################################
+    # @staticmethod
+    # def compute_days_since_last_purchase_for_item_inclusive(df, colName: str, reference_date_col="date"):
+    #     df = df.sort_values(["itemId", reference_date_col]).reset_index(drop=True)
+    #     df[colName] = np.nan
+    #     last_purchase_date = {}
+    
+    #     for i in range(len(df)):
+    #         itemId = df.at[i, "itemId"]
+    #         current_date = df.at[i, reference_date_col]
+    
+    #         if "didBuy_target" in df.columns and df.at[i, "didBuy_target"] == 1:
+    #             last_purchase_date[itemId] = current_date
+    #             df.at[i, colName] = 0
+    #         else:
+    #             if itemId in last_purchase_date:
+    #                 df.at[i, colName] = (current_date - last_purchase_date[itemId]).days
+    #             else:
+    #                 df.at[i, colName] = np.nan
+    
+    #     df[colName] = df[colName].fillna(0)
+    #     return df
+    # ############################################################
+#     @staticmethod
+#     def compute_avg_days_between_item_purchases_series(df):
+#         print("compute_avg_days_between_item_purchases_series(): start");
+#         dfSorted = df.sort_values(["itemId", "date"])
+        
+#         purchase_dates = dfSorted["date"].where(dfSorted["didBuy_target"] == 1)
+#         purchase_gap = purchase_dates.groupby(dfSorted["itemId"]).diff().dt.days
+    
+#         avg_gap = purchase_gap.groupby(dfSorted["itemId"]).expanding().mean()
+#         avg_gap = avg_gap.reset_index(level=0, drop=True)
+    
+#         avg_gap = avg_gap.groupby(dfSorted["itemId"]).ffill().fillna(0)
+    
+#         result = avg_gap.reindex(dfSorted.index)
+#         result = result.reindex(df.index)
+#         print("compute_avg_days_between_item_purchases_series(): done");
+#         return result
+# #
+    ############################################################    
+    @staticmethod
+    def compute_avg_days_between_item_purchases(df, colName: str):
+        df = df.sort_values(["itemId", "date"]).reset_index(drop=True)
+        purchase_gap = df.where(df["didBuy_target"] == 1).groupby("itemId")["date"].diff().dt.days
+        avg_gap = purchase_gap.groupby(df["itemId"]).expanding().mean().reset_index(level=0, drop=True)
+        df[colName] = avg_gap.groupby(df["itemId"]).ffill().fillna(0)
+
+        return df
+    #######################################################
+    @staticmethod
+    def compute_item_due_ratio(df, cap=3.0):
+        ratio = df["daysSinceThisItemLastPurchased_raw"] / df["avgDaysBetweenItemPurchases_feat"]
+        ratio = ratio.replace([np.inf, -np.inf], np.nan).fillna(0)
+        return ratio.clip(0, cap)
+    ##########################################################################################
+
+    ######## TRIP #######
+    @staticmethod
+    def create_days_since_last_trip(targetDf):
+        return targetDf["date"].diff().dt.days.fillna(0)
+    #######################################################
+    @staticmethod
+    def compute_days_since_last_trip_value(df, prediction_date, date_col: str = "date"):
+        prediction_date_ts = pd.to_datetime(prediction_date)
+        last_trip_date = pd.to_datetime(df[date_col]).max()
+
+        if pd.isna(last_trip_date):
+            return None
+
+        return int((prediction_date_ts - last_trip_date).days)
+    ########################################################
+    # @staticmethod
+    # def compute_avg_days_between_trips(targetDf):
+    #     return targetDf["daysSinceLastTrip_raw"].replace(0, np.nan).expanding().mean().fillna(0)    
+    #######################################################
+    @staticmethod
+    def compute_trip_due_ratio(targetDf):
+        targetDf["tripDueRatio_feat"] = (targetDf["daysSinceLastTrip_raw"] / targetDf["avgDaysBetweenTrips_feat"]).fillna(0)
+    ###########################################################################################
+    @staticmethod
+    def create_date_features(df):
+        dt = df["date"]
+        df["year_feat"]       = dt.dt.year
+        df["month_cyc_feat"]  = dt.dt.month
+        df["day_cyc_feat"]    = dt.dt.day
+        df["dow_cyc_feat"]    = dt.dt.dayofweek
+        df["doy_feat"]        = dt.dt.dayofyear
+        df["quarter_feat"]    = dt.dt.quarter
+        return df
+    #######################################################
+    @staticmethod
+    def encode_sin_cos(value, period):
+        angle = 2 * np.pi * value / period
+        return np.sin(angle), np.cos(angle)
+    #######################################################
+    @staticmethod
+    def fill_freq(group):
+        group = group.copy()
+        group = group.sort_values("date").reset_index(drop=True)
+    
+        history = []
+    
+        col_date = group.columns.get_loc("date")
+        col_buy = group.columns.get_loc("didBuy_target")
+        col_freq = {w: group.columns.get_loc(f"freq_{w}_raw") for w in freq_windows}
+    
+        for i in range(len(group)):
+            cur_date = group.iat[i, col_date]
+    
+            # record purchase
+            if group.iat[i, col_buy] == 1:
+                history.append(cur_date)
+    
+            # prune history ONCE using largest window
+            cutoff_max = cur_date - pd.Timedelta(days=max_w)
+            history = [d for d in history if d >= cutoff_max]
+    
+            # compute windowed counts
+            for w in freq_windows:
+                cutoff = cur_date - pd.Timedelta(days=w)
+                count = 0
+                for d in history:
+                    if d >= cutoff:
+                        count += 1
+                group.iat[i, col_freq[w]] = count
+    
+        return group
+    ####################################################################################################
+    @staticmethod
+    def is_dst_series(date_series: pd.Series, tz="America/Chicago") -> pd.Series:
+        s = pd.to_datetime(date_series)
+        return s.map(
+            lambda d: 1 if pytz.timezone(tz).localize(d).dst() != pd.Timedelta(0) else 0
+        )  
+    ####################################################################################################
+
+  
+    

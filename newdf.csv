@@ -1,0 +1,1547 @@
+,vendor,source,date,time,sku,item,itemsSold,derivedItemsSold
+0,winndixie,winndixie_app_json,04/28/2025,20:06:00,00003800027003,KELLOGG APL JCK GT,20,11
+1,winndixie,winndixie_app_json,04/28/2025,20:06:00,00004900004255,CocaCola Soda,20,11
+2,winndixie,winndixie_app_json,04/28/2025,20:06:00,00007218074152,Red Baron Pizza,20,11
+3,winndixie,winndixie_app_json,04/28/2025,20:06:00,00009027700001,Hugbi Pies,20,11
+4,winndixie,winndixie_app_json,04/28/2025,20:06:00,00003000031930,Quaker Instnt Grts,20,11
+5,winndixie,winndixie_app_json,04/28/2025,20:06:00,00085004220302,Rght Grd Ddrnt,20,11
+6,winndixie,winndixie_app_json,04/28/2025,20:06:00,00007940058956,Degree Dry Spray,20,11
+7,winndixie,winndixie_app_json,04/28/2025,20:06:00,00003000056851,Bacon Inst Grits,20,11
+8,winndixie,winndixie_app_json,04/28/2025,20:06:00,00067984410457,Dewafelbakkr Pncks,20,11
+9,winndixie,winndixie_app_json,04/28/2025,20:06:00,00003825910178,SE Grocers Bread,20,11
+10,winndixie,winndixie_app_json,04/28/2025,20:06:00,00004530000065,Peter Pan Pnt Bttr,20,11
+11,winndixie,winndixie_app_json,04/23/2025,17:57:00,00025731200000,Butterball Turkey,15,15
+12,winndixie,winndixie_app_json,04/23/2025,17:57:00,00025628500000,D&W Cheese,15,15
+13,winndixie,winndixie_app_json,04/23/2025,17:57:00,00002959900188,Manda Sausage,15,15
+14,winndixie,winndixie_app_json,04/23/2025,17:57:00,00007800003526,DR PEPPER 12PK,15,15
+15,winndixie,winndixie_app_json,04/23/2025,17:57:00,00004900003073,Fanta Soda,15,15
+16,winndixie,winndixie_app_json,04/23/2025,17:57:00,00002500005824,Minute Maid Lmnade,15,15
+17,winndixie,winndixie_app_json,04/23/2025,17:57:00,00003800027088,Cocoa Krispies Crl,15,15
+18,winndixie,winndixie_app_json,04/23/2025,17:57:00,00002178850695,Lotus Cookie Buttr,15,15
+19,winndixie,winndixie_app_json,04/23/2025,17:57:00,00076566710080,Annie Chun's Bowl,15,15
+20,winndixie,winndixie_app_json,04/23/2025,17:57:00,00007084789618,MONSTER ULTRA FANT,15,15
+21,winndixie,winndixie_app_json,04/23/2025,17:57:00,00007064000663,Bomb Pop Popsicles,15,15
+22,winndixie,winndixie_app_json,04/23/2025,17:57:00,00060788030991,k&l Kidney Beans,15,15
+23,winndixie,winndixie_app_json,04/23/2025,17:57:00,00007035330100,Blue Runner Beans,15,15
+24,winndixie,winndixie_app_json,04/23/2025,17:57:00,00060788030744,k&l Corn,15,15
+25,winndixie,winndixie_app_json,04/23/2025,17:57:00,00007192119331,DIGIORNO PIZZA,15,15
+26,winndixie,winndixie_app_json,04/12/2025,13:26:00,00002500005838,Minute Maid Lmnade,11,10
+27,winndixie,winndixie_app_json,04/12/2025,13:26:00,00020665400000,D&W Turkey,11,10
+28,winndixie,winndixie_app_json,04/12/2025,13:26:00,00025628500000,D&W Cheese,11,10
+29,winndixie,winndixie_app_json,04/12/2025,13:26:00,00003825912878,SEG PNCK POUCH,11,10
+30,winndixie,winndixie_app_json,04/12/2025,13:26:00,00020572800000,4 Star Roast Beef,11,10
+31,winndixie,winndixie_app_json,04/12/2025,13:26:00,00023088300000,Chicken Thighs,11,10
+32,winndixie,winndixie_app_json,04/12/2025,13:26:00,00007066209631,Nissin Noodle Soup,11,10
+33,winndixie,winndixie_app_json,04/12/2025,13:26:00,00064312604011,Bananas,11,10
+34,winndixie,winndixie_app_json,04/12/2025,13:26:00,00003022306087,Taylor Farms Green,11,10
+35,winndixie,winndixie_app_json,04/12/2025,13:26:00,00020210600000,SEG Green Grapes,11,10
+36,winndixie,winndixie_app_json,04/10/2025,19:20:00,00000980080005,Nutella Spread,9,9
+37,winndixie,winndixie_app_json,04/10/2025,19:20:00,00076566710080,Annie Chun's Bowl,9,9
+38,winndixie,winndixie_app_json,04/10/2025,19:20:00,00005150004816,Smucker's Uncrstbl,9,9
+39,winndixie,winndixie_app_json,04/10/2025,19:20:00,00002100065883,Kraft Mac & Cheese,9,9
+40,winndixie,winndixie_app_json,04/10/2025,19:20:00,00007218074154,Red Baron Pizza,9,9
+41,winndixie,winndixie_app_json,04/10/2025,19:20:00,00007102501612,Bunny Bread,9,9
+42,winndixie,winndixie_app_json,04/10/2025,19:20:00,00026398500000,Beef Cubed Steak,9,9
+43,winndixie,winndixie_app_json,04/10/2025,19:20:00,00007273026307,Prairie Farm Milk,9,9
+44,winndixie,winndixie_app_json,04/10/2025,19:20:00,00060788030009,k&l Milk,9,9
+45,winndixie,winndixie_app_json,04/08/2025,20:54:00,00002073516155,TH NEAPOLTN IC,2,2
+46,winndixie,winndixie_app_json,04/08/2025,20:54:00,00004400003483,Ritz Crackers,2,2
+47,winndixie,winndixie_app_json,04/08/2025,11:50:00,00004900004121,Fanta Soda,11,4
+48,winndixie,winndixie_app_json,04/08/2025,11:50:00,00005150005722,Smucker's Spread,11,4
+49,winndixie,winndixie_app_json,04/08/2025,11:50:00,00005150005711,Smucker's Jelly,11,4
+50,winndixie,winndixie_app_json,04/08/2025,11:50:00,00004900004255,CocaCola Soda,11,4
+51,winndixie,winndixie_app_json,04/05/2025,12:54:00,00001530044025,Pasta Roni Pasta,31,29
+52,winndixie,winndixie_app_json,04/05/2025,12:54:00,00002100004685,Taco Bell Kit,31,29
+53,winndixie,winndixie_app_json,04/05/2025,12:54:00,00007035370101,Blue Runner Beans,31,29
+54,winndixie,winndixie_app_json,04/05/2025,12:54:00,00002959900188,Manda Sausage,31,29
+55,winndixie,winndixie_app_json,04/05/2025,12:54:00,00020170000000,Fresh Meats,31,29
+56,winndixie,winndixie_app_json,04/05/2025,12:54:00,00020237100000,London Broil,31,29
+57,winndixie,winndixie_app_json,04/05/2025,12:54:00,00023080900000,SF Chicken Thighs,31,29
+58,winndixie,winndixie_app_json,04/05/2025,12:54:00,00007102501003,Bunny Bread,31,29
+59,winndixie,winndixie_app_json,04/05/2025,12:54:00,00060788030028,k&l Eggs,31,29
+60,winndixie,winndixie_app_json,04/05/2025,12:54:00,00003825913487,SEG Pasta Sauce,31,29
+61,winndixie,winndixie_app_json,04/05/2025,12:54:00,00003825912354,SE Grocers Olives,31,29
+62,winndixie,winndixie_app_json,04/05/2025,12:54:00,00003825911816,SEG Canned Fruit,31,29
+63,winndixie,winndixie_app_json,04/05/2025,12:54:00,00060788030741,k&l Corn,31,29
+64,winndixie,winndixie_app_json,04/05/2025,12:54:00,00004127102253,ID Coffee Creamer,31,29
+65,winndixie,winndixie_app_json,04/05/2025,12:54:00,00003825914668,Assume it's Butter,31,29
+66,winndixie,winndixie_app_json,04/05/2025,12:54:00,00073402061016,Crunchies Strwbrry,31,29
+67,winndixie,winndixie_app_json,04/05/2025,12:54:00,00005150004816,Smucker's Uncrstbl,31,29
+68,winndixie,winndixie_app_json,04/05/2025,12:54:00,00003077207385,GAIN LQ HEC OXI WD,31,29
+69,winndixie,winndixie_app_json,04/05/2025,12:54:00,00002114003090,W&T Cat Litter,31,29
+70,winndixie,winndixie_app_json,04/05/2025,12:54:00,00081309802008,Cilantro,31,29
+71,winndixie,winndixie_app_json,04/05/2025,12:54:00,00060788030013,k&l Milk,31,29
+72,winndixie,winndixie_app_json,04/05/2025,12:54:00,00005150005722,Smucker's Spread,31,29
+73,winndixie,winndixie_app_json,04/05/2025,12:54:00,00007878351410,Matchstick Carrots,31,29
+74,winndixie,winndixie_app_json,04/05/2025,12:54:00,00007143001065,Dole Shred Lettuce,31,29
+75,winndixie,winndixie_app_json,04/05/2025,12:54:00,00000000004072,Russet Potato,31,29
+76,winndixie,winndixie_app_json,04/05/2025,12:54:00,00020612300000,SEG Turkey,31,29
+77,winndixie,winndixie_app_json,04/05/2025,12:54:00,00074173900100,Guidry's Seasoning,31,29
+78,winndixie,winndixie_app_json,04/05/2025,12:54:00,00020202900000,Cut Watermelon,31,29
+79,winndixie,winndixie_app_json,04/05/2025,12:54:00,00085029000217,Asparagus,31,29
+80,winndixie,winndixie_app_json,04/01/2025,17:45:00,00004900003073,Fanta Soda,4,4
+81,winndixie,winndixie_app_json,04/01/2025,17:45:00,00002500005824,Minute Maid Lmnade,4,4
+82,winndixie,winndixie_app_json,04/01/2025,17:45:00,00007189900375,Blue Bell IceCream,4,4
+83,winndixie,winndixie_app_json,04/01/2025,17:45:00,00001200001672,Strbucks Frppccino,4,4
+84,winndixie,winndixie_app_json,03/29/2025,14:33:00,00007800003576,Dr. Pepper Soda,34,26
+85,winndixie,winndixie_app_json,03/29/2025,14:33:00,00002100005467,Kraft Cheese,34,26
+86,winndixie,winndixie_app_json,03/29/2025,14:33:00,00020165300000,Ground Beef,34,26
+87,winndixie,winndixie_app_json,03/29/2025,14:33:00,00020320100000,Pork Shoulder,34,26
+88,winndixie,winndixie_app_json,03/29/2025,14:33:00,00020320100000,Pork Shoulder,34,26
+89,winndixie,winndixie_app_json,03/29/2025,14:33:00,00020907100000,Ahi Tuna Steak,34,26
+90,winndixie,winndixie_app_json,03/29/2025,14:33:00,00020807400000,Catfish Fillet,34,26
+91,winndixie,winndixie_app_json,03/29/2025,14:33:00,00003825912626,SEG BBQ Sauce,34,26
+92,winndixie,winndixie_app_json,03/29/2025,14:33:00,00004790050118,Blue Plate Mynnase,34,26
+93,winndixie,winndixie_app_json,03/29/2025,14:33:00,00003825911816,SEG Canned Fruit,34,26
+94,winndixie,winndixie_app_json,03/29/2025,14:33:00,00004600086121,Old El Paso Sauce,34,26
+95,winndixie,winndixie_app_json,03/29/2025,14:33:00,00003940001612,Bush's Best Beans,34,26
+96,winndixie,winndixie_app_json,03/29/2025,14:33:00,00004100002263,Knorr Rice Sides,34,26
+97,winndixie,winndixie_app_json,03/29/2025,14:33:00,00004100054100,Knorr Rice Sides,34,26
+98,winndixie,winndixie_app_json,03/29/2025,14:33:00,00000000004093,Jumbo Yellow Onion,34,26
+99,winndixie,winndixie_app_json,03/29/2025,14:33:00,00064312604011,Bananas,34,26
+100,winndixie,winndixie_app_json,03/29/2025,14:33:00,00000000004087,Tomatoes,34,26
+101,winndixie,winndixie_app_json,03/29/2025,14:33:00,00003825910182,SE Grocers Buns,34,26
+102,winndixie,winndixie_app_json,03/29/2025,14:33:00,00003825910178,SE Grocers Bread,34,26
+103,winndixie,winndixie_app_json,03/29/2025,14:33:00,00020595300000,ROTISCHICK TRAD,34,26
+104,winndixie,winndixie_app_json,03/29/2025,14:33:00,00020202900000,Cut Watermelon,34,26
+105,winndixie,winndixie_app_json,03/29/2025,14:33:00,00061126900312,RED BULL 12 OZ,34,26
+106,winndixie,winndixie_app_json,03/29/2025,14:33:00,00003825913775,SEG Bleach,34,26
+107,winndixie,winndixie_app_json,03/29/2025,14:33:00,00000000004078,Corn,34,26
+108,winndixie,winndixie_app_json,03/29/2025,14:33:00,00003320000260,Arm & Hammer Dtgnt,34,26
+109,winndixie,winndixie_app_json,03/29/2025,14:33:00,00060788030013,k&l Milk,34,26
+110,winndixie,winndixie_app_json,03/26/2025,17:44:00,00060788030013,k&l Milk,10,10
+111,winndixie,winndixie_app_json,03/26/2025,17:44:00,00003825914772,SEG Ice Cream Cup,10,10
+112,winndixie,winndixie_app_json,03/26/2025,17:44:00,00023083400000,Chicken Cutlet,10,10
+113,winndixie,winndixie_app_json,03/26/2025,17:44:00,00003825910309,SEG Water,10,10
+114,winndixie,winndixie_app_json,03/26/2025,17:44:00,00020632900000,D&W Cheese,10,10
+115,winndixie,winndixie_app_json,03/26/2025,17:44:00,00020612300000,SEG Turkey,10,10
+116,winndixie,winndixie_app_json,03/26/2025,17:44:00,00020927500000,Crab Leg Surimi,10,10
+117,winndixie,winndixie_app_json,03/26/2025,17:44:00,00003022306087,Taylor Farms Green,10,10
+118,winndixie,winndixie_app_json,03/26/2025,17:44:00,00060788030110,k&l Diced Tomatoes,10,10
+119,winndixie,winndixie_app_json,03/26/2025,17:44:00,00020224600000,Mixed Grapes,10,10
+120,winndixie,winndixie_app_json,03/22/2025,22:15:00,00004610040076,Sargento Cheese,10,10
+121,winndixie,winndixie_app_json,03/22/2025,22:15:00,00007373100830,Mission Tortillas,10,10
+122,winndixie,winndixie_app_json,03/22/2025,22:15:00,00007790053615,Jimmy Dean Bacon,10,10
+123,winndixie,winndixie_app_json,03/22/2025,22:15:00,00002100060464,Kraft Cheese,10,10
+124,winndixie,winndixie_app_json,03/22/2025,22:15:00,00076566710080,Annie Chun's Bowl,10,10
+125,winndixie,winndixie_app_json,03/22/2025,22:15:00,00060788010285,Essentials Plates,10,10
+126,winndixie,winndixie_app_json,03/22/2025,22:15:00,00003825911816,SEG Canned Fruit,10,10
+127,winndixie,winndixie_app_json,03/22/2025,22:15:00,00007800003526,DR PEPPER 12PK,10,10
+128,winndixie,winndixie_app_json,03/22/2025,22:15:00,00002500005824,Minute Maid Lmnade,10,10
+129,winndixie,winndixie_app_json,03/22/2025,22:15:00,00002500005838,Minute Maid Lmnade,10,10
+130,winndixie,winndixie_app_json,03/22/2025,18:31:00,00004900004255,CocaCola Soda,12,2
+131,winndixie,winndixie_app_json,03/22/2025,18:31:00,00009027700001,Hugbi Pies,12,2
+132,winndixie,winndixie_app_json,03/20/2025,14:35:00,00020793600000,MSG BROWNIE BC,1,1
+133,winndixie,winndixie_app_json,03/15/2025,19:50:00,00004900004284,Coca Cola Cola,22,21
+134,winndixie,winndixie_app_json,03/15/2025,19:50:00,00007080074679,Smithfield Pork,22,21
+135,winndixie,winndixie_app_json,03/15/2025,19:50:00,00020165300000,Ground Beef,22,21
+136,winndixie,winndixie_app_json,03/15/2025,19:50:00,00004470003095,OM Deli Meat,22,21
+137,winndixie,winndixie_app_json,03/15/2025,19:50:00,00081829001665,Chobani Yogurt,22,21
+138,winndixie,winndixie_app_json,03/15/2025,19:50:00,00003825910051,SE Grocers Cheese,22,21
+139,winndixie,winndixie_app_json,03/15/2025,19:50:00,00003825911992,SEG Jumbo Biscuit,22,21
+140,winndixie,winndixie_app_json,03/15/2025,19:50:00,00007189962427,Blue Bell IceCream,22,21
+141,winndixie,winndixie_app_json,03/15/2025,19:50:00,00007342001614,Daisy Sour Cream,22,21
+142,winndixie,winndixie_app_json,03/15/2025,19:50:00,00005150005711,Smucker's Jelly,22,21
+143,winndixie,winndixie_app_json,03/15/2025,19:50:00,00005150025516,Jif Peanut Butter,22,21
+144,winndixie,winndixie_app_json,03/15/2025,19:50:00,00004530000065,Peter Pan Pnt Bttr,22,21
+145,winndixie,winndixie_app_json,03/15/2025,19:50:00,00003400040012,Reese's Pnt Butter,22,21
+146,winndixie,winndixie_app_json,03/15/2025,19:50:00,00003825912354,SE Grocers Olives,22,21
+147,winndixie,winndixie_app_json,03/15/2025,19:50:00,00060788030744,k&l Corn,22,21
+148,winndixie,winndixie_app_json,03/15/2025,19:50:00,00007102501003,Bunny Bread,22,21
+149,winndixie,winndixie_app_json,03/15/2025,19:50:00,00060788030027,k&l Eggs,22,21
+150,winndixie,winndixie_app_json,03/15/2025,19:50:00,00002840073742,18CT FLAVOR MIX VA,22,21
+151,winndixie,winndixie_app_json,03/15/2025,19:50:00,00060788030013,k&l Milk,22,21
+152,winndixie,winndixie_app_json,03/15/2025,19:50:00,00060788030814,k&l Water,22,21
+153,winndixie,winndixie_app_json,03/15/2025,19:50:00,00007800008246,Dr. Pepper Soda,22,21
+154,winndixie,winndixie_app_json,03/12/2025,22:00:00,00007189962427,Blue Bell IceCream,2,2
+155,winndixie,winndixie_app_json,03/12/2025,22:00:00,00007790033496,Jimmy Dean Sausage,2,2
+156,winndixie,winndixie_app_json,03/12/2025,18:30:00,00004900004255,CocaCola Soda,6,3
+157,winndixie,winndixie_app_json,03/12/2025,18:30:00,00001600022195,GM WFFL TST CRNC,6,3
+158,winndixie,winndixie_app_json,03/12/2025,18:30:00,00003800027003,KELLOGG APL JCK GT,6,3
+159,winndixie,winndixie_app_json,03/09/2025,18:06:00,00025628500000,D&W Cheese,31,30
+160,winndixie,winndixie_app_json,03/09/2025,18:06:00,00028245100000,Pork Chops,31,30
+161,winndixie,winndixie_app_json,03/09/2025,18:06:00,00023083400000,Chicken Cutlet,31,30
+162,winndixie,winndixie_app_json,03/09/2025,18:06:00,00020612300000,SEG Turkey,31,30
+163,winndixie,winndixie_app_json,03/09/2025,18:06:00,00007708340420,Rosina Meatballs,31,30
+164,winndixie,winndixie_app_json,03/09/2025,18:06:00,00020907100000,Ahi Tuna Steak,31,30
+165,winndixie,winndixie_app_json,03/09/2025,18:06:00,00020809000000,Catfish Fillet,31,30
+166,winndixie,winndixie_app_json,03/09/2025,18:06:00,00002500005838,Minute Maid Lmnade,31,30
+167,winndixie,winndixie_app_json,03/09/2025,18:06:00,00004900004121,Fanta Soda,31,30
+168,winndixie,winndixie_app_json,03/09/2025,18:06:00,00003825911011,SE Grocers Pasta,31,30
+169,winndixie,winndixie_app_json,03/09/2025,18:06:00,00003825911817,SEG Canned Fruit,31,30
+170,winndixie,winndixie_app_json,03/09/2025,18:06:00,00060788030104,k&l Diced Tomatoes,31,30
+171,winndixie,winndixie_app_json,03/09/2025,18:06:00,00003825910589,SEG Pasta Sauce,31,30
+172,winndixie,winndixie_app_json,03/09/2025,18:06:00,00005100023314,SpaghettiOs Pasta,31,30
+173,winndixie,winndixie_app_json,03/09/2025,18:06:00,00002900000822,BlueBonnet Margrne,31,30
+174,winndixie,winndixie_app_json,03/09/2025,18:06:00,00003000056851,Bacon Inst Grits,31,30
+175,winndixie,winndixie_app_json,03/09/2025,18:06:00,00001600012929,DunkAroos Van/Choc,31,30
+176,winndixie,winndixie_app_json,03/09/2025,18:06:00,00060788030013,k&l Milk,31,30
+177,winndixie,winndixie_app_json,03/09/2025,18:06:00,00002550030401,Folgers Coffee,31,30
+178,winndixie,winndixie_app_json,03/09/2025,18:06:00,00002700037244,Orville Popcorn,31,30
+179,winndixie,winndixie_app_json,03/09/2025,18:06:00,00005150005722,Smucker's Spread,31,30
+180,winndixie,winndixie_app_json,03/09/2025,18:06:00,00007066209631,Nissin Noodle Soup,31,30
+181,winndixie,winndixie_app_json,03/09/2025,18:06:00,00002100008338,KRAFT SINGLES,31,30
+182,winndixie,winndixie_app_json,03/09/2025,18:06:00,00007066209633,Nissin Noodle Soup,31,30
+183,winndixie,winndixie_app_json,03/09/2025,18:06:00,00007102501003,Bunny Bread,31,30
+184,winndixie,winndixie_app_json,03/09/2025,18:06:00,00003825910866,SEG Storage Bags,31,30
+185,winndixie,winndixie_app_json,03/09/2025,18:06:00,00003825910864,SEG Storage Bags,31,30
+186,winndixie,winndixie_app_json,03/09/2025,18:06:00,00007084789618,MONSTER ULTRA FANT,31,30
+187,winndixie,winndixie_app_json,03/09/2025,18:06:00,00060788030029,k&l Eggs,31,30
+188,winndixie,winndixie_app_json,03/09/2025,18:06:00,00003680039400,Top Care Nitetime,31,30
+189,winndixie,winndixie_app_json,03/04/2025,17:21:00,00007800003576,Dr. Pepper Soda,12,11
+190,winndixie,winndixie_app_json,03/04/2025,17:21:00,00004470010321,OM BASICS HAM-AMER,12,11
+191,winndixie,winndixie_app_json,03/04/2025,17:21:00,00004470002411,Lunchables Snack,12,11
+192,winndixie,winndixie_app_json,03/04/2025,17:21:00,00007084789618,MONSTER ULTRA FANT,12,11
+193,winndixie,winndixie_app_json,03/04/2025,17:21:00,00007054310014,Kleinpeter Milk,12,11
+194,winndixie,winndixie_app_json,03/04/2025,17:21:00,00005210008480,McCormick Ssng Mix,12,11
+195,winndixie,winndixie_app_json,03/04/2025,17:21:00,00003825913230,SEG Gravy Mix,12,11
+196,winndixie,winndixie_app_json,03/04/2025,17:21:00,00002700041905,Snack Pack Pudding,12,11
+197,winndixie,winndixie_app_json,03/04/2025,17:21:00,00003022306087,Taylor Farms Green,12,11
+198,winndixie,winndixie_app_json,03/04/2025,17:21:00,00060788030128,k&l Tomato Paste,12,11
+199,winndixie,winndixie_app_json,03/04/2025,17:21:00,00000000004072,Russet Potato,12,11
+200,winndixie,winndixie_app_json,03/02/2025,15:45:00,00008002020240,Abita Beer,25,23
+201,winndixie,winndixie_app_json,03/02/2025,15:45:00,00001410004661,PF Cookies,25,23
+202,winndixie,winndixie_app_json,03/02/2025,15:45:00,00002500004769,Minute Maid Drink,25,23
+203,winndixie,winndixie_app_json,03/02/2025,15:45:00,00060788030797,k&l Sweet Peas,25,23
+204,winndixie,winndixie_app_json,03/02/2025,15:45:00,00020612300000,SEG Turkey,25,23
+205,winndixie,winndixie_app_json,03/02/2025,15:45:00,00060788030012,k&l Milk,25,23
+206,winndixie,winndixie_app_json,03/02/2025,15:45:00,00060788030744,k&l Corn,25,23
+207,winndixie,winndixie_app_json,03/02/2025,15:45:00,00003825911817,SEG Canned Fruit,25,23
+208,winndixie,winndixie_app_json,03/02/2025,15:45:00,00007208027429,Golden Flake Skins,25,23
+209,winndixie,winndixie_app_json,03/02/2025,15:45:00,00001530043006,Rice A Roni,25,23
+210,winndixie,winndixie_app_json,03/02/2025,15:45:00,00003825911154,SE Grocers Cheese,25,23
+211,winndixie,winndixie_app_json,03/02/2025,15:45:00,00020234200000,Sirloin Tip Steak,25,23
+212,winndixie,winndixie_app_json,03/02/2025,15:45:00,00024370200000,Ground Beef Rnd,25,23
+213,winndixie,winndixie_app_json,03/02/2025,15:45:00,00063441852451,Albanese Gummies,25,23
+214,winndixie,winndixie_app_json,03/02/2025,15:45:00,00007273026307,Prairie Farm Milk,25,23
+215,winndixie,winndixie_app_json,03/02/2025,15:45:00,00001657195210,Sparkling Ice Wtr,25,23
+216,winndixie,winndixie_app_json,03/02/2025,15:45:00,00001657194035,Sparkling Ice Wtr,25,23
+217,winndixie,winndixie_app_json,03/02/2025,15:45:00,00001657194033,Sparkling Ice Wtr,25,23
+218,winndixie,winndixie_app_json,03/02/2025,15:45:00,00008823141320,CHEDDAR WHISPS,25,23
+219,winndixie,winndixie_app_json,03/02/2025,15:45:00,00007102501003,Bunny Bread,25,23
+220,winndixie,winndixie_app_json,03/02/2025,15:45:00,00020652200000,WD 10PC DARK,25,23
+221,winndixie,winndixie_app_json,03/02/2025,15:45:00,00000000006810,HOTLINE BY LB,25,23
+222,winndixie,winndixie_app_json,03/02/2025,15:45:00,00007084789618,MONSTER ULTRA FANT,25,23
+223,winndixie,winndixie_app_json,02/25/2025,19:31:00,00007800004057,Dr Pepper 20oz,6,5
+224,winndixie,winndixie_app_json,02/25/2025,19:31:00,00007084789618,MONSTER ULTRA FANT,6,5
+225,winndixie,winndixie_app_json,02/25/2025,19:31:00,00004000000435,Twix Cookie Bars,6,5
+226,winndixie,winndixie_app_json,02/25/2025,19:31:00,00004148304461,ITTIBITZ COOKE&CRM,6,5
+227,winndixie,winndixie_app_json,02/25/2025,19:31:00,00000000004078,Corn,6,5
+228,winndixie,winndixie_app_json,02/19/2025,19:20:00,00002560000972,Tastykake Pie,11,3
+229,winndixie,winndixie_app_json,02/19/2025,19:20:00,00004530000065,Peter Pan Pnt Bttr,11,3
+230,winndixie,winndixie_app_json,02/19/2025,19:20:00,00004900004255,CocaCola Soda,11,3
+231,winndixie,winndixie_app_json,02/16/2025,18:14:00,00007940006663,Suave Shampoo,10,10
+232,winndixie,winndixie_app_json,02/16/2025,18:14:00,00002073516155,TH NEAPOLTN IC,10,10
+233,winndixie,winndixie_app_json,02/16/2025,18:14:00,00007342001614,Daisy Sour Cream,10,10
+234,winndixie,winndixie_app_json,02/16/2025,18:14:00,00007143001065,Dole Shred Lettuce,10,10
+235,winndixie,winndixie_app_json,02/16/2025,18:14:00,00000000004087,Tomatoes,10,10
+236,winndixie,winndixie_app_json,02/16/2025,18:14:00,00060788030774,k&l Peas & Carrots,10,10
+237,winndixie,winndixie_app_json,02/16/2025,18:14:00,00003587851111,Jumbo Sweet Onions,10,10
+238,winndixie,winndixie_app_json,02/16/2025,18:14:00,00000000004072,Russet Potato,10,10
+239,winndixie,winndixie_app_json,02/16/2025,18:14:00,00064312604011,Bananas,10,10
+240,winndixie,winndixie_app_json,02/16/2025,18:14:00,00060788030013,k&l Milk,10,10
+241,winndixie,winndixie_app_json,02/14/2025,18:09:00,00007102501612,Bunny Bread,10,10
+242,winndixie,winndixie_app_json,02/14/2025,18:09:00,00020612300000,SEG Turkey,10,10
+243,winndixie,winndixie_app_json,02/14/2025,18:09:00,00020574500000,Chisesi Ham,10,10
+244,winndixie,winndixie_app_json,02/14/2025,18:09:00,00000980080005,Nutella Spread,10,10
+245,winndixie,winndixie_app_json,02/14/2025,18:09:00,00076817261508,Bernard's Hny Bear,10,10
+246,winndixie,winndixie_app_json,02/14/2025,18:09:00,00001530044132,Pasta Roni Pasta,10,10
+247,winndixie,winndixie_app_json,02/14/2025,18:09:00,00023086500000,Chicken Thigh,10,10
+248,winndixie,winndixie_app_json,02/14/2025,18:09:00,00024370200000,Ground Beef Rnd,10,10
+249,winndixie,winndixie_app_json,02/14/2025,18:09:00,00060788030744,k&l Corn,10,10
+250,winndixie,winndixie_app_json,02/14/2025,18:09:00,00003825910569,SEG Sauce,10,10
+251,winndixie,winndixie_app_json,02/11/2025,19:21:00,00007851600032,Turkey Creek Snack,14,13
+252,winndixie,winndixie_app_json,02/11/2025,19:21:00,00003077207385,GAIN LQ HEC OXI WD,14,13
+253,winndixie,winndixie_app_json,02/11/2025,19:21:00,00060788030009,Know & Love Milk,14,13
+254,winndixie,winndixie_app_json,02/11/2025,19:21:00,00005000014578,Coffee Mate Creamr,14,13
+255,winndixie,winndixie_app_json,02/11/2025,19:21:00,00001200001672,Strbucks Frppccino,14,13
+256,winndixie,winndixie_app_json,02/11/2025,19:21:00,00007800004057,Dr Pepper 20oz,14,13
+257,winndixie,winndixie_app_json,02/11/2025,19:21:00,00002100005513,Kraft Cheese,14,13
+258,winndixie,winndixie_app_json,02/11/2025,19:21:00,00071458103151,Vine Ripe Tomato,14,13
+259,winndixie,winndixie_app_json,02/11/2025,19:21:00,00004790050733,Blue Plate Mayo,14,13
+260,winndixie,winndixie_app_json,02/11/2025,19:21:00,00081138701709,Bro's Nat Strawbs,14,13
+261,winndixie,winndixie_app_json,02/11/2025,19:21:00,00003825910182,SE Grocers Buns,14,13
+262,winndixie,winndixie_app_json,02/11/2025,19:21:00,00003825910300,SEG Aluminum Foil,14,13
+263,winndixie,winndixie_app_json,02/11/2025,19:21:00,00007455503883,Mini Valentine 2 t,14,13
+264,winndixie,winndixie_app_json,02/09/2025,16:30:00,00020976200000,6ct Buttercream Cu,25,23
+265,winndixie,winndixie_app_json,02/09/2025,16:30:00,00003825911816,SEG Canned Fruit,25,23
+266,winndixie,winndixie_app_json,02/09/2025,16:30:00,00001600012929,DunkAroos Van/Choc,25,23
+267,winndixie,winndixie_app_json,02/09/2025,16:30:00,00000980089500,Nutella Spread,25,23
+268,winndixie,winndixie_app_json,02/09/2025,16:30:00,00004667500079,YoCrunch Yogurt,25,23
+269,winndixie,winndixie_app_json,02/09/2025,16:30:00,00002100065883,Kraft Mac & Cheese,25,23
+270,winndixie,winndixie_app_json,02/09/2025,16:30:00,00020170000000,Fresh Meats,25,23
+271,winndixie,winndixie_app_json,02/09/2025,16:30:00,00020234200000,Sirloin Tip Steak,25,23
+272,winndixie,winndixie_app_json,02/09/2025,16:30:00,00001530043006,Rice A Roni,25,23
+273,winndixie,winndixie_app_json,02/09/2025,16:30:00,00003825913083,SE Grocers Crisps,25,23
+274,winndixie,winndixie_app_json,02/09/2025,16:30:00,00003825913082,SE Grocers Crisps,25,23
+275,winndixie,winndixie_app_json,02/09/2025,16:30:00,00003825914221,SEG Canister Chips,25,23
+276,winndixie,winndixie_app_json,02/09/2025,16:30:00,00020574500000,Chisesi Ham,25,23
+277,winndixie,winndixie_app_json,02/09/2025,16:30:00,00020612300000,SEG Turkey,25,23
+278,winndixie,winndixie_app_json,02/09/2025,16:30:00,00002100008338,KRAFT SINGLES,25,23
+279,winndixie,winndixie_app_json,02/09/2025,16:30:00,00002100060465,Kraft Cheese,25,23
+280,winndixie,winndixie_app_json,02/09/2025,16:30:00,00003940001914,Bush's Grlln Beans,25,23
+281,winndixie,winndixie_app_json,02/09/2025,16:30:00,00005100023314,SpaghettiOs Pasta,25,23
+282,winndixie,winndixie_app_json,02/09/2025,16:30:00,00082486200647,Taylor Farms Green,25,23
+283,winndixie,winndixie_app_json,02/09/2025,16:30:00,00003825913181,SE Grocers Bleach,25,23
+284,winndixie,winndixie_app_json,02/09/2025,16:30:00,00020231400000,Fruit Platter,25,23
+285,winndixie,winndixie_app_json,02/09/2025,16:30:00,00002500005824,Minute Maid Lmnade,25,23
+286,winndixie,winndixie_app_json,02/09/2025,16:30:00,00007800003526,DR PEPPER 12PK,25,23
+287,winndixie,winndixie_app_json,02/08/2025,20:30:00,00007102501003,Bunny Bread,6,4
+288,winndixie,winndixie_app_json,02/08/2025,20:30:00,00009027700001,Hugbi Pies,6,4
+289,winndixie,winndixie_app_json,02/08/2025,20:30:00,00003400000185,Hershey's Syrup,6,4
+290,winndixie,winndixie_app_json,02/08/2025,20:30:00,00007054310503,Kleinpeter Milk,6,4
+291,winndixie,winndixie_app_json,02/08/2025,20:29:00,00003680021549,Topcare Acid Rdcr+,3,3
+292,winndixie,winndixie_app_json,02/08/2025,20:29:00,00085004220302,Rght Grd Ddrnt,3,3
+293,winndixie,winndixie_app_json,02/08/2025,20:29:00,00002260088161,Arrid Deodorant,3,3
+294,winndixie,winndixie_app_json,02/03/2025,20:27:00,00002840004011,Cheetos,13,11
+295,winndixie,winndixie_app_json,02/03/2025,20:27:00,00007120217110,DOLE SLCD STRWBRY,13,11
+296,winndixie,winndixie_app_json,02/03/2025,20:27:00,00002840032505,Doritos Trtlla Chp,13,11
+297,winndixie,winndixie_app_json,02/03/2025,20:27:00,00003825914098,SEG HBSC ELDRBRY,13,11
+298,winndixie,winndixie_app_json,02/03/2025,20:27:00,00004114312010,SunMaid Raisins,13,11
+299,winndixie,winndixie_app_json,02/03/2025,20:27:00,00004440015250,Gortons Fsh Fillet,13,11
+300,winndixie,winndixie_app_json,02/03/2025,20:27:00,00001657194035,Sparkling Ice Wtr,13,11
+301,winndixie,winndixie_app_json,02/03/2025,20:27:00,00006647900002,CC Sparkling Water,13,11
+302,winndixie,winndixie_app_json,02/03/2025,20:27:00,00004133102164,Goya Milk,13,11
+303,winndixie,winndixie_app_json,02/03/2025,20:27:00,00003825910697,SE Grocers Juice,13,11
+304,winndixie,winndixie_app_json,02/03/2025,20:27:00,00003825910667,SEG 100% Juice,13,11
+305,winndixie,winndixie_app_json,01/29/2025,19:23:00,00002200000067,Hubba Bubba Gum,15,9
+306,winndixie,winndixie_app_json,01/29/2025,19:23:00,00004145854891,Edwards Pies,15,9
+307,winndixie,winndixie_app_json,01/29/2025,19:23:00,00007790033496,Jimmy Dean Sausage,15,9
+308,winndixie,winndixie_app_json,01/29/2025,19:23:00,00067984410457,Dewafelbakkr Pncks,15,9
+309,winndixie,winndixie_app_json,01/29/2025,19:23:00,00004900004255,CocaCola Soda,15,9
+310,winndixie,winndixie_app_json,01/29/2025,19:23:00,00001657194033,Sparkling Ice Wtr,15,9
+311,winndixie,winndixie_app_json,01/29/2025,19:23:00,00001657194035,Sparkling Ice Wtr,15,9
+312,winndixie,winndixie_app_json,01/29/2025,19:23:00,00001657195210,Sparkling Ice Wtr,15,9
+313,winndixie,winndixie_app_json,01/29/2025,19:23:00,00001657191032,Sparkling Ice Wtr,15,9
+314,winndixie,winndixie_app_json,07/21/2025,12:21:00,00004900004284,Coca Cola Cola,7,5
+315,winndixie,winndixie_app_json,07/21/2025,12:21:00,00007045900558,NYB Garlic Bread,7,5
+316,winndixie,winndixie_app_json,07/21/2025,12:21:00,00085499300412,Sno-Balls To Go,7,5
+317,winndixie,winndixie_app_json,07/21/2025,12:21:00,00009027700001,Hugbi Pies,7,5
+318,winndixie,winndixie_app_json,07/21/2025,12:21:00,00067984410457,Dewafelbakkr Pncks,7,5
+319,winndixie,winndixie_app_json,07/20/2025,11:07:00,00060788030013,k&l Milk,18,15
+320,winndixie,winndixie_app_json,07/20/2025,11:07:00,00005200004344,Gatorade Beverage,18,15
+321,winndixie,winndixie_app_json,07/20/2025,11:07:00,00005000014578,Coffee Mate Creamr,18,15
+322,winndixie,winndixie_app_json,07/20/2025,11:07:00,00005400010183,Scott Bthrm Tissue,18,15
+323,winndixie,winndixie_app_json,07/20/2025,11:07:00,00060788030771,k&l Sweet Peas,18,15
+324,winndixie,winndixie_app_json,07/20/2025,11:07:00,00005100023314,SpaghettiOs Pasta,18,15
+325,winndixie,winndixie_app_json,07/20/2025,11:07:00,00004178900621,Maruchan Ramen Sup,18,15
+326,winndixie,winndixie_app_json,07/20/2025,11:07:00,00060538871457,Sunny Meadows Eggs,18,15
+327,winndixie,winndixie_app_json,07/20/2025,11:07:00,00020612300000,SEG Turkey,18,15
+328,winndixie,winndixie_app_json,07/20/2025,11:07:00,00004660003383,Armour Crunchers,18,15
+329,winndixie,winndixie_app_json,07/20/2025,11:07:00,00002100065371,Kraft Mac & Cheese,18,15
+330,winndixie,winndixie_app_json,07/20/2025,11:07:00,00004470010321,OM BASICS HAM-AMER,18,15
+331,winndixie,winndixie_app_json,07/20/2025,11:07:00,00004470036000,Lunchables Snack,18,15
+332,winndixie,winndixie_app_json,07/20/2025,11:07:00,00000000004011,Bananas,18,15
+333,winndixie,winndixie_app_json,07/20/2025,11:07:00,00000000004078,Yellow Corn,18,15
+334,winndixie,winndixie_app_json,07/16/2025,18:06:00,00020612300000,SEG Turkey,7,7
+335,winndixie,winndixie_app_json,07/16/2025,18:06:00,00020632900000,D&W Cheese,7,7
+336,winndixie,winndixie_app_json,07/16/2025,18:06:00,00003825910178,SE Grocers Bread,7,7
+337,winndixie,winndixie_app_json,07/16/2025,18:06:00,00008390000575,Gold Peak Tea,7,7
+338,winndixie,winndixie_app_json,07/16/2025,18:06:00,00001657191030,Sparkling Ice Wtr,7,7
+339,winndixie,winndixie_app_json,07/16/2025,18:06:00,00001657195920,SI Starburst Straw,7,7
+340,winndixie,winndixie_app_json,07/16/2025,18:06:00,00001657195926,SI Starburst Cherr,7,7
+341,winndixie,winndixie_app_json,07/12/2025,14:51:00,00000980080005,Nutella Spread,10,10
+342,winndixie,winndixie_app_json,07/12/2025,14:51:00,00003825910180,SE Grocers Bread,10,10
+343,winndixie,winndixie_app_json,07/12/2025,14:51:00,00003825910593,SEG Pasta Sauce,10,10
+344,winndixie,winndixie_app_json,07/12/2025,14:51:00,00002114045020,HS Regular Bacon,10,10
+345,winndixie,winndixie_app_json,07/12/2025,14:51:00,00023080900000,SF Chicken Thighs,10,10
+346,winndixie,winndixie_app_json,07/12/2025,14:51:00,00004470002411,Lunchables Snack,10,10
+347,winndixie,winndixie_app_json,07/12/2025,14:51:00,00004470036000,Lunchables Snack,10,10
+348,winndixie,winndixie_app_json,07/12/2025,14:51:00,00004470010320,OM BASICS TURKEY-A,10,10
+349,winndixie,winndixie_app_json,07/12/2025,14:51:00,00004470036002,Lunchables Snack,10,10
+350,winndixie,winndixie_app_json,07/12/2025,14:51:00,00086677800020,Watermelon,10,10
+351,winndixie,winndixie_app_json,07/09/2025,18:01:00,00085499300407,Sno-Balls To Go,23,17
+352,winndixie,winndixie_app_json,07/09/2025,18:01:00,00020970200000,ALM PETIT FOUR,23,17
+353,winndixie,winndixie_app_json,07/09/2025,18:01:00,00020612300000,SEG Turkey,23,17
+354,winndixie,winndixie_app_json,07/09/2025,18:01:00,00004530000065,Peter Pan Pnt Bttr,23,17
+355,winndixie,winndixie_app_json,07/09/2025,18:01:00,00088399065120,Good2Grow 100% Jce,23,17
+356,winndixie,winndixie_app_json,07/09/2025,18:01:00,00004119210891,APPLE JACK DONUT,23,17
+357,winndixie,winndixie_app_json,07/09/2025,18:01:00,00004470036002,Lunchables Snack,23,17
+358,winndixie,winndixie_app_json,07/09/2025,18:01:00,00001657195210,Sparkling Ice Wtr,23,17
+359,winndixie,winndixie_app_json,07/09/2025,18:01:00,00001657191032,Sparkling Ice Wtr,23,17
+360,winndixie,winndixie_app_json,07/09/2025,18:01:00,00085499300412,Sno-Balls To Go,23,17
+361,winndixie,winndixie_app_json,07/09/2025,18:01:00,00001657194033,Sparkling Ice Wtr,23,17
+362,winndixie,winndixie_app_json,07/09/2025,18:01:00,00001657194035,Sparkling Ice Wtr,23,17
+363,winndixie,winndixie_app_json,07/09/2025,18:01:00,00004470002411,Lunchables Snack,23,17
+364,winndixie,winndixie_app_json,07/09/2025,18:01:00,00003000056859,Chse Vrty Inst Grt,23,17
+365,winndixie,winndixie_app_json,07/09/2025,18:01:00,00003800027088,Cocoa Krispies Crl,23,17
+366,winndixie,winndixie_app_json,07/09/2025,18:01:00,00003000065800,Pearl Millng Syrup,23,17
+367,winndixie,winndixie_app_json,07/09/2025,18:01:00,00004900004284,Coca Cola Cola,23,17
+368,winndixie,winndixie_app_json,07/06/2025,19:26:00,00060538871457,Sunny Meadows Eggs,27,23
+369,winndixie,winndixie_app_json,07/06/2025,19:26:00,00002430004503,LD CAKE,27,23
+370,winndixie,winndixie_app_json,07/06/2025,19:26:00,00003825911818,SEG Canned Fruit,27,23
+371,winndixie,winndixie_app_json,07/06/2025,19:26:00,00002700050014,Hunts Rstd Garlic,27,23
+372,winndixie,winndixie_app_json,07/06/2025,19:26:00,00060788030104,k&l Diced Tomatoes,27,23
+373,winndixie,winndixie_app_json,07/06/2025,19:26:00,00007102501612,Bunny Bread,27,23
+374,winndixie,winndixie_app_json,07/06/2025,19:26:00,00007708340420,Rosina Meatballs,27,23
+375,winndixie,winndixie_app_json,07/06/2025,19:26:00,00003825910859,SEG Storage Bags,27,23
+376,winndixie,winndixie_app_json,07/06/2025,19:26:00,00003825913306,SEG Pistachios,27,23
+377,winndixie,winndixie_app_json,07/06/2025,19:26:00,00081829001665,Chobani Yogurt,27,23
+378,winndixie,winndixie_app_json,07/06/2025,19:26:00,00004470036002,Lunchables Snack,27,23
+379,winndixie,winndixie_app_json,07/06/2025,19:26:00,00004470036000,Lunchables Snack,27,23
+380,winndixie,winndixie_app_json,07/06/2025,19:26:00,00004470010321,OM BASICS HAM-AMER,27,23
+381,winndixie,winndixie_app_json,07/06/2025,19:26:00,00002178850695,Lotus Cookie Buttr,27,23
+382,winndixie,winndixie_app_json,07/06/2025,19:26:00,00003825910597,SE Grocers Pasta,27,23
+383,winndixie,winndixie_app_json,07/06/2025,19:26:00,00020616300000,SEG Ham,27,23
+384,winndixie,winndixie_app_json,07/06/2025,19:26:00,00005849672306,Temptations Treats,27,23
+385,winndixie,winndixie_app_json,07/06/2025,19:26:00,00066785904135,Apples,27,23
+386,winndixie,winndixie_app_json,07/06/2025,19:26:00,00066785904017,GRNY SMTH APPLE,27,23
+387,winndixie,winndixie_app_json,07/06/2025,19:26:00,00000000004078,Yellow Corn,27,23
+388,winndixie,winndixie_app_json,07/06/2025,19:26:00,00066529000118,Strawberries,27,23
+389,winndixie,winndixie_app_json,07/06/2025,19:26:00,00063441852450,Albanese Gummies,27,23
+390,winndixie,winndixie_app_json,07/06/2025,19:26:00,00002114003085,W&T Cat Litter,27,23
+391,winndixie,winndixie_app_json,06/30/2025,14:11:00,00085499300412,Sno-Balls To Go,14,5
+392,winndixie,winndixie_app_json,06/30/2025,14:11:00,00067984410457,Dewafelbakkr Pncks,14,5
+393,winndixie,winndixie_app_json,06/30/2025,14:11:00,00003800027003,KELLOGG APL JCK GT,14,5
+394,winndixie,winndixie_app_json,06/30/2025,14:11:00,00060788030013,k&l Milk,14,5
+395,winndixie,winndixie_app_json,06/30/2025,14:11:00,00007800003526,DR PEPPER 12PK,14,5
+396,winndixie,winndixie_app_json,06/29/2025,13:12:00,00003800084524,Pringles Chips,2,2
+397,winndixie,winndixie_app_json,06/29/2025,13:12:00,00004900001916,Fanta Soda,2,2
+398,winndixie,winndixie_app_json,06/26/2025,17:52:00,00005150004816,Smucker's Uncrstbl,5,5
+399,winndixie,winndixie_app_json,06/26/2025,17:52:00,00002500005824,Minute Maid Lmnade,5,5
+400,winndixie,winndixie_app_json,06/26/2025,17:52:00,00004900003108,Diet Barqs Rt Beer,5,5
+401,winndixie,winndixie_app_json,06/26/2025,17:52:00,00000980000052,Kinder Joy Treat,5,5
+402,winndixie,winndixie_app_json,06/26/2025,17:52:00,00004900004121,Fanta Soda,5,5
+403,winndixie,winndixie_app_json,06/22/2025,17:27:00,00003077207385,GAIN LQ HEC OXI WD,14,13
+404,winndixie,winndixie_app_json,06/22/2025,17:27:00,00060788030013,k&l Milk,14,13
+405,winndixie,winndixie_app_json,06/22/2025,17:27:00,00007064002435,BB MINI SWIRL CONE,14,13
+406,winndixie,winndixie_app_json,06/22/2025,17:27:00,00004470010156,Oscar Mayer Lnchbl,14,13
+407,winndixie,winndixie_app_json,06/22/2025,17:27:00,00004470036002,Lunchables Snack,14,13
+408,winndixie,winndixie_app_json,06/22/2025,17:27:00,00004470002411,Lunchables Snack,14,13
+409,winndixie,winndixie_app_json,06/22/2025,17:27:00,00000980080005,Nutella Spread,14,13
+410,winndixie,winndixie_app_json,06/22/2025,17:27:00,00020612300000,SEG Turkey,14,13
+411,winndixie,winndixie_app_json,06/22/2025,17:27:00,00025628500000,D&W Cheese,14,13
+412,winndixie,winndixie_app_json,06/22/2025,17:27:00,00081829001665,Chobani Yogurt,14,13
+413,winndixie,winndixie_app_json,06/22/2025,17:27:00,00023083400000,Chicken Cutlet,14,13
+414,winndixie,winndixie_app_json,06/22/2025,17:27:00,00028169100000,Boneless Pork Ribs,14,13
+415,winndixie,winndixie_app_json,06/22/2025,17:27:00,00007102501612,Bunny Bread,14,13
+416,winndixie,winndixie_app_json,06/14/2025,18:03:00,00020224700000,Green Grapes,35,33
+417,winndixie,winndixie_app_json,06/14/2025,18:03:00,00020224600000,Mixed Grapes,35,33
+418,winndixie,winndixie_app_json,06/14/2025,18:03:00,00004667500079,YoCrunch Yogurt,35,33
+419,winndixie,winndixie_app_json,06/14/2025,18:03:00,00002500005838,Minute Maid Lmnade,35,33
+420,winndixie,winndixie_app_json,06/14/2025,18:03:00,00004900003108,Diet Barqs Rt Beer,35,33
+421,winndixie,winndixie_app_json,06/14/2025,18:03:00,00004900004121,Fanta Soda,35,33
+422,winndixie,winndixie_app_json,06/14/2025,18:03:00,00007480601500,Little Hug Drink,35,33
+423,winndixie,winndixie_app_json,06/14/2025,18:03:00,00060788030741,k&l Corn,35,33
+424,winndixie,winndixie_app_json,06/14/2025,18:03:00,00007020085612,Chick-Fil-A Drssng,35,33
+425,winndixie,winndixie_app_json,06/14/2025,18:03:00,00003825913241,SEG Seasoning Mix,35,33
+426,winndixie,winndixie_app_json,06/14/2025,18:03:00,00020612300000,SEG Turkey,35,33
+427,winndixie,winndixie_app_json,06/14/2025,18:03:00,00003825911993,SEG Jumbo Biscuit,35,33
+428,winndixie,winndixie_app_json,06/14/2025,18:03:00,00005100023314,SpaghettiOs Pasta,35,33
+429,winndixie,winndixie_app_json,06/14/2025,18:03:00,00003825911816,SEG Canned Fruit,35,33
+430,winndixie,winndixie_app_json,06/14/2025,18:03:00,00002178850695,Lotus Cookie Buttr,35,33
+431,winndixie,winndixie_app_json,06/14/2025,18:03:00,00003825911224,SEG Cutlery,35,33
+432,winndixie,winndixie_app_json,06/14/2025,18:03:00,00002740026499,CC Oil Spread,35,33
+433,winndixie,winndixie_app_json,06/14/2025,18:03:00,00007143001065,Dole Shred Lettuce,35,33
+434,winndixie,winndixie_app_json,06/14/2025,18:03:00,00003760015304,Hormel Bacon,35,33
+435,winndixie,winndixie_app_json,06/14/2025,18:03:00,00000000004889,Cilantro,35,33
+436,winndixie,winndixie_app_json,06/14/2025,18:03:00,00003338357104,Russet Potatoes,35,33
+437,winndixie,winndixie_app_json,06/14/2025,18:03:00,00028256400000,T-Bone Steak,35,33
+438,winndixie,winndixie_app_json,06/14/2025,18:03:00,00028256400000,T-Bone Steak,35,33
+439,winndixie,winndixie_app_json,06/14/2025,18:03:00,00020170000000,Fresh Meats,35,33
+440,winndixie,winndixie_app_json,06/14/2025,18:03:00,00060788030013,k&l Milk,35,33
+441,winndixie,winndixie_app_json,06/14/2025,18:03:00,00007373100830,Mission Tortillas,35,33
+442,winndixie,winndixie_app_json,06/14/2025,18:03:00,00007102501003,Bunny Bread,35,33
+443,winndixie,winndixie_app_json,06/14/2025,18:03:00,00007189962432,Blue Bell IceCream,35,33
+444,winndixie,winndixie_app_json,06/14/2025,18:03:00,00004470002411,Lunchables Snack,35,33
+445,winndixie,winndixie_app_json,06/14/2025,18:03:00,00004470010320,OM BASICS TURKEY-A,35,33
+446,winndixie,winndixie_app_json,06/14/2025,18:03:00,00004470036000,Lunchables Snack,35,33
+447,winndixie,winndixie_app_json,06/14/2025,18:03:00,00004470036002,Lunchables Snack,35,33
+448,winndixie,winndixie_app_json,06/14/2025,18:03:00,00000000004087,Tomatoes,35,33
+449,winndixie,winndixie_app_json,06/14/2025,18:01:00,00060788030814,k&l Water,3,3
+450,winndixie,winndixie_app_json,06/14/2025,18:01:00,00002420000086,Purex Detergent,3,3
+451,winndixie,winndixie_app_json,06/14/2025,18:01:00,00085631200277,Fairlife Milk,3,3
+452,winndixie,winndixie_app_json,06/09/2025,20:39:00,00007480601500,Little Hug Drink,1,1
+453,winndixie,winndixie_app_json,06/08/2025,20:18:00,00000000004072,Russet Potato,25,21
+454,winndixie,winndixie_app_json,06/08/2025,20:18:00,00060788031082,k&l Cheese,25,21
+455,winndixie,winndixie_app_json,06/08/2025,20:18:00,00060788030013,k&l Milk,25,21
+456,winndixie,winndixie_app_json,06/08/2025,20:18:00,00060788030006,k&l Milk,25,21
+457,winndixie,winndixie_app_json,06/08/2025,20:18:00,00076566710080,Annie Chun's Bowl,25,21
+458,winndixie,winndixie_app_json,06/08/2025,20:18:00,00081829001665,Chobani Yogurt,25,21
+459,winndixie,winndixie_app_json,06/08/2025,20:18:00,00060788030744,k&l Corn,25,21
+460,winndixie,winndixie_app_json,06/08/2025,20:18:00,00003680049808,Top Care Nitetime,25,21
+461,winndixie,winndixie_app_json,06/08/2025,20:18:00,00060538871457,Sunny Meadows Eggs,25,21
+462,winndixie,winndixie_app_json,06/08/2025,20:18:00,00005150002512,Smucker's Syrup,25,21
+463,winndixie,winndixie_app_json,06/08/2025,20:18:00,00081829001857,Chobani Yogurt,25,21
+464,winndixie,winndixie_app_json,06/08/2025,20:18:00,00066529000118,Strawberries,25,21
+465,winndixie,winndixie_app_json,06/08/2025,20:18:00,00085092500204,Blueberries,25,21
+466,winndixie,winndixie_app_json,06/08/2025,20:18:00,00077098104107,Two-Bite Cupcakes,25,21
+467,winndixie,winndixie_app_json,06/08/2025,20:18:00,00002100061223,Philadelphia Chse,25,21
+468,winndixie,winndixie_app_json,06/08/2025,20:18:00,00020165300000,Ground Beef,25,21
+469,winndixie,winndixie_app_json,06/08/2025,20:18:00,00026398500000,Beef Cubed Steak,25,21
+470,winndixie,winndixie_app_json,06/08/2025,20:18:00,00004470002411,Lunchables Snack,25,21
+471,winndixie,winndixie_app_json,06/08/2025,20:18:00,00004470036000,Lunchables Snack,25,21
+472,winndixie,winndixie_app_json,06/08/2025,20:18:00,00004470036002,Lunchables Snack,25,21
+473,winndixie,winndixie_app_json,06/08/2025,20:18:00,00004900004255,CocaCola Soda,25,21
+474,winndixie,winndixie_app_json,06/07/2025,13:18:00,00004900003073,Fanta Soda,9,8
+475,winndixie,winndixie_app_json,06/07/2025,13:18:00,00002500005824,Minute Maid Lmnade,9,8
+476,winndixie,winndixie_app_json,06/07/2025,13:18:00,00005150005722,Smucker's Spread,9,8
+477,winndixie,winndixie_app_json,06/07/2025,13:18:00,00004790050118,Blue Plate Mynnase,9,8
+478,winndixie,winndixie_app_json,06/07/2025,13:18:00,00002114002480,HSWT Thk Bacon,9,8
+479,winndixie,winndixie_app_json,06/07/2025,13:18:00,00020632900000,D&W Cheese,9,8
+480,winndixie,winndixie_app_json,06/07/2025,13:18:00,00020612300000,SEG Turkey,9,8
+481,winndixie,winndixie_app_json,06/07/2025,13:18:00,00007102501003,Bunny Bread,9,8
+482,winndixie,winndixie_app_json,06/06/2025,22:17:00,00005150005711,Smucker's Jelly,8,5
+483,winndixie,winndixie_app_json,06/06/2025,22:17:00,00085499300412,Sno-Balls To Go,8,5
+484,winndixie,winndixie_app_json,06/06/2025,22:17:00,00085499300411,Sno-Balls To Go,8,5
+485,winndixie,winndixie_app_json,06/06/2025,22:17:00,00067984410457,Dewafelbakkr Pncks,8,5
+486,winndixie,winndixie_app_json,06/06/2025,22:17:00,00009027700001,Hugbi Pies,8,5
+487,winndixie,winndixie_app_json,06/01/2025,18:31:00,00007102501003,Bunny Bread,16,14
+488,winndixie,winndixie_app_json,06/01/2025,18:31:00,00020170000000,Fresh Meats,16,14
+489,winndixie,winndixie_app_json,06/01/2025,18:31:00,00060788030013,k&l Milk,16,14
+490,winndixie,winndixie_app_json,06/01/2025,18:31:00,00004470010156,Oscar Mayer Lnchbl,16,14
+491,winndixie,winndixie_app_json,06/01/2025,18:31:00,00081829001665,Chobani Yogurt,16,14
+492,winndixie,winndixie_app_json,06/01/2025,18:31:00,00003825911011,SE Grocers Pasta,16,14
+493,winndixie,winndixie_app_json,06/01/2025,18:31:00,00020612300000,SEG Turkey,16,14
+494,winndixie,winndixie_app_json,06/01/2025,18:31:00,00060788030742,k&l Corn,16,14
+495,winndixie,winndixie_app_json,06/01/2025,18:31:00,00060788030110,k&l Diced Tomatoes,16,14
+496,winndixie,winndixie_app_json,06/01/2025,18:31:00,00000980080005,Nutella Spread,16,14
+497,winndixie,winndixie_app_json,06/01/2025,18:31:00,00005000014578,Coffee Mate Creamr,16,14
+498,winndixie,winndixie_app_json,06/01/2025,18:31:00,00004470002411,Lunchables Snack,16,14
+499,winndixie,winndixie_app_json,06/01/2025,18:31:00,00004470036000,Lunchables Snack,16,14
+500,winndixie,winndixie_app_json,06/01/2025,18:31:00,00004470010321,OM BASICS HAM-AMER,16,14
+501,winndixie,winndixie_app_json,05/31/2025,21:01:00,00003825914764,SEG Ice Cream Cone,4,4
+502,winndixie,winndixie_app_json,05/31/2025,21:01:00,00007192123298,DIGIORNO PIZZA,4,4
+503,winndixie,winndixie_app_json,05/31/2025,21:01:00,00002178850695,Lotus Cookie Buttr,4,4
+504,winndixie,winndixie_app_json,05/31/2025,21:01:00,00005100023314,SpaghettiOs Pasta,4,4
+505,winndixie,winndixie_app_json,05/26/2025,10:39:00,00003825910257,SE Grocers Tea,29,24
+506,winndixie,winndixie_app_json,05/26/2025,10:39:00,00060788030008,k&l Milk,29,24
+507,winndixie,winndixie_app_json,05/26/2025,10:39:00,00007480601500,Little Hug Drink,29,24
+508,winndixie,winndixie_app_json,05/26/2025,10:39:00,00003800027088,Cocoa Krispies Crl,29,24
+509,winndixie,winndixie_app_json,05/26/2025,10:39:00,00007271400662,Mccain Fries,29,24
+510,winndixie,winndixie_app_json,05/26/2025,10:39:00,00002100065883,Kraft Mac & Cheese,29,24
+511,winndixie,winndixie_app_json,05/26/2025,10:39:00,00007203000161,Entenmann's Donut,29,24
+512,winndixie,winndixie_app_json,05/26/2025,10:39:00,00003825910593,SEG Pasta Sauce,29,24
+513,winndixie,winndixie_app_json,05/26/2025,10:39:00,00081829001665,Chobani Yogurt,29,24
+514,winndixie,winndixie_app_json,05/26/2025,10:39:00,00005450019352,Ball Park Franks,29,24
+515,winndixie,winndixie_app_json,05/26/2025,10:39:00,00004470002411,Lunchables Snack,29,24
+516,winndixie,winndixie_app_json,05/26/2025,10:39:00,00004470010320,OM BASICS TURKEY-A,29,24
+517,winndixie,winndixie_app_json,05/26/2025,10:39:00,00028245100000,Pork Chops,29,24
+518,winndixie,winndixie_app_json,05/26/2025,10:39:00,00020170000000,Fresh Meats,29,24
+519,winndixie,winndixie_app_json,05/26/2025,10:39:00,00007965607087,BB Sunscreen,29,24
+520,winndixie,winndixie_app_json,05/26/2025,10:39:00,00004900055893,Sprite Soda,29,24
+521,winndixie,winndixie_app_json,05/26/2025,10:39:00,00007965603179,BB SPORT SPRAY 50+,29,24
+522,winndixie,winndixie_app_json,05/26/2025,10:39:00,00081016903027,Red Seedless Grape,29,24
+523,winndixie,winndixie_app_json,05/26/2025,10:39:00,00000000004078,Yellow Corn,29,24
+524,winndixie,winndixie_app_json,05/26/2025,10:39:00,00007102501003,Bunny Bread,29,24
+525,winndixie,winndixie_app_json,05/26/2025,10:39:00,00003825910182,SE Grocers Buns,29,24
+526,winndixie,winndixie_app_json,05/26/2025,10:39:00,00020632900000,D&W Cheese,29,24
+527,winndixie,winndixie_app_json,05/26/2025,10:39:00,00020612300000,SEG Turkey,29,24
+528,winndixie,winndixie_app_json,05/26/2025,10:39:00,00085131100213,Watermelon,29,24
+529,winndixie,winndixie_app_json,05/18/2025,15:15:00,00007102501003,Bunny Bread,23,22
+530,winndixie,winndixie_app_json,05/18/2025,15:15:00,00001740010076,Success Rice,23,22
+531,winndixie,winndixie_app_json,05/18/2025,15:15:00,00060788030326,k&l Peas & Carrots,23,22
+532,winndixie,winndixie_app_json,05/18/2025,15:15:00,00002100065883,Kraft Mac & Cheese,23,22
+533,winndixie,winndixie_app_json,05/18/2025,15:15:00,00003760039885,Hormel Pepperoni,23,22
+534,winndixie,winndixie_app_json,05/18/2025,15:15:00,00009810010101,SBUX ICED ENERGY,23,22
+535,winndixie,winndixie_app_json,05/18/2025,15:15:00,00007035330100,Blue Runner Beans,23,22
+536,winndixie,winndixie_app_json,05/18/2025,15:15:00,00060788030991,k&l Kidney Beans,23,22
+537,winndixie,winndixie_app_json,05/18/2025,15:15:00,00004100002266,Knorr Rice Sides,23,22
+538,winndixie,winndixie_app_json,05/18/2025,15:15:00,00025628500000,D&W Cheese,23,22
+539,winndixie,winndixie_app_json,05/18/2025,15:15:00,00002100060473,Kraft Cheese,23,22
+540,winndixie,winndixie_app_json,05/18/2025,15:15:00,00020612300000,SEG Turkey,23,22
+541,winndixie,winndixie_app_json,05/18/2025,15:15:00,00081829001665,Chobani Yogurt,23,22
+542,winndixie,winndixie_app_json,05/18/2025,15:15:00,00003825911089,SEG Light Cream,23,22
+543,winndixie,winndixie_app_json,05/18/2025,15:15:00,00007143001065,Dole Shred Lettuce,23,22
+544,winndixie,winndixie_app_json,05/18/2025,15:15:00,00000000004087,Tomatoes,23,22
+545,winndixie,winndixie_app_json,05/18/2025,15:15:00,00002959900188,Manda Sausage,23,22
+546,winndixie,winndixie_app_json,05/18/2025,15:15:00,00064312604011,Bananas,23,22
+547,winndixie,winndixie_app_json,05/18/2025,15:15:00,00020165300000,Ground Beef,23,22
+548,winndixie,winndixie_app_json,05/18/2025,15:15:00,00027147200000,SF TENDERLOINS VP,23,22
+549,winndixie,winndixie_app_json,05/18/2025,15:15:00,00060788030013,k&l Milk,23,22
+550,winndixie,winndixie_app_json,05/18/2025,15:15:00,00003940001971,Bush's Best Beans,23,22
+551,winndixie,winndixie_app_json,05/15/2025,20:19:00,00060788030013,k&l Milk,2,2
+552,winndixie,winndixie_app_json,05/15/2025,20:19:00,00085499300411,Sno-Balls To Go,2,2
+553,winndixie,winndixie_app_json,05/10/2025,17:02:00,00003000065800,Pearl Millng Syrup,9,5
+554,winndixie,winndixie_app_json,05/10/2025,17:02:00,00009027700001,Hugbi Pies,9,5
+555,winndixie,winndixie_app_json,05/10/2025,17:02:00,00079590253679,HALLMARK ITEM,9,5
+556,winndixie,winndixie_app_json,05/10/2025,17:02:00,00007800003526,DR PEPPER 12PK,9,5
+557,winndixie,winndixie_app_json,05/10/2025,17:02:00,00004900004284,Coca Cola Cola,9,5
+558,winndixie,winndixie_app_json,05/09/2025,18:10:00,00029178400000,Beef Sandwich,26,23
+559,winndixie,winndixie_app_json,05/09/2025,18:10:00,00024370700000,Ground Sirloin,26,23
+560,winndixie,winndixie_app_json,05/09/2025,18:10:00,00004400006923,Wheat Thins Crackr,26,23
+561,winndixie,winndixie_app_json,05/09/2025,18:10:00,00004400006924,Wheat Thins Crackr,26,23
+562,winndixie,winndixie_app_json,05/09/2025,18:10:00,00007130000035,Ronzoni Pasta,26,23
+563,winndixie,winndixie_app_json,05/09/2025,18:10:00,00003825910593,SEG Pasta Sauce,26,23
+564,winndixie,winndixie_app_json,05/09/2025,18:10:00,00003825910178,SE Grocers Bread,26,23
+565,winndixie,winndixie_app_json,05/09/2025,18:10:00,00002100005467,Kraft Cheese,26,23
+566,winndixie,winndixie_app_json,05/09/2025,18:10:00,00003825913228,SEG Gravy Mix,26,23
+567,winndixie,winndixie_app_json,05/09/2025,18:10:00,00001111587132,Imperial Spread,26,23
+568,winndixie,winndixie_app_json,05/09/2025,18:10:00,00005100023314,SpaghettiOs Pasta,26,23
+569,winndixie,winndixie_app_json,05/09/2025,18:10:00,00060788030128,k&l Tomato Paste,26,23
+570,winndixie,winndixie_app_json,05/09/2025,18:10:00,00002178850695,Lotus Cookie Buttr,26,23
+571,winndixie,winndixie_app_json,05/09/2025,18:10:00,00060788030095,k&l Diced Tomatoes,26,23
+572,winndixie,winndixie_app_json,05/09/2025,18:10:00,00081829001665,Chobani Yogurt,26,23
+573,winndixie,winndixie_app_json,05/09/2025,18:10:00,00020612300000,SEG Turkey,26,23
+574,winndixie,winndixie_app_json,05/09/2025,18:10:00,00060788030007,k&l Milk,26,23
+575,winndixie,winndixie_app_json,05/09/2025,18:10:00,00003022306087,Taylor Farms Green,26,23
+576,winndixie,winndixie_app_json,05/09/2025,18:10:00,00003825914668,Assume it's Butter,26,23
+577,winndixie,winndixie_app_json,05/09/2025,18:10:00,00074173900100,Guidry's Seasoning,26,23
+578,winndixie,winndixie_app_json,05/09/2025,18:10:00,00064312604011,Bananas,26,23
+579,winndixie,winndixie_app_json,05/09/2025,18:10:00,00004900003108,Diet Barqs Rt Beer,26,23
+580,winndixie,winndixie_app_json,05/09/2025,18:10:00,00004900004255,CocaCola Soda,26,23
+581,winndixie,winndixie_app_json,05/03/2025,16:29:00,00007102501003,Bunny Bread,19,17
+582,winndixie,winndixie_app_json,05/03/2025,16:29:00,00004400008010,NABISCO MINI VARTY,19,17
+583,winndixie,winndixie_app_json,05/03/2025,16:29:00,00007189962427,Blue Bell IceCream,19,17
+584,winndixie,winndixie_app_json,05/03/2025,16:29:00,00002430004146,Little Debbie Snck,19,17
+585,winndixie,winndixie_app_json,05/03/2025,16:29:00,00003077209402,Dawn Dshwshng Lqud,19,17
+586,winndixie,winndixie_app_json,05/03/2025,16:29:00,00060788030013,k&l Milk,19,17
+587,winndixie,winndixie_app_json,05/03/2025,16:29:00,00002620011750,Slim Jim Jerky,19,17
+588,winndixie,winndixie_app_json,05/03/2025,16:29:00,00007940032363,SUAVE SWEET PEA BW,19,17
+589,winndixie,winndixie_app_json,05/03/2025,16:29:00,00003400000312,Hershey's Syrup,19,17
+590,winndixie,winndixie_app_json,05/03/2025,16:29:00,00003825911993,SEG Jumbo Biscuit,19,17
+591,winndixie,winndixie_app_json,05/03/2025,16:29:00,00002100000014,Philadlph Crm Chse,19,17
+592,winndixie,winndixie_app_json,05/03/2025,16:29:00,00005100023315,SpaghettiOs Pasta,19,17
+593,winndixie,winndixie_app_json,05/03/2025,16:29:00,00003940001606,Bush's Best Beans,19,17
+594,winndixie,winndixie_app_json,05/03/2025,16:29:00,00002211007980,Hubba Bubba Gum,19,17
+595,winndixie,winndixie_app_json,05/03/2025,16:29:00,00020612300000,SEG Turkey,19,17
+596,winndixie,winndixie_app_json,05/03/2025,16:29:00,00020223700000,Top Sirloin Steak,19,17
+597,winndixie,winndixie_app_json,05/03/2025,16:29:00,00023087600000,Chicken Leg,19,17
+598,winndixie,winndixie_app_json,04/29/2025,18:34:00,00003663203640,Danimals Smoothie,21,18
+599,winndixie,winndixie_app_json,04/29/2025,18:34:00,00002840004012,Cheetos,21,18
+600,winndixie,winndixie_app_json,04/29/2025,18:34:00,00003825911816,SEG Canned Fruit,21,18
+601,winndixie,winndixie_app_json,04/29/2025,18:34:00,00060788030793,k&l Sweet Peas,21,18
+602,winndixie,winndixie_app_json,04/29/2025,18:34:00,00005100023317,SpaghettiOs Pasta,21,18
+603,winndixie,winndixie_app_json,04/29/2025,18:34:00,00004400000713,Chips Ahoy Cookies,21,18
+604,winndixie,winndixie_app_json,04/29/2025,18:34:00,00004400006923,Wheat Thins Crackr,21,18
+605,winndixie,winndixie_app_json,04/29/2025,18:34:00,00004100002266,Knorr Rice Sides,21,18
+606,winndixie,winndixie_app_json,04/29/2025,18:34:00,00081829001665,Chobani Yogurt,21,18
+607,winndixie,winndixie_app_json,04/29/2025,18:34:00,00001657194033,Sparkling Ice Wtr,21,18
+608,winndixie,winndixie_app_json,04/29/2025,18:34:00,00001657195210,Sparkling Ice Wtr,21,18
+609,winndixie,winndixie_app_json,04/29/2025,18:34:00,00001657191030,Sparkling Ice Wtr,21,18
+610,winndixie,winndixie_app_json,04/29/2025,18:34:00,00001657194035,Sparkling Ice Wtr,21,18
+611,winndixie,winndixie_app_json,04/29/2025,18:34:00,00023083400000,Chicken Cutlet,21,18
+612,winndixie,winndixie_app_json,04/29/2025,18:34:00,00028164100000,Pork Chops,21,18
+613,winndixie,winndixie_app_json,04/29/2025,18:34:00,00000000004135,Apples,21,18
+614,winndixie,winndixie_app_json,04/29/2025,18:34:00,00000000004078,Yellow Corn,21,18
+615,winndixie,winndixie_app_json,04/29/2025,18:34:00,00060788030013,k&l Milk,21,18
+616,winndixie,winndixie_app_json,09/06/2025,19:41:00,00003338365162,Romaine Hearts,7,7
+617,winndixie,winndixie_app_json,09/06/2025,19:41:00,00004000000237,M&M's Candies,7,7
+618,winndixie,winndixie_app_json,09/06/2025,19:41:00,00007339000011,Mentos Mint,7,7
+619,winndixie,winndixie_app_json,09/06/2025,19:41:00,00000000004065,Green Bell Pepper,7,7
+620,winndixie,winndixie_app_json,09/06/2025,19:41:00,00000000004062,Produce Cucumbers,7,7
+621,winndixie,winndixie_app_json,09/06/2025,19:41:00,00003400000440,Reese's Candy,7,7
+622,winndixie,winndixie_app_json,09/06/2025,19:41:00,00020223600000,Mix Melon Chunks,7,7
+623,winndixie,winndixie_app_json,09/04/2025,21:09:00,00002740026499,CC Oil Spread,7,6
+624,winndixie,winndixie_app_json,09/04/2025,21:09:00,00003000065800,Pearl Millng Syrup,7,6
+625,winndixie,winndixie_app_json,09/04/2025,21:09:00,00007940050092,AXE BERGAMOT BODY,7,6
+626,winndixie,winndixie_app_json,09/04/2025,21:09:00,00088399068120,Good2Grow 100% Jce,7,6
+627,winndixie,winndixie_app_json,09/04/2025,21:09:00,00004100000324,Lipton Soup Mix,7,6
+628,winndixie,winndixie_app_json,09/04/2025,21:09:00,00060788030013,k&l Milk,7,6
+629,winndixie,winndixie_app_json,09/03/2025,18:52:00,00003825914769,SEG IC Sandwich,4,4
+630,winndixie,winndixie_app_json,09/03/2025,18:52:00,00001740010076,Success Rice,4,4
+631,winndixie,winndixie_app_json,09/03/2025,18:52:00,00007035331620,Blue Runner Beans,4,4
+632,winndixie,winndixie_app_json,09/03/2025,18:52:00,00060788030830,k&l Canned Beans,4,4
+633,winndixie,winndixie_app_json,09/02/2025,19:04:00,00004300095369,Kool Aid Drinks,3,3
+634,winndixie,winndixie_app_json,09/02/2025,19:04:00,00085351000500,MILK STRW,3,3
+635,winndixie,winndixie_app_json,09/02/2025,19:04:00,00005000014578,Coffee Mate Creamr,3,3
+636,winndixie,winndixie_app_json,09/01/2025,16:30:00,00020574500000,Chisesi Ham,5,5
+637,winndixie,winndixie_app_json,09/01/2025,16:30:00,00020231700000,Watermelon Slices,5,5
+638,winndixie,winndixie_app_json,09/01/2025,16:30:00,00000000004889,Cilantro,5,5
+639,winndixie,winndixie_app_json,09/01/2025,16:30:00,00000000004065,Green Bell Pepper,5,5
+640,winndixie,winndixie_app_json,09/01/2025,16:30:00,00000000004087,Tomatoes,5,5
+641,winndixie,winndixie_app_json,08/31/2025,21:53:00,00004900005643,POWERADE 8PK,7,6
+642,winndixie,winndixie_app_json,08/31/2025,21:53:00,00060788030009,k&l Milk,7,6
+643,winndixie,winndixie_app_json,08/31/2025,21:53:00,00007008503538,Bagel Bites Chs &,7,6
+644,winndixie,winndixie_app_json,08/31/2025,21:53:00,00067984410457,Dewafelbakkr Pncks,7,6
+645,winndixie,winndixie_app_json,08/31/2025,21:53:00,00003825911730,SEG Breadsticks,7,6
+646,winndixie,winndixie_app_json,08/31/2025,21:53:00,00004900004284,Coca Cola Cola,7,6
+647,winndixie,winndixie_app_json,08/30/2025,12:55:00,00089165800135,Apples,19,18
+648,winndixie,winndixie_app_json,08/30/2025,12:55:00,00020224600000,Mixed Grapes,19,18
+649,winndixie,winndixie_app_json,08/30/2025,12:55:00,00004000000435,Twix Cookie Bars,19,18
+650,winndixie,winndixie_app_json,08/30/2025,12:55:00,00002200000067,Hubba Bubba Gum,19,18
+651,winndixie,winndixie_app_json,08/30/2025,12:55:00,00000980080005,Nutella Spread,19,18
+652,winndixie,winndixie_app_json,08/30/2025,12:55:00,00001200001672,Strbucks Frppccino,19,18
+653,winndixie,winndixie_app_json,08/30/2025,12:55:00,00002781500071,Armour Meatballs,19,18
+654,winndixie,winndixie_app_json,08/30/2025,12:55:00,00002550030401,Folgers Coffee,19,18
+655,winndixie,winndixie_app_json,08/30/2025,12:55:00,00007066240406,Nissin SF F Kor ch,19,18
+656,winndixie,winndixie_app_json,08/30/2025,12:55:00,00007066240407,Nissin SF Hon Chkn,19,18
+657,winndixie,winndixie_app_json,08/30/2025,12:55:00,00007035331620,Blue Runner Beans,19,18
+658,winndixie,winndixie_app_json,08/30/2025,12:55:00,00060788030095,k&l Diced Tomatoes,19,18
+659,winndixie,winndixie_app_json,08/30/2025,12:55:00,00003940001612,Bush's Best Beans,19,18
+660,winndixie,winndixie_app_json,08/30/2025,12:55:00,00003825913487,SEG Pasta Sauce,19,18
+661,winndixie,winndixie_app_json,08/30/2025,12:55:00,00020572800000,4 Star Roast Beef,19,18
+662,winndixie,winndixie_app_json,08/30/2025,12:55:00,00020574500000,Chisesi Ham,19,18
+663,winndixie,winndixie_app_json,08/30/2025,12:55:00,00027030500000,Sausage,19,18
+664,winndixie,winndixie_app_json,08/30/2025,12:55:00,00023080900000,SF Chicken Thighs,19,18
+665,winndixie,winndixie_app_json,08/29/2025,18:06:00,00009027700001,Hugbi Pies,17,10
+666,winndixie,winndixie_app_json,08/29/2025,18:06:00,00003825910178,SE Grocers Bread,17,10
+667,winndixie,winndixie_app_json,08/29/2025,18:06:00,00026765600000,Cupcakes 6ct,17,10
+668,winndixie,winndixie_app_json,08/29/2025,18:06:00,00000980089500,Nutella Spread,17,10
+669,winndixie,winndixie_app_json,08/29/2025,18:06:00,00004900004566,Pwrde Sports Drink,17,10
+670,winndixie,winndixie_app_json,08/29/2025,18:06:00,00004900003075,Fanta Soda,17,10
+671,winndixie,winndixie_app_json,08/29/2025,18:06:00,00004900004284,Coca Cola Cola,17,10
+672,winndixie,winndixie_app_json,08/29/2025,18:06:00,00007800003576,Dr. Pepper Soda,17,10
+673,winndixie,winndixie_app_json,08/29/2025,18:06:00,00004900004255,CocaCola Soda,17,10
+674,winndixie,winndixie_app_json,08/29/2025,18:06:00,00000980000630,Tic Tac Mints,17,10
+675,winndixie,winndixie_app_json,08/25/2025,19:11:00,00003320000260,Arm & Hammer Dtgnt,25,24
+676,winndixie,winndixie_app_json,08/25/2025,19:11:00,00060788030013,k&l Milk,25,24
+677,winndixie,winndixie_app_json,08/25/2025,19:11:00,00030997018485,Revlon Hair Color,25,24
+678,winndixie,winndixie_app_json,08/25/2025,19:11:00,00003825914350,SEG FRSHSCT SHEETS,25,24
+679,winndixie,winndixie_app_json,08/25/2025,19:11:00,00001700002410,Dial Bar Soap,25,24
+680,winndixie,winndixie_app_json,08/25/2025,19:11:00,00020632900000,D&W Cheese,25,24
+681,winndixie,winndixie_app_json,08/25/2025,19:11:00,00020612300000,SEG Turkey,25,24
+682,winndixie,winndixie_app_json,08/25/2025,19:11:00,00038371100249,SV SHOWER FRESH DE,25,24
+683,winndixie,winndixie_app_json,08/25/2025,19:11:00,00002370006026,Chicken Nuggets,25,24
+684,winndixie,winndixie_app_json,08/25/2025,19:11:00,00081829001830,Chobani Yogurt,25,24
+685,winndixie,winndixie_app_json,08/25/2025,19:11:00,00000980080005,Nutella Spread,25,24
+686,winndixie,winndixie_app_json,08/25/2025,19:11:00,00081829001865,Chobani Yogurt,25,24
+687,winndixie,winndixie_app_json,08/25/2025,19:11:00,00081829001828,Chobani Yogurt,25,24
+688,winndixie,winndixie_app_json,08/25/2025,19:11:00,00002620011750,Slim Jim Jerky,25,24
+689,winndixie,winndixie_app_json,08/25/2025,19:11:00,00003825910178,SE Grocers Bread,25,24
+690,winndixie,winndixie_app_json,08/25/2025,19:11:00,00060788030280,know & love Pasta,25,24
+691,winndixie,winndixie_app_json,08/25/2025,19:11:00,00007184030002,Deans French Onion,25,24
+692,winndixie,winndixie_app_json,08/25/2025,19:11:00,00009810010101,SBUX ICED ENERGY,25,24
+693,winndixie,winndixie_app_json,08/25/2025,19:11:00,00007066240406,Nissin SF F Kor ch,25,24
+694,winndixie,winndixie_app_json,08/25/2025,19:11:00,00060788030345,k&l Broccoli,25,24
+695,winndixie,winndixie_app_json,08/25/2025,19:11:00,00060788030037,k&l Green Beans,25,24
+696,winndixie,winndixie_app_json,08/25/2025,19:11:00,00060788030036,k&l Edamame,25,24
+697,winndixie,winndixie_app_json,08/25/2025,19:11:00,00004082201124,Sabra Hummus,25,24
+698,winndixie,winndixie_app_json,08/25/2025,19:11:00,00020473400000,Bnls Chkn Breasts,25,24
+699,winndixie,winndixie_app_json,08/21/2025,19:18:00,00007023015343,Tidy Cats Litter,9,9
+700,winndixie,winndixie_app_json,08/21/2025,19:18:00,00060788030009,k&l Milk,9,9
+701,winndixie,winndixie_app_json,08/21/2025,19:18:00,00000980080005,Nutella Spread,9,9
+702,winndixie,winndixie_app_json,08/21/2025,19:18:00,00007265500105,HC Cafe Steamers,9,9
+703,winndixie,winndixie_app_json,08/21/2025,19:18:00,00004145854891,Edwards Pies,9,9
+704,winndixie,winndixie_app_json,08/21/2025,19:18:00,00004145811713,Edwards Pies,9,9
+705,winndixie,winndixie_app_json,08/21/2025,19:18:00,00003825912767,SEG Bagel Bites,9,9
+706,winndixie,winndixie_app_json,08/21/2025,19:18:00,00005150004816,Smucker's Uncrstbl,9,9
+707,winndixie,winndixie_app_json,08/21/2025,19:18:00,00003825912768,SEG Bagel Bites,9,9
+708,winndixie,winndixie_app_json,08/17/2025,17:56:00,00060788030009,k&l Milk,10,9
+709,winndixie,winndixie_app_json,08/17/2025,17:56:00,00078113871011,On The Border Chip,10,9
+710,winndixie,winndixie_app_json,08/17/2025,17:56:00,00003825912304,SEG Picante Sauce,10,9
+711,winndixie,winndixie_app_json,08/17/2025,17:56:00,00005100023314,SpaghettiOs Pasta,10,9
+712,winndixie,winndixie_app_json,08/17/2025,17:56:00,00002100005513,Kraft Cheese,10,9
+713,winndixie,winndixie_app_json,08/17/2025,17:56:00,00007265500105,HC Cafe Steamers,10,9
+714,winndixie,winndixie_app_json,08/17/2025,17:56:00,00003825910182,SE Grocers Buns,10,9
+715,winndixie,winndixie_app_json,08/17/2025,17:56:00,00028245100000,Pork Chops,10,9
+716,winndixie,winndixie_app_json,08/17/2025,17:56:00,00020170000000,Fresh Meats,10,9
+717,winndixie,winndixie_app_json,08/17/2025,12:36:00,00004144900110,Krustz Pancake Mix,1,1
+718,winndixie,winndixie_app_json,08/14/2025,15:33:00,00000980080005,Nutella Spread,16,15
+719,winndixie,winndixie_app_json,08/14/2025,15:33:00,00060788030009,k&l Milk,16,15
+720,winndixie,winndixie_app_json,08/14/2025,15:33:00,00004610035762,SARGENTO CHEESE,16,15
+721,winndixie,winndixie_app_json,08/14/2025,15:33:00,00003825912406,SEG Croutons,16,15
+722,winndixie,winndixie_app_json,08/14/2025,15:33:00,00002100005467,Kraft Cheese,16,15
+723,winndixie,winndixie_app_json,08/14/2025,15:33:00,00003825912110,SEG Eraser Pads,16,15
+724,winndixie,winndixie_app_json,08/14/2025,15:33:00,00003680036726,Topcare Liquid Rlf,16,15
+725,winndixie,winndixie_app_json,08/14/2025,15:33:00,00020612300000,SEG Turkey,16,15
+726,winndixie,winndixie_app_json,08/14/2025,15:33:00,00019830602538,BHF Carrots,16,15
+727,winndixie,winndixie_app_json,08/14/2025,15:33:00,00007143001065,Dole Shred Lettuce,16,15
+728,winndixie,winndixie_app_json,08/14/2025,15:33:00,00007373100830,Mission Tortillas,16,15
+729,winndixie,winndixie_app_json,08/14/2025,15:33:00,00060538871457,Sunny Meadows Eggs,16,15
+730,winndixie,winndixie_app_json,08/14/2025,15:33:00,00003825910180,SE Grocers Bread,16,15
+731,winndixie,winndixie_app_json,08/14/2025,15:33:00,00004900003076,Fanta Soda,16,15
+732,winndixie,winndixie_app_json,08/14/2025,15:33:00,00002500005824,Minute Maid Lmnade,16,15
+733,winndixie,winndixie_app_json,08/12/2025,12:12:00,00004900004284,Coca Cola Cola,1,1
+734,winndixie,winndixie_app_json,08/11/2025,17:56:00,00002114063624,Chek Root Beer,3,3
+735,winndixie,winndixie_app_json,08/11/2025,17:56:00,00002114064044,Chek Soda,3,3
+736,winndixie,winndixie_app_json,08/11/2025,17:56:00,00007192123298,DIGIORNO PIZZA,3,3
+737,winndixie,winndixie_app_json,08/11/2025,17:56:00,00076566710080,Annie Chun's Bowl,2,2
+738,winndixie,winndixie_app_json,08/11/2025,17:56:00,00002178850695,Lotus Cookie Buttr,2,2
+739,winndixie,winndixie_app_json,08/11/2025,17:08:00,00061029044304,HALLMARK ITEM,5,5
+740,winndixie,winndixie_app_json,08/11/2025,17:08:00,00007148640713,MAGAZINE,5,5
+741,winndixie,winndixie_app_json,08/11/2025,17:08:00,00001070002440,Whoppers Candy,5,5
+742,winndixie,winndixie_app_json,08/11/2025,17:08:00,00004000058892,MM PB Mini Shr Sz,5,5
+743,winndixie,winndixie_app_json,08/11/2025,17:08:00,00061029049928,HALLMARK ITEM,5,5
+744,winndixie,winndixie_app_json,08/06/2025,15:54:00,00002100065883,Kraft Mac & Cheese,25,24
+745,winndixie,winndixie_app_json,08/06/2025,15:54:00,00060788030741,k&l Corn,25,24
+746,winndixie,winndixie_app_json,08/06/2025,15:54:00,00060788030757,k&l Green Beans,25,24
+747,winndixie,winndixie_app_json,08/06/2025,15:54:00,00003825911010,SE Grocers Pasta,25,24
+748,winndixie,winndixie_app_json,08/06/2025,15:54:00,00060788030009,k&l Milk,25,24
+749,winndixie,winndixie_app_json,08/06/2025,15:54:00,00007189962427,Blue Bell IceCream,25,24
+750,winndixie,winndixie_app_json,08/06/2025,15:54:00,00003825910593,SEG Pasta Sauce,25,24
+751,winndixie,winndixie_app_json,08/06/2025,15:54:00,00003890000473,Dole Can Pineapple,25,24
+752,winndixie,winndixie_app_json,08/06/2025,15:54:00,00025628500000,D&W Cheese,25,24
+753,winndixie,winndixie_app_json,08/06/2025,15:54:00,00002114002480,HS Thick Bacon,25,24
+754,winndixie,winndixie_app_json,08/06/2025,15:54:00,00020612300000,SEG Turkey,25,24
+755,winndixie,winndixie_app_json,08/06/2025,15:54:00,00004470010321,OM BASICS HAM-AMER,25,24
+756,winndixie,winndixie_app_json,08/06/2025,15:54:00,00004470036002,Lunchables Snack,25,24
+757,winndixie,winndixie_app_json,08/06/2025,15:54:00,00020807400000,Catfish Fillet,25,24
+758,winndixie,winndixie_app_json,08/06/2025,15:54:00,00020907100000,Ahi Tuna Steak,25,24
+759,winndixie,winndixie_app_json,08/06/2025,15:54:00,00000000004065,Green Bell Pepper,25,24
+760,winndixie,winndixie_app_json,08/06/2025,15:54:00,00000000004068,Green Onions,25,24
+761,winndixie,winndixie_app_json,08/06/2025,15:54:00,00028245100000,Pork Chops,25,24
+762,winndixie,winndixie_app_json,08/06/2025,15:54:00,00023083400000,Chicken Cutlet,25,24
+763,winndixie,winndixie_app_json,08/06/2025,15:54:00,00020224500000,Sliced Strwberries,25,24
+764,winndixie,winndixie_app_json,08/06/2025,15:54:00,00020791800000,Deep Dark Choco Sl,25,24
+765,winndixie,winndixie_app_json,08/06/2025,15:54:00,00000000004060,Packaged Broccoli,25,24
+766,winndixie,winndixie_app_json,08/06/2025,15:54:00,00003825910178,SE Grocers Bread,25,24
+767,winndixie,winndixie_app_json,08/06/2025,15:54:00,00003700052364,Dawn Dish Spray,25,24
+768,winndixie,winndixie_app_json,08/03/2025,16:38:00,00003077200297,Puffs Tissues,27,19
+769,winndixie,winndixie_app_json,08/03/2025,16:38:00,00002114003090,W&T Cat Litter,27,19
+770,winndixie,winndixie_app_json,08/03/2025,16:38:00,00003320000260,Arm & Hammer Dtgnt,27,19
+771,winndixie,winndixie_app_json,08/03/2025,16:38:00,00081829001665,Chobani Yogurt,27,19
+772,winndixie,winndixie_app_json,08/03/2025,16:38:00,00081829001919,Chobani Yogurt,27,19
+773,winndixie,winndixie_app_json,08/03/2025,16:38:00,00004470036000,Lunchables Snack,27,19
+774,winndixie,winndixie_app_json,08/03/2025,16:38:00,00004470010320,OM BASICS TURKEY-A,27,19
+775,winndixie,winndixie_app_json,08/03/2025,16:38:00,00003825914769,SEG IC Sandwich,27,19
+776,winndixie,winndixie_app_json,08/03/2025,16:38:00,00003825912264,SEG BOIL-N-BAG,27,19
+777,winndixie,winndixie_app_json,08/03/2025,16:38:00,00004400008010,NABISCO MINI VARTY,27,19
+778,winndixie,winndixie_app_json,08/03/2025,16:38:00,00003022306087,TF Green Beans,27,19
+779,winndixie,winndixie_app_json,08/03/2025,16:38:00,00020224600000,Mixed Grapes,27,19
+780,winndixie,winndixie_app_json,08/03/2025,16:38:00,00060788030991,k&l Kidney Beans,27,19
+781,winndixie,winndixie_app_json,08/03/2025,16:38:00,00005100023314,SpaghettiOs Pasta,27,19
+782,winndixie,winndixie_app_json,08/03/2025,16:38:00,00007035331620,Blue Runner Beans,27,19
+783,winndixie,winndixie_app_json,08/03/2025,16:38:00,00005100002457,Campbell's Soup,27,19
+784,winndixie,winndixie_app_json,08/03/2025,16:38:00,00060788030791,k&l Potatoes,27,19
+785,winndixie,winndixie_app_json,08/03/2025,16:38:00,00060788030742,k&l Corn,27,19
+786,winndixie,winndixie_app_json,08/03/2025,16:38:00,00006827490021,Pure Life 6pk,27,19
+787,winndixie,winndixie_app_json,08/02/2025,22:29:00,00000980000052,Kinder Joy Treat,1,1
+788,winndixie,winndixie_app_json,08/02/2025,22:26:00,00004900004255,CocaCola Soda,15,11
+789,winndixie,winndixie_app_json,08/02/2025,22:26:00,00060788030013,k&l Milk,15,11
+790,winndixie,winndixie_app_json,08/02/2025,22:26:00,00009027700001,Hugbi Pies,15,11
+791,winndixie,winndixie_app_json,08/02/2025,22:26:00,00003000065800,Pearl Millng Syrup,15,11
+792,winndixie,winndixie_app_json,08/02/2025,22:26:00,00005150005711,Smucker's Jelly,15,11
+793,winndixie,winndixie_app_json,08/02/2025,22:26:00,00005150005722,Smucker's Spread,15,11
+794,winndixie,winndixie_app_json,08/02/2025,22:26:00,00085499300416,Sno-Balls To Go,15,11
+795,winndixie,winndixie_app_json,08/02/2025,22:26:00,00085499300412,Sno-Balls To Go,15,11
+796,winndixie,winndixie_app_json,08/02/2025,22:26:00,00085499300411,Sno-Balls To Go,15,11
+797,winndixie,winndixie_app_json,08/02/2025,22:26:00,00020970200000,ALM PETIT FOUR,15,11
+798,winndixie,winndixie_app_json,08/02/2025,22:26:00,00001600018486,Cinnagraham Cereal,15,11
+799,winndixie,winndixie_app_json,07/31/2025,16:34:00,00020612300000,SEG Turkey,3,3
+800,winndixie,winndixie_app_json,07/31/2025,16:34:00,00002410010685,Cheez-It Crackers,3,3
+801,winndixie,winndixie_app_json,07/31/2025,16:34:00,00003825910178,SE Grocers Bread,3,3
+802,winndixie,winndixie_app_json,07/28/2025,18:41:00,00005150004816,Smucker's Uncrstbl,14,14
+803,winndixie,winndixie_app_json,07/28/2025,18:41:00,00007064002435,BB MINI SWIRL CONE,14,14
+804,winndixie,winndixie_app_json,07/28/2025,18:41:00,00003663203640,Danimals Smoothie,14,14
+805,winndixie,winndixie_app_json,07/28/2025,18:41:00,00060788030009,k&l Milk,14,14
+806,winndixie,winndixie_app_json,07/28/2025,18:41:00,00003680039400,Top Care Nitetime,14,14
+807,winndixie,winndixie_app_json,07/28/2025,18:41:00,00003825913241,SEG Seasoning Mix,14,14
+808,winndixie,winndixie_app_json,07/28/2025,18:41:00,00003400000240,Hershey's Candy,14,14
+809,winndixie,winndixie_app_json,07/28/2025,18:41:00,00020660300000,FRIED CKN 8PC,14,14
+810,winndixie,winndixie_app_json,07/28/2025,18:41:00,00020538600000,15ct Oatmeal Raisi,14,14
+811,winndixie,winndixie_app_json,07/28/2025,18:41:00,00003825911052,SEG Sour Cream,14,14
+812,winndixie,winndixie_app_json,07/28/2025,18:41:00,00003825912723,SE Grocers Syrup,14,14
+813,winndixie,winndixie_app_json,07/28/2025,18:41:00,00020612300000,SEG Turkey,14,14
+814,winndixie,winndixie_app_json,07/28/2025,18:41:00,00029124100000,Ground Beef,14,14
+815,winndixie,winndixie_app_json,07/28/2025,18:41:00,00006929870103,Strawberries,14,14
+816,winndixie,winndixie_app_json,07/24/2025,14:47:00,00004900004121,Fanta Soda,25,23
+817,winndixie,winndixie_app_json,07/24/2025,14:47:00,00002500005824,Minute Maid Lmnade,25,23
+818,winndixie,winndixie_app_json,07/24/2025,14:47:00,00007480601500,Little Hug Drink,25,23
+819,winndixie,winndixie_app_json,07/24/2025,14:47:00,00081829001919,Chobani Yogurt,25,23
+820,winndixie,winndixie_app_json,07/24/2025,14:47:00,00081829001665,Chobani Yogurt,25,23
+821,winndixie,winndixie_app_json,07/24/2025,14:47:00,00004610000165,Sargento Cheese,25,23
+822,winndixie,winndixie_app_json,07/24/2025,14:47:00,00004610040076,Sargento Cheese,25,23
+823,winndixie,winndixie_app_json,07/24/2025,14:47:00,00005100023314,SpaghettiOs Pasta,25,23
+824,winndixie,winndixie_app_json,07/24/2025,14:47:00,00019830602527,Baby Carrots,25,23
+825,winndixie,winndixie_app_json,07/24/2025,14:47:00,00003825910178,SE Grocers Bread,25,23
+826,winndixie,winndixie_app_json,07/24/2025,14:47:00,00004470010156,Oscar Mayer Lnchbl,25,23
+827,winndixie,winndixie_app_json,07/24/2025,14:47:00,00004470010154,Oscar Mayer Lnchbl,25,23
+828,winndixie,winndixie_app_json,07/24/2025,14:47:00,00004470036000,Lunchables Snack,25,23
+829,winndixie,winndixie_app_json,07/24/2025,14:47:00,00004470010321,OM BASICS HAM-AMER,25,23
+830,winndixie,winndixie_app_json,07/24/2025,14:47:00,00004900000044,Coca Cola,25,23
+831,winndixie,winndixie_app_json,07/24/2025,14:47:00,00007142901502,Zats Ckn and Rice,25,23
+832,winndixie,winndixie_app_json,07/24/2025,14:47:00,00002178850695,Lotus Cookie Buttr,25,23
+833,winndixie,winndixie_app_json,07/24/2025,14:47:00,00001800000261,Pillsbury Biscuits,25,23
+834,winndixie,winndixie_app_json,07/24/2025,14:47:00,00020612300000,SEG Turkey,25,23
+835,winndixie,winndixie_app_json,07/24/2025,14:47:00,00002200029294,Skittles Littles S,25,23
+836,winndixie,winndixie_app_json,07/24/2025,14:47:00,00020574500000,Chisesi Ham,25,23
+837,winndixie,winndixie_app_json,07/24/2025,14:47:00,00020224700000,Green Grapes,25,23
+838,winndixie,winndixie_app_json,07/24/2025,14:47:00,00002114002480,HS Thick Bacon,25,23
+839,winndixie,winndixie_app_json,07/24/2025,10:25:00,00004900004284,Coca Cola Cola,6,3
+840,winndixie,winndixie_app_json,07/24/2025,10:25:00,00060788030013,k&l Milk,6,3
+841,winndixie,winndixie_app_json,07/24/2025,10:25:00,00003825912925,SEG 100% Juice,6,3
+842,winndixie,winndixie_app_json,11/09/2025,22:48:00,00060788030013,k&l Milk,1,1
+843,winndixie,winndixie_app_json,11/05/2025,17:59:00,00060788030830,k&l Canned Beans,4,4
+844,winndixie,winndixie_app_json,11/05/2025,17:59:00,00007035330100,Blue Runner Beans,4,4
+845,winndixie,winndixie_app_json,11/05/2025,17:59:00,00002959900188,Manda Sausage,4,4
+846,winndixie,winndixie_app_json,11/05/2025,17:59:00,00003825912264,SEG BOIL-N-BAG,4,4
+847,winndixie,winndixie_app_json,11/04/2025,14:00:00,00009027700001,Hugbi Pies,18,8
+848,winndixie,winndixie_app_json,11/04/2025,14:00:00,00060788030664,know & love Cheese,18,8
+849,winndixie,winndixie_app_json,11/04/2025,14:00:00,00023086500000,Chicken Thighs,18,8
+850,winndixie,winndixie_app_json,11/04/2025,14:00:00,00067984410457,Dewafelbakkr Pncks,18,8
+851,winndixie,winndixie_app_json,11/04/2025,14:00:00,00004900004121,Fanta Soda,18,8
+852,winndixie,winndixie_app_json,11/04/2025,14:00:00,00007800003526,DR PEPPER 12PK,18,8
+853,winndixie,winndixie_app_json,11/04/2025,14:00:00,00004900004255,CocaCola Soda,18,8
+854,winndixie,winndixie_app_json,11/04/2025,14:00:00,00007054310503,Kleinpeter Milk,18,8
+855,winndixie,winndixie_app_json,10/30/2025,20:45:00,00002840000022,Fritos Dip,6,5
+856,winndixie,winndixie_app_json,10/30/2025,20:45:00,00003000016920,Quaker Rice Crisps,6,5
+857,winndixie,winndixie_app_json,10/30/2025,20:45:00,00060788010212,Essentials Cookies,6,5
+858,winndixie,winndixie_app_json,10/30/2025,20:45:00,00005100024637,Campbell's Soup,6,5
+859,winndixie,winndixie_app_json,10/30/2025,20:45:00,00007373142000,Mission Chips,6,5
+860,winndixie,winndixie_app_json,10/27/2025,20:36:00,00060788030013,k&l Milk,2,2
+861,winndixie,winndixie_app_json,10/27/2025,20:36:00,00003825913969,SEG Fruit Punch,2,2
+862,winndixie,winndixie_app_json,10/25/2025,11:01:00,00020574500000,Chisesi Ham,15,14
+863,winndixie,winndixie_app_json,10/25/2025,11:01:00,00020615700000,SEG Turkey,15,14
+864,winndixie,winndixie_app_json,10/25/2025,11:01:00,00060788030036,k&l Edamame,15,14
+865,winndixie,winndixie_app_json,10/25/2025,11:01:00,00060788030325,k&l Green Beans,15,14
+866,winndixie,winndixie_app_json,10/25/2025,11:01:00,00060788030351,k&l Winter Mix,15,14
+867,winndixie,winndixie_app_json,10/25/2025,11:01:00,00081006268453,Sow Good Candy,15,14
+868,winndixie,winndixie_app_json,10/25/2025,11:01:00,00004470010320,OM BASICS TURKEY-A,15,14
+869,winndixie,winndixie_app_json,10/25/2025,11:01:00,00007189900375,Blue Bell IceCream,15,14
+870,winndixie,winndixie_app_json,10/25/2025,11:01:00,00020170000000,Fresh Meats,15,14
+871,winndixie,winndixie_app_json,10/25/2025,11:01:00,00001800000261,Pillsbury Biscuits,15,14
+872,winndixie,winndixie_app_json,10/25/2025,11:01:00,00003100018464,Banquet Sausage,15,14
+873,winndixie,winndixie_app_json,10/25/2025,11:01:00,00060788031078,k&l Ricotta Cheese,15,14
+874,winndixie,winndixie_app_json,10/25/2025,11:01:00,00005000014578,Coffee Mate Creamr,15,14
+875,winndixie,winndixie_app_json,10/25/2025,11:01:00,00003825911010,SE Grocers Pasta,15,14
+876,winndixie,winndixie_app_json,10/24/2025,22:35:00,00003000065800,Pearl Millng Syrup,7,6
+877,winndixie,winndixie_app_json,10/24/2025,22:35:00,00001600022195,GM WFFL TST CRNC,7,6
+878,winndixie,winndixie_app_json,10/24/2025,22:35:00,00003825915387,SEG Sandwich Bread,7,6
+879,winndixie,winndixie_app_json,10/24/2025,22:35:00,00004530000065,Peter Pan Pnt Bttr,7,6
+880,winndixie,winndixie_app_json,10/24/2025,22:35:00,00004900005643,POWERADE 8PK,7,6
+881,winndixie,winndixie_app_json,10/24/2025,22:35:00,00004900004284,Coca Cola Cola,7,6
+882,winndixie,winndixie_app_json,10/23/2025,13:11:00,00003000016920,Quaker Rice Crisps,11,10
+883,winndixie,winndixie_app_json,10/23/2025,13:11:00,00009810010042,SB TRPL SHOT RICH,11,10
+884,winndixie,winndixie_app_json,10/23/2025,13:11:00,00002410010685,Cheez-It Crackers,11,10
+885,winndixie,winndixie_app_json,10/23/2025,13:11:00,00001657191030,Sparkling Ice Wtr,11,10
+886,winndixie,winndixie_app_json,10/23/2025,13:11:00,00001657194033,Sparkling Ice Wtr,11,10
+887,winndixie,winndixie_app_json,10/23/2025,13:11:00,00001657195210,Sparkling Ice Wtr,11,10
+888,winndixie,winndixie_app_json,10/23/2025,13:11:00,00001657191032,Sparkling Ice Wtr,11,10
+889,winndixie,winndixie_app_json,10/23/2025,13:11:00,00007800003576,Dr. Pepper Soda,11,10
+890,winndixie,winndixie_app_json,10/23/2025,13:11:00,00004900003076,Fanta Soda,11,10
+891,winndixie,winndixie_app_json,10/23/2025,13:11:00,00004900004121,Fanta Soda,11,10
+892,winndixie,winndixie_app_json,10/21/2025,18:05:00,00002430004562,LITTLE DEBBIE FOOT,18,16
+893,winndixie,winndixie_app_json,10/21/2025,18:05:00,00020587000000,D&W Turkey,18,16
+894,winndixie,winndixie_app_json,10/21/2025,18:05:00,00080717654042,Annie Chun's Bowl,18,16
+895,winndixie,winndixie_app_json,10/21/2025,18:05:00,00002100065883,Kraft Mac & Cheese,18,16
+896,winndixie,winndixie_app_json,10/21/2025,18:05:00,00007265500504,HC Cafe Steamers,18,16
+897,winndixie,winndixie_app_json,10/21/2025,18:05:00,00003825912767,SEG Bagel Bites,18,16
+898,winndixie,winndixie_app_json,10/21/2025,18:05:00,00007265500111,HC Cafe Steamers,18,16
+899,winndixie,winndixie_app_json,10/21/2025,18:05:00,00002620011750,Slim Jim Jerky,18,16
+900,winndixie,winndixie_app_json,10/21/2025,18:05:00,00003825914619,SEG Alfredo Sauce,18,16
+901,winndixie,winndixie_app_json,10/21/2025,18:05:00,00060788031017,k&l Pasta Sauce,18,16
+902,winndixie,winndixie_app_json,10/21/2025,18:05:00,00005150005722,Smucker's Spread,18,16
+903,winndixie,winndixie_app_json,10/21/2025,18:05:00,00005150005711,Smucker's Jelly,18,16
+904,winndixie,winndixie_app_json,10/21/2025,18:05:00,00002178850695,Lotus Cookie Buttr,18,16
+905,winndixie,winndixie_app_json,10/21/2025,18:05:00,00060788030013,k&l Milk,18,16
+906,winndixie,winndixie_app_json,10/21/2025,18:05:00,00007047565687,SEG Slcd Mushrooms,18,16
+907,winndixie,winndixie_app_json,10/21/2025,18:05:00,00000000004078,Yellow Corn,18,16
+908,winndixie,winndixie_app_json,10/17/2025,21:23:00,00003800027088,Cocoa Krispies Crl,1,1
+909,winndixie,winndixie_app_json,10/17/2025,21:18:00,00004530000060,Peter Pan Pnt Bttr,3,2
+910,winndixie,winndixie_app_json,10/17/2025,21:18:00,00004900004284,Coca Cola Cola,3,2
+911,winndixie,winndixie_app_json,10/17/2025,21:17:00,00004900004284,Coca Cola Cola,3,2
+912,winndixie,winndixie_app_json,10/17/2025,21:17:00,00009027700001,Hugbi Pies,3,2
+913,winndixie,winndixie_app_json,10/14/2025,18:08:00,00001450001671,BE SF SLT PEPPR BR,14,13
+914,winndixie,winndixie_app_json,10/14/2025,18:08:00,00001450002132,BE SF WINTER BLEND,14,13
+915,winndixie,winndixie_app_json,10/14/2025,18:08:00,00020927500000,Crab Leg Surimi,14,13
+916,winndixie,winndixie_app_json,10/14/2025,18:08:00,00007143001065,Dole Shred Lettuce,14,13
+917,winndixie,winndixie_app_json,10/14/2025,18:08:00,00003825913241,SEG Seasoning Mix,14,13
+918,winndixie,winndixie_app_json,10/14/2025,18:08:00,00003825912767,SEG Bagel Bites,14,13
+919,winndixie,winndixie_app_json,10/14/2025,18:08:00,00060788030771,k&l Sweet Peas,14,13
+920,winndixie,winndixie_app_json,10/14/2025,18:08:00,00060788030744,k&l Corn,14,13
+921,winndixie,winndixie_app_json,10/14/2025,18:08:00,00002100065883,Kraft Mac & Cheese,14,13
+922,winndixie,winndixie_app_json,10/14/2025,18:08:00,00000000004166,Jumbo Sweet Onions,14,13
+923,winndixie,winndixie_app_json,10/14/2025,18:08:00,00020615700000,SEG Turkey,14,13
+924,winndixie,winndixie_app_json,10/14/2025,18:08:00,00020170000000,Fresh Meats,14,13
+925,winndixie,winndixie_app_json,10/14/2025,18:08:00,00020236800000,Top Round Steak,14,13
+926,winndixie,winndixie_app_json,10/14/2025,16:06:00,00007054310503,Kleinpeter Milk,5,5
+927,winndixie,winndixie_app_json,10/14/2025,16:06:00,00004900004086,Coca Cola,5,5
+928,winndixie,winndixie_app_json,10/14/2025,16:06:00,00067984410457,Dewafelbakkr Pncks,5,5
+929,winndixie,winndixie_app_json,10/14/2025,16:06:00,00003825910178,SE Grocers Bread,5,5
+930,winndixie,winndixie_app_json,10/14/2025,16:06:00,00004900004284,Coca Cola Cola,5,5
+931,winndixie,winndixie_app_json,10/08/2025,20:50:00,00004900004284,Coca Cola Cola,1,1
+932,winndixie,winndixie_app_json,10/07/2025,18:06:00,00003825913053,SEG Parchment Ppr,1,1
+933,winndixie,winndixie_app_json,10/07/2025,18:05:00,00007273026307,Prairie Farm Milk,10,10
+934,winndixie,winndixie_app_json,10/07/2025,18:05:00,00060788030013,k&l Milk,10,10
+935,winndixie,winndixie_app_json,10/07/2025,18:05:00,00003338369999,Cauliflower,10,10
+936,winndixie,winndixie_app_json,10/07/2025,18:05:00,00003825911051,SEG Sour Cream,10,10
+937,winndixie,winndixie_app_json,10/07/2025,18:05:00,00020210400000,Sliced Strwberries,10,10
+938,winndixie,winndixie_app_json,10/07/2025,18:05:00,00005210000208,McCormick Seasonng,10,10
+939,winndixie,winndixie_app_json,10/07/2025,18:05:00,00002430004562,LITTLE DEBBIE FOOT,10,10
+940,winndixie,winndixie_app_json,10/07/2025,18:05:00,00060788030664,know & love Cheese,10,10
+941,winndixie,winndixie_app_json,10/07/2025,18:05:00,00020193100000,Chuck Steak,10,10
+942,winndixie,winndixie_app_json,10/07/2025,18:05:00,00024046500000,NB Chicken Thighs,10,10
+943,winndixie,winndixie_app_json,10/03/2025,18:41:00,00004900003076,Fanta Soda,16,16
+944,winndixie,winndixie_app_json,10/03/2025,18:41:00,00004900004121,Fanta Soda,16,16
+945,winndixie,winndixie_app_json,10/03/2025,18:41:00,00004900004751,CocaCola Soda,16,16
+946,winndixie,winndixie_app_json,10/03/2025,18:41:00,00003825910302,SE Grocers Foil,16,16
+947,winndixie,winndixie_app_json,10/03/2025,18:41:00,00003825911011,SE Grocers Pasta,16,16
+948,winndixie,winndixie_app_json,10/03/2025,18:41:00,00060788031017,k&l Pasta Sauce,16,16
+949,winndixie,winndixie_app_json,10/03/2025,18:41:00,00005100023314,SpaghettiOs Pasta,16,16
+950,winndixie,winndixie_app_json,10/03/2025,18:41:00,00000980080004,Nutella Snack Pack,16,16
+951,winndixie,winndixie_app_json,10/03/2025,18:41:00,00020632900000,D&W Cheese,16,16
+952,winndixie,winndixie_app_json,10/03/2025,18:41:00,00020587000000,D&W Turkey,16,16
+953,winndixie,winndixie_app_json,10/03/2025,18:41:00,00020320100000,Pork Shoulder,16,16
+954,winndixie,winndixie_app_json,10/03/2025,18:41:00,00020320100000,Pork Shoulder,16,16
+955,winndixie,winndixie_app_json,10/03/2025,18:41:00,00003825910178,SE Grocers Bread,16,16
+956,winndixie,winndixie_app_json,10/03/2025,18:41:00,00000000004889,Cilantro,16,16
+957,winndixie,winndixie_app_json,10/03/2025,18:41:00,00000000004080,Asparagus,16,16
+958,winndixie,winndixie_app_json,10/03/2025,18:41:00,00004530000055,Peter Pan Crnch Pe,16,16
+959,winndixie,winndixie_app_json,09/30/2025,19:56:00,00003825910198,SEG Ice Cream,3,3
+960,winndixie,winndixie_app_json,09/30/2025,19:56:00,00060788030861,k&l Sugar,3,3
+961,winndixie,winndixie_app_json,09/30/2025,19:56:00,00060788030013,k&l Milk,3,3
+962,winndixie,winndixie_app_json,09/28/2025,17:02:00,00003825910180,SE Grocers Bread,21,21
+963,winndixie,winndixie_app_json,09/28/2025,17:02:00,00020619500000,D&W Salami,21,21
+964,winndixie,winndixie_app_json,09/28/2025,17:02:00,00020585300000,Butterball Turkey,21,21
+965,winndixie,winndixie_app_json,09/28/2025,17:02:00,00020236800000,Top Round Steak,21,21
+966,winndixie,winndixie_app_json,09/28/2025,17:02:00,00003338365325,Celery,21,21
+967,winndixie,winndixie_app_json,09/28/2025,17:02:00,00000000004067,Zucchini Squash,21,21
+968,winndixie,winndixie_app_json,09/28/2025,17:02:00,00001450002158,BE SF BRUSSEL SPRT,21,21
+969,winndixie,winndixie_app_json,09/28/2025,17:02:00,00003587851111,Jumbo Sweet Onions,21,21
+970,winndixie,winndixie_app_json,09/28/2025,17:02:00,00001450001740,BE MSH CAUL GAR,21,21
+971,winndixie,winndixie_app_json,09/28/2025,17:02:00,00060788030741,k&l Corn,21,21
+972,winndixie,winndixie_app_json,09/28/2025,17:02:00,00005100028853,Swan Ckn Spcy Brot,21,21
+973,winndixie,winndixie_app_json,09/28/2025,17:02:00,00005100029408,Swanson Broth,21,21
+974,winndixie,winndixie_app_json,09/28/2025,17:02:00,00002100065883,Kraft Mac & Cheese,21,21
+975,winndixie,winndixie_app_json,09/28/2025,17:02:00,00001657194033,Sparkling Ice Wtr,21,21
+976,winndixie,winndixie_app_json,09/28/2025,17:02:00,00005100023314,SpaghettiOs Pasta,21,21
+977,winndixie,winndixie_app_json,09/28/2025,17:02:00,00005150005722,Smucker's Spread,21,21
+978,winndixie,winndixie_app_json,09/28/2025,17:02:00,00081829001089,Chobani Creamer,21,21
+979,winndixie,winndixie_app_json,09/28/2025,17:02:00,00003077206892,MRCL LQ AB LEMON,21,21
+980,winndixie,winndixie_app_json,09/28/2025,17:02:00,00003663202848,Dannon Yogurt,21,21
+981,winndixie,winndixie_app_json,09/28/2025,17:02:00,00003663200834,Oikos Yogurt,21,21
+982,winndixie,winndixie_app_json,09/28/2025,17:02:00,00003663204255,Oikos Yogurt,21,21
+983,winndixie,winndixie_app_json,09/24/2025,20:09:00,00004900004284,Coca Cola Cola,2,1
+984,winndixie,winndixie_app_json,09/24/2025,20:05:00,00004900004284,Coca Cola Cola,5,4
+985,winndixie,winndixie_app_json,09/24/2025,20:05:00,00003825910180,SE Grocers Bread,5,4
+986,winndixie,winndixie_app_json,09/24/2025,20:05:00,00003680036724,TOPCARE NIGHTTIME,5,4
+987,winndixie,winndixie_app_json,09/24/2025,20:05:00,00020970200000,ALM PETIT FOUR,5,4
+988,winndixie,winndixie_app_json,09/21/2025,15:11:00,00003663202017,Oikos 3X Lemon Tar,27,24
+989,winndixie,winndixie_app_json,09/21/2025,15:11:00,00003663204255,Oikos Yogurt,27,24
+990,winndixie,winndixie_app_json,09/21/2025,15:11:00,00001657194033,Sparkling Ice Wtr,27,24
+991,winndixie,winndixie_app_json,09/21/2025,15:11:00,00001657191030,Sparkling Ice Wtr,27,24
+992,winndixie,winndixie_app_json,09/21/2025,15:11:00,00003825910178,SE Grocers Bread,27,24
+993,winndixie,winndixie_app_json,09/21/2025,15:11:00,00020203500000,Watermelon Chunks,27,24
+994,winndixie,winndixie_app_json,09/21/2025,15:11:00,00081363501000,Blueberries,27,24
+995,winndixie,winndixie_app_json,09/21/2025,15:11:00,00020224600000,Mixed Grapes,27,24
+996,winndixie,winndixie_app_json,09/21/2025,15:11:00,00000000004065,Green Bell Pepper,27,24
+997,winndixie,winndixie_app_json,09/21/2025,15:11:00,00000000004889,Cilantro,27,24
+998,winndixie,winndixie_app_json,09/21/2025,15:11:00,00000000004062,Produce Cucumbers,27,24
+999,winndixie,winndixie_app_json,09/21/2025,15:11:00,00020612300000,SEG Turkey,27,24
+1000,winndixie,winndixie_app_json,09/21/2025,15:11:00,00000000004087,Tomatoes,27,24
+1001,winndixie,winndixie_app_json,09/21/2025,15:11:00,00005150005722,Smucker's Spread,27,24
+1002,winndixie,winndixie_app_json,09/21/2025,15:11:00,00003000065800,Pearl Millng Syrup,27,24
+1003,winndixie,winndixie_app_json,09/21/2025,15:11:00,00020233300000,Yellow Squash,27,24
+1004,winndixie,winndixie_app_json,09/21/2025,15:11:00,00007143001065,Dole Shred Lettuce,27,24
+1005,winndixie,winndixie_app_json,09/21/2025,15:11:00,00060788030740,k&l Corn,27,24
+1006,winndixie,winndixie_app_json,09/21/2025,15:11:00,00060788030013,k&l Milk,27,24
+1007,winndixie,winndixie_app_json,09/21/2025,15:11:00,00003320000262,Arm & Hammer Dtgnt,27,24
+1008,winndixie,winndixie_app_json,09/21/2025,15:11:00,00000980000052,Kinder Joy Treat,27,24
+1009,winndixie,winndixie_app_json,09/21/2025,15:11:00,00004900004121,Fanta Soda,27,24
+1010,winndixie,winndixie_app_json,09/21/2025,15:11:00,00007800003526,DR PEPPER 12PK,27,24
+1011,winndixie,winndixie_app_json,09/21/2025,15:11:00,00004900003076,Fanta Soda,27,24
+1012,winndixie,winndixie_app_json,09/17/2025,17:32:00,00002178851694,Lotus Cookie Buttr,4,4
+1013,winndixie,winndixie_app_json,09/17/2025,17:32:00,00004850002106,Twister Punch,4,4
+1014,winndixie,winndixie_app_json,09/17/2025,17:32:00,00004530000055,Peter Pan Crnch Pe,4,4
+1015,winndixie,winndixie_app_json,09/17/2025,17:32:00,00003825910178,SE Grocers Bread,4,4
+1016,winndixie,winndixie_app_json,09/08/2025,17:47:00,00007800004050,Dr. Pepper 12pk,19,18
+1017,winndixie,winndixie_app_json,09/08/2025,17:47:00,00002500005824,Minute Maid Lmnade,19,18
+1018,winndixie,winndixie_app_json,09/08/2025,17:47:00,00004900003076,Fanta Soda,19,18
+1019,winndixie,winndixie_app_json,09/08/2025,17:47:00,00020612300000,SEG Turkey,19,18
+1020,winndixie,winndixie_app_json,09/08/2025,17:47:00,00025628500000,D&W Cheese,19,18
+1021,winndixie,winndixie_app_json,09/08/2025,17:47:00,00060788030036,k&l Edamame,19,18
+1022,winndixie,winndixie_app_json,09/08/2025,17:47:00,00003825910070,SE Grocers Cheese,19,18
+1023,winndixie,winndixie_app_json,09/08/2025,17:47:00,00007265500105,HC Cafe Steamers,19,18
+1024,winndixie,winndixie_app_json,09/08/2025,17:47:00,00067984410457,Dewafelbakkr Pncks,19,18
+1025,winndixie,winndixie_app_json,09/08/2025,17:47:00,00005100023314,SpaghettiOs Pasta,19,18
+1026,winndixie,winndixie_app_json,09/08/2025,17:47:00,00003825910972,SE Grocers Broth,19,18
+1027,winndixie,winndixie_app_json,09/08/2025,17:47:00,00001657194033,Sparkling Ice Wtr,19,18
+1028,winndixie,winndixie_app_json,09/08/2025,17:47:00,00004118618750,Andes Snap Bar,19,18
+1029,winndixie,winndixie_app_json,09/08/2025,17:47:00,00003340061283,Lght 'n Flffy Ndle,19,18
+1030,winndixie,winndixie_app_json,09/08/2025,17:47:00,00004300095373,Kool Aid Drinks,19,18
+1031,winndixie,winndixie_app_json,09/08/2025,17:47:00,00026399400000,USDA Chce Stw Meat,19,18
+1032,winndixie,winndixie_app_json,09/08/2025,17:47:00,00003825910178,SE Grocers Bread,19,18
+1033,winndixie,winndixie_app_json,09/08/2025,17:47:00,00071514151464,Eggland's Best Egg,19,18
+1034,winndixie,winndixie_app_json,01/18/2026,15:06:00,00003077209403,Dawn Dshwshng Lqud,9,18
+1035,winndixie,winndixie_app_json,01/18/2026,15:06:00,00003680049808,Top Care Nitetime,9,18
+1036,winndixie,winndixie_app_json,01/18/2026,15:06:00,00004150001310,French'S Sauce,9,18
+1037,winndixie,winndixie_app_json,01/18/2026,15:06:00,00004300095369,Kool Aid Drinks,9,18
+1038,winndixie,winndixie_app_json,01/18/2026,15:06:00,00007035331620,Blue Runner Beans,9,18
+1039,winndixie,winndixie_app_json,01/18/2026,15:06:00,00007747912341,Mp Seasoning Mix,9,18
+1040,winndixie,winndixie_app_json,01/18/2026,15:06:00,00003800028142,PRINGLES MINGLES W,9,18
+1041,winndixie,winndixie_app_json,01/18/2026,15:06:00,00001657194033,Sparkling Ice Wtr,9,18
+1042,winndixie,winndixie_app_json,01/18/2026,15:06:00,00005200004344,Gatorade Beverage,9,18
+1043,winndixie,winndixie_app_json,01/12/2026,18:13:00,00004400000489,Honey Maid Grahams,4,8
+1044,winndixie,winndixie_app_json,01/12/2026,18:13:00,00002200000067,Hubba Bubba Gum,4,8
+1045,winndixie,winndixie_app_json,01/12/2026,18:13:00,00003400017038,Hershey's XL Bar,4,8
+1046,winndixie,winndixie_app_json,01/12/2026,18:13:00,00060069966116,JET-PUF MARSHMA,4,8
+1047,winndixie,winndixie_app_json,01/08/2026,19:58:00,00007102501003,Bunny Bread,1,2
+1048,winndixie,winndixie_app_json,01/05/2026,19:32:00,00067984410442,Dewafelbakkr Pncks,6,8
+1049,winndixie,winndixie_app_json,01/05/2026,19:32:00,00009027700001,Hugbi Pies,6,8
+1050,winndixie,winndixie_app_json,01/05/2026,19:32:00,00004900003076,Fanta Soda,6,8
+1051,winndixie,winndixie_app_json,01/05/2026,19:32:00,00004900004284,Coca Cola Cola,6,8
+1052,winndixie,winndixie_app_json,01/01/2026,20:18:00,00007102501612,Bunny Bread,30,56
+1053,winndixie,winndixie_app_json,01/01/2026,20:18:00,00007189900375,Blue Bell IceCream,30,56
+1054,winndixie,winndixie_app_json,01/01/2026,20:18:00,00002840067905,LAYS 10CT,30,56
+1055,winndixie,winndixie_app_json,01/01/2026,20:18:00,00002430004484,Little Debbie Snck,30,56
+1056,winndixie,winndixie_app_json,01/01/2026,20:18:00,00001740010076,Success Rice,30,56
+1057,winndixie,winndixie_app_json,01/01/2026,20:18:00,00001530044051,Pasta Roni Pasta,30,56
+1058,winndixie,winndixie_app_json,01/01/2026,20:18:00,00007035331620,Blue Runner Beans,30,56
+1059,winndixie,winndixie_app_json,01/01/2026,20:18:00,00060788030831,k&l Canned Beans,30,56
+1060,winndixie,winndixie_app_json,01/01/2026,20:18:00,00002100065883,Kraft Mac & Cheese,30,56
+1061,winndixie,winndixie_app_json,01/01/2026,20:18:00,00001200001672,Strbucks Frppccino,30,56
+1062,winndixie,winndixie_app_json,01/01/2026,20:18:00,00060788030744,k&l Corn,30,56
+1063,winndixie,winndixie_app_json,01/01/2026,20:18:00,00007035330100,Blue Runner Beans,30,56
+1064,winndixie,winndixie_app_json,01/01/2026,20:18:00,00004300095369,Kool Aid Drinks,30,56
+1065,winndixie,winndixie_app_json,01/01/2026,20:18:00,00003680036726,Topcare Liquid Rlf,30,56
+1066,winndixie,winndixie_app_json,01/01/2026,20:18:00,00060788030757,k&l Green Beans,30,56
+1067,winndixie,winndixie_app_json,01/01/2026,20:18:00,00080381023497,Milk Magic Straws,30,56
+1068,winndixie,winndixie_app_json,01/01/2026,20:18:00,00003825910599,SE Grocers Pasta,30,56
+1069,winndixie,winndixie_app_json,01/01/2026,20:18:00,00003000016920,Quaker Rice Crisps,30,56
+1070,winndixie,winndixie_app_json,01/01/2026,20:18:00,00002100003045,Brkstn Cottage Chs,30,56
+1071,winndixie,winndixie_app_json,01/01/2026,20:18:00,00003890000473,Dole Can Pineapple,30,56
+1072,winndixie,winndixie_app_json,01/01/2026,20:18:00,00004900005026,Fanta Soda,30,56
+1073,winndixie,winndixie_app_json,01/01/2026,20:18:00,00002114002478,HS Applewood Bacon,30,56
+1074,winndixie,winndixie_app_json,01/01/2026,20:18:00,00002959900180,Manda Sausage,30,56
+1075,winndixie,winndixie_app_json,01/01/2026,20:18:00,00023083400000,Chicken Cutlets,30,56
+1076,winndixie,winndixie_app_json,01/01/2026,20:18:00,00001657195210,Sparkling Ice Wtr,30,56
+1077,winndixie,winndixie_app_json,01/01/2026,20:18:00,00001657191030,Sparkling Ice Wtr,30,56
+1078,winndixie,winndixie_app_json,01/01/2026,20:18:00,00001657194033,Sparkling Ice Wtr,30,56
+1079,winndixie,winndixie_app_json,01/01/2026,20:18:00,00001657191032,Sparkling Ice Wtr,30,56
+1080,winndixie,winndixie_app_json,12/30/2025,18:21:00,00060788010248,Pure Value Milk,3,6
+1081,winndixie,winndixie_app_json,12/30/2025,18:21:00,00007102501612,Bunny Bread,3,6
+1082,winndixie,winndixie_app_json,12/30/2025,18:21:00,00020647800000,SEG Ham,3,6
+1083,winndixie,winndixie_app_json,12/27/2025,18:40:00,00003825913189,SE Grocers Bleach,13,22
+1084,winndixie,winndixie_app_json,12/27/2025,18:40:00,00003825914341,SEG Sprklng Water,13,22
+1085,winndixie,winndixie_app_json,12/27/2025,18:40:00,00004400003113,Ritz Crackers,13,22
+1086,winndixie,winndixie_app_json,12/27/2025,18:40:00,00088399068120,Good2Grow 100% Jce,13,22
+1087,winndixie,winndixie_app_json,12/27/2025,18:40:00,00000980055227,Chocolate Bar,13,22
+1088,winndixie,winndixie_app_json,12/27/2025,18:40:00,00003825912925,SEG 100% Juice,13,22
+1089,winndixie,winndixie_app_json,12/27/2025,18:40:00,00003825912227,SEG Drink Mix,13,22
+1090,winndixie,winndixie_app_json,12/27/2025,18:40:00,00003825912234,SEG Drink Mix,13,22
+1091,winndixie,winndixie_app_json,12/27/2025,18:40:00,00064420929047,Mrs. B Syrup,13,22
+1092,winndixie,winndixie_app_json,12/27/2025,18:40:00,00002740026499,CC Oil Spread,13,22
+1093,winndixie,winndixie_app_json,12/27/2025,18:40:00,00005200004344,Gatorade Beverage,13,22
+1094,winndixie,winndixie_app_json,12/24/2025,15:29:00,00019830602542,Whole Carrots,5,10
+1095,winndixie,winndixie_app_json,12/24/2025,15:29:00,00003825912925,SEG 100% Juice,5,10
+1096,winndixie,winndixie_app_json,12/24/2025,15:29:00,00085004220306,Rght Grd Ddrnt,5,10
+1097,winndixie,winndixie_app_json,12/24/2025,15:29:00,00086174500002,VITAL ORG DOZEN,5,10
+1098,winndixie,winndixie_app_json,12/24/2025,15:29:00,00002178850695,Lotus Cookie Buttr,5,10
+1099,winndixie,winndixie_app_json,12/24/2025,12:56:00,00007116922703,BC Sprinkles,12,24
+1100,winndixie,winndixie_app_json,12/24/2025,12:56:00,00007116970003,BC Icing,12,24
+1101,winndixie,winndixie_app_json,12/24/2025,12:56:00,00007116970005,BC Icing,12,24
+1102,winndixie,winndixie_app_json,12/24/2025,12:56:00,00001600030630,BC Cookie Mix,12,24
+1103,winndixie,winndixie_app_json,12/24/2025,12:56:00,00003825915389,SEG Hamburger Buns,12,24
+1104,winndixie,winndixie_app_json,12/24/2025,12:56:00,00007102501612,Bunny Bread,12,24
+1105,winndixie,winndixie_app_json,12/24/2025,12:56:00,00060788031032,k&l Pasta Sauce,12,24
+1106,winndixie,winndixie_app_json,12/24/2025,12:56:00,00060788030011,k&l Milk,12,24
+1107,winndixie,winndixie_app_json,12/24/2025,12:56:00,00001800000918,Pillsbury Biscuits,12,24
+1108,winndixie,winndixie_app_json,12/24/2025,12:56:00,00024370300000,93% Ground Beef,12,24
+1109,winndixie,winndixie_app_json,12/24/2025,12:56:00,00020320100000,Pork Shoulder,12,24
+1110,winndixie,winndixie_app_json,12/24/2025,12:56:00,00020320100000,Pork Shoulder,12,24
+1111,winndixie,winndixie_app_json,12/22/2025,17:57:00,00005000014578,Coffee Mate Creamr,9,18
+1112,winndixie,winndixie_app_json,12/22/2025,17:57:00,00002100065883,Kraft Mac & Cheese,9,18
+1113,winndixie,winndixie_app_json,12/22/2025,17:57:00,00002430004156,LITTLE DEBBIE CAKE,9,18
+1114,winndixie,winndixie_app_json,12/22/2025,17:57:00,00003825910071,SE Grocers Cheese,9,18
+1115,winndixie,winndixie_app_json,12/22/2025,17:57:00,00001657195210,Sparkling Ice Wtr,9,18
+1116,winndixie,winndixie_app_json,12/22/2025,17:57:00,00001657194033,Sparkling Ice Wtr,9,18
+1117,winndixie,winndixie_app_json,12/22/2025,17:57:00,00025712700000,Wildflower Ham,9,18
+1118,winndixie,winndixie_app_json,12/22/2025,17:57:00,00023083400000,Chicken Cutlets,9,18
+1119,winndixie,winndixie_app_json,12/22/2025,17:57:00,00020321100000,Bnls Pork Stew,9,18
+1120,winndixie,winndixie_app_json,12/21/2025,22:22:00,00007800003526,DR PEPPER 12PK,10,16
+1121,winndixie,winndixie_app_json,12/21/2025,22:22:00,00004900003076,Fanta Soda,10,16
+1122,winndixie,winndixie_app_json,12/21/2025,22:22:00,00009027700001,Hugbi Pies,10,16
+1123,winndixie,winndixie_app_json,12/21/2025,22:22:00,00004470002411,Lunchables Snack,10,16
+1124,winndixie,winndixie_app_json,12/21/2025,22:22:00,00005150005722,Smucker's Spread,10,16
+1125,winndixie,winndixie_app_json,12/21/2025,22:22:00,00004530000065,Peter Pan Pnt Bttr,10,16
+1126,winndixie,winndixie_app_json,12/21/2025,22:22:00,00004900004284,Coca Cola Cola,10,16
+1127,winndixie,winndixie_app_json,12/21/2025,22:22:00,00004470010320,OM BASICS TURKEY-A,10,16
+1128,winndixie,winndixie_app_json,12/20/2025,22:06:00,00009027700001,Hugbi Pies,5,8
+1129,winndixie,winndixie_app_json,12/20/2025,22:06:00,00003000065800,Pearl Millng Syrup,5,8
+1130,winndixie,winndixie_app_json,12/20/2025,22:06:00,00060788030013,k&l Milk,5,8
+1131,winndixie,winndixie_app_json,12/20/2025,22:06:00,00007102501612,Bunny Bread,5,8
+1132,winndixie,winndixie_app_json,12/17/2025,20:03:00,00007064000663,Bomb Pop Popsicles,5,8
+1133,winndixie,winndixie_app_json,12/17/2025,20:03:00,00071514150349,EB Eggs,5,8
+1134,winndixie,winndixie_app_json,12/17/2025,20:03:00,00007373107109,Mission Tortillas,5,8
+1135,winndixie,winndixie_app_json,12/17/2025,20:03:00,00004119210211,KELLOGG RAISN BRAN,5,8
+1136,winndixie,winndixie_app_json,12/12/2025,20:42:00,00026765600000,Cupcakes 6ct,17,24
+1137,winndixie,winndixie_app_json,12/12/2025,20:42:00,00005150005711,Smucker's Jelly,17,24
+1138,winndixie,winndixie_app_json,12/12/2025,20:42:00,00067984410457,Dewafelbakkr Pncks,17,24
+1139,winndixie,winndixie_app_json,12/12/2025,20:42:00,00004530000065,Peter Pan Pnt Bttr,17,24
+1140,winndixie,winndixie_app_json,12/12/2025,20:42:00,00007102501612,Bunny Bread,17,24
+1141,winndixie,winndixie_app_json,12/12/2025,20:42:00,00005200004344,Gatorade Beverage,17,24
+1142,winndixie,winndixie_app_json,12/12/2025,20:42:00,00060788030013,k&l Milk,17,24
+1143,winndixie,winndixie_app_json,12/12/2025,20:42:00,00007480601500,Little Hug Drink,17,24
+1144,winndixie,winndixie_app_json,12/12/2025,20:42:00,00003825914341,SEG Sprklng Water,17,24
+1145,winndixie,winndixie_app_json,12/12/2025,20:42:00,00007054311311,Kleinpeter Milk,17,24
+1146,winndixie,winndixie_app_json,12/12/2025,20:42:00,00007800003526,DR PEPPER 12PK,17,24
+1147,winndixie,winndixie_app_json,12/12/2025,20:42:00,00004900004255,CocaCola Soda,17,24
+1148,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003825910876,SEG Containers,23,36
+1149,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003825910874,SEG Containers,23,36
+1150,winndixie,winndixie_app_json,12/07/2025,18:58:00,00020165300000,Ground Beef,23,36
+1151,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003700047971,FBRZ AIR OCEAN,23,36
+1152,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003825912264,SEG BOIL-N-BAG,23,36
+1153,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003825910815,SEG Crm Chs Spread,23,36
+1154,winndixie,winndixie_app_json,12/07/2025,18:58:00,00060788030615,know & love Cheese,23,36
+1155,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003825913508,SEG Pasta,23,36
+1156,winndixie,winndixie_app_json,12/07/2025,18:58:00,00060788030679,know & love Cheese,23,36
+1157,winndixie,winndixie_app_json,12/07/2025,18:58:00,00007708340420,Rosina Meatballs,23,36
+1158,winndixie,winndixie_app_json,12/07/2025,18:58:00,00004400006924,WHT THNS SNDRD TMT,23,36
+1159,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003825911010,SE Grocers Pasta,23,36
+1160,winndixie,winndixie_app_json,12/07/2025,18:58:00,00060788030991,k&l Kidney Beans,23,36
+1161,winndixie,winndixie_app_json,12/07/2025,18:58:00,00007035331620,Blue Runner Beans,23,36
+1162,winndixie,winndixie_app_json,12/07/2025,18:58:00,00060788031078,k&l Ricotta Cheese,23,36
+1163,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003825910957,SE Grocers Soup,23,36
+1164,winndixie,winndixie_app_json,12/07/2025,18:58:00,00060788031032,k&l Pasta Sauce,23,36
+1165,winndixie,winndixie_app_json,12/07/2025,18:58:00,00005200010310,Gatorade Beverage,23,36
+1166,winndixie,winndixie_app_json,12/06/2025,22:09:00,00009027700001,Hugbi Pies,3,4
+1167,winndixie,winndixie_app_json,12/06/2025,22:09:00,00007102501004,Bunny Bread,3,4
+1168,winndixie,winndixie_app_json,12/06/2025,22:06:00,00004119210474,KELLOGG RAISIN BRA,2,4
+1169,winndixie,winndixie_app_json,12/06/2025,22:06:00,00060788030013,k&l Milk,2,4
+1170,winndixie,winndixie_app_json,12/04/2025,16:24:00,00003320080101,A&H FRSH BOOST,29,52
+1171,winndixie,winndixie_app_json,12/04/2025,16:24:00,00007373107109,Mission Tortillas,29,52
+1172,winndixie,winndixie_app_json,12/04/2025,16:24:00,00007064002435,BB MINI SWIRL CONE,29,52
+1173,winndixie,winndixie_app_json,12/04/2025,16:24:00,00005200004344,Gatorade Beverage,29,52
+1174,winndixie,winndixie_app_json,12/04/2025,16:24:00,00024370200000,Ground Beef Rnd,29,52
+1175,winndixie,winndixie_app_json,12/04/2025,16:24:00,00060788030669,know & love Cheese,29,52
+1176,winndixie,winndixie_app_json,12/04/2025,16:24:00,00007142909980,Zatarain's Mix,29,52
+1177,winndixie,winndixie_app_json,12/04/2025,16:24:00,00004300004191,Crystal Light Mix,29,52
+1178,winndixie,winndixie_app_json,12/04/2025,16:24:00,00020587000000,D&W Turkey,29,52
+1179,winndixie,winndixie_app_json,12/04/2025,16:24:00,00020574500000,Chisesi Ham,29,52
+1180,winndixie,winndixie_app_json,12/04/2025,16:24:00,00005210003495,MC Taco Seasoning,29,52
+1181,winndixie,winndixie_app_json,12/04/2025,16:24:00,00002100065883,Kraft Mac & Cheese,29,52
+1182,winndixie,winndixie_app_json,12/04/2025,16:24:00,00002959900188,Manda Sausage,29,52
+1183,winndixie,winndixie_app_json,12/04/2025,16:24:00,00004660003387,Armour Lunchmakers,29,52
+1184,winndixie,winndixie_app_json,12/04/2025,16:24:00,00004660003427,Armour Crunchers,29,52
+1185,winndixie,winndixie_app_json,12/04/2025,16:24:00,00004900004284,Coca Cola Cola,29,52
+1186,winndixie,winndixie_app_json,12/04/2025,16:24:00,00004900003076,Fanta Soda,29,52
+1187,winndixie,winndixie_app_json,12/04/2025,16:24:00,00004900004121,Fanta Soda,29,52
+1188,winndixie,winndixie_app_json,12/04/2025,16:24:00,00004178900621,Maruchan Ramen Sup,29,52
+1189,winndixie,winndixie_app_json,12/04/2025,16:24:00,00006414404302,Chef Boyardee Psta,29,52
+1190,winndixie,winndixie_app_json,12/04/2025,16:24:00,00003825914040,SEG STHRN HMSTYLE,29,52
+1191,winndixie,winndixie_app_json,12/04/2025,16:24:00,00003825912354,SE Grocers Olives,29,52
+1192,winndixie,winndixie_app_json,12/04/2025,16:24:00,00003825911053,SEG Sour Cream,29,52
+1193,winndixie,winndixie_app_json,12/04/2025,16:24:00,00060788030744,k&l Corn,29,52
+1194,winndixie,winndixie_app_json,12/04/2025,16:24:00,00003077215785,Cascade Lemon 9Ct,29,52
+1195,winndixie,winndixie_app_json,12/04/2025,16:24:00,00003825915387,SEG Sandwich Bread,29,52
+1196,winndixie,winndixie_app_json,11/30/2025,20:02:00,00005200004344,Gatorade Beverage,3,6
+1197,winndixie,winndixie_app_json,11/30/2025,20:02:00,00003825915387,SEG Sandwich Bread,3,6
+1198,winndixie,winndixie_app_json,11/30/2025,20:02:00,00003825910157,SE Grocers Pizza,3,6
+1199,winndixie,winndixie_app_json,11/29/2025,19:28:00,00004900004284,Coca Cola Cola,6,8
+1200,winndixie,winndixie_app_json,11/29/2025,19:28:00,00071514171943,Egglands Best Eggs,6,8
+1201,winndixie,winndixie_app_json,11/29/2025,19:28:00,00004530000065,Peter Pan Pnt Bttr,6,8
+1202,winndixie,winndixie_app_json,11/29/2025,19:28:00,00004300004191,Crystal Light Mix,6,8
+1203,winndixie,winndixie_app_json,11/26/2025,18:45:00,00060788030013,k&l Milk,39,60
+1204,winndixie,winndixie_app_json,11/26/2025,18:45:00,00007054311311,Kleinpeter Milk,39,60
+1205,winndixie,winndixie_app_json,11/26/2025,18:45:00,00005150005722,Smucker's Spread,39,60
+1206,winndixie,winndixie_app_json,11/26/2025,18:45:00,00074938492002,Jiffy Foil Pan,39,60
+1207,winndixie,winndixie_app_json,11/26/2025,18:45:00,00004145811704,Edwards Pies,39,60
+1208,winndixie,winndixie_app_json,11/26/2025,18:45:00,00004145854891,Edwards Pies,39,60
+1209,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003663203640,Danimals Smoothie,39,60
+1210,winndixie,winndixie_app_json,11/26/2025,18:45:00,00004133400154,Jonny Cat Liners,39,60
+1211,winndixie,winndixie_app_json,11/26/2025,18:45:00,00006414403021,Pam Cooking Spray,39,60
+1212,winndixie,winndixie_app_json,11/26/2025,18:45:00,00060788030966,k&l Peanuts,39,60
+1213,winndixie,winndixie_app_json,11/26/2025,18:45:00,00084037090145,Kraft Cheese,39,60
+1214,winndixie,winndixie_app_json,11/26/2025,18:45:00,00004660003428,Armour Crunchers,39,60
+1215,winndixie,winndixie_app_json,11/26/2025,18:45:00,00000000004078,Yellow Corn,39,60
+1216,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003825915387,SEG Sandwich Bread,39,60
+1217,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003825910799,SEG Soup Stock,39,60
+1218,winndixie,winndixie_app_json,11/26/2025,18:45:00,00060788030744,k&l Corn,39,60
+1219,winndixie,winndixie_app_json,11/26/2025,18:45:00,00002114042700,HS Regular Bacon,39,60
+1220,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003825911052,SEG Sour Cream,39,60
+1221,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003825914039,SEG STHR HMST STIK,39,60
+1222,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003825910601,SE Grocers Pasta,39,60
+1223,winndixie,winndixie_app_json,11/26/2025,18:45:00,00001657195210,Sparkling Ice Wtr,39,60
+1224,winndixie,winndixie_app_json,11/26/2025,18:45:00,00001657191032,Sparkling Ice Wtr,39,60
+1225,winndixie,winndixie_app_json,11/26/2025,18:45:00,00001657191030,Sparkling Ice Wtr,39,60
+1226,winndixie,winndixie_app_json,11/26/2025,18:45:00,00007084789621,Monster Energy,39,60
+1227,winndixie,winndixie_app_json,11/26/2025,18:45:00,00000000004093,Jumbo Yellow Onion,39,60
+1228,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003338365325,Celery,39,60
+1229,winndixie,winndixie_app_json,11/26/2025,18:45:00,00000000004072,Russet Potato,39,60
+1230,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003710004213,Libby's Peas,39,60
+1231,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003338399987,Mini Carnation,39,60
+1232,winndixie,winndixie_app_json,11/26/2025,18:45:00,00026779000000,12COOKIECAKE,39,60
+1233,winndixie,winndixie_app_json,11/20/2025,11:25:00,00003825915387,SEG Sandwich Bread,13,16
+1234,winndixie,winndixie_app_json,11/20/2025,11:25:00,00060788030013,k&l Milk,13,16
+1235,winndixie,winndixie_app_json,11/20/2025,11:25:00,00004900004255,CocaCola Soda,13,16
+1236,winndixie,winndixie_app_json,11/20/2025,11:25:00,00004900006090,CocaCola Soda,13,16
+1237,winndixie,winndixie_app_json,11/20/2025,11:25:00,00007800003526,DR PEPPER 12PK,13,16
+1238,winndixie,winndixie_app_json,11/20/2025,11:25:00,00081829001857,Chobani Yogurt,13,16
+1239,winndixie,winndixie_app_json,11/20/2025,11:25:00,00003825912978,SE Grocers Oats,13,16
+1240,winndixie,winndixie_app_json,11/20/2025,11:25:00,00060788030022,k&l Milk,13,16
+1241,winndixie,winndixie_app_json,11/17/2025,18:59:00,00003825914339,SEG Sprklng Water,15,26
+1242,winndixie,winndixie_app_json,11/17/2025,18:59:00,00003825914341,SEG Sprklng Water,15,26
+1243,winndixie,winndixie_app_json,11/17/2025,18:59:00,00007208027431,Golden Flake Skins,15,26
+1244,winndixie,winndixie_app_json,11/17/2025,18:59:00,00003680036726,Topcare Liquid Rlf,15,26
+1245,winndixie,winndixie_app_json,11/17/2025,18:59:00,00002178850695,Lotus Cookie Buttr,15,26
+1246,winndixie,winndixie_app_json,11/17/2025,18:59:00,00007084789948,Monster Enrgy Drnk,15,26
+1247,winndixie,winndixie_app_json,11/17/2025,18:59:00,00007056097060,Pictsweet Vegetble,15,26
+1248,winndixie,winndixie_app_json,11/17/2025,18:59:00,00081026402712,Kevins Thai Style,15,26
+1249,winndixie,winndixie_app_json,11/17/2025,18:59:00,00004470036002,Lunchables Snack,15,26
+1250,winndixie,winndixie_app_json,11/17/2025,18:59:00,00004660003387,Armour Lunchmakers,15,26
+1251,winndixie,winndixie_app_json,11/17/2025,18:59:00,00028245100000,Pork Chops,15,26
+1252,winndixie,winndixie_app_json,11/17/2025,18:59:00,00028245100000,Pork Chops,15,26
+1253,winndixie,winndixie_app_json,11/17/2025,18:59:00,00000980000055,Kinder Bueno,15,26
+1254,winndixie,winndixie_app_json,11/15/2025,19:55:00,00060788030013,k&l Milk,14,26
+1255,winndixie,winndixie_app_json,11/15/2025,19:55:00,00005200004346,Gatorade Beverage,14,26
+1256,winndixie,winndixie_app_json,11/15/2025,19:55:00,00005200004344,Gatorade Beverage,14,26
+1257,winndixie,winndixie_app_json,11/15/2025,19:55:00,00000980083003,Nutella Biscuits,14,26
+1258,winndixie,winndixie_app_json,11/15/2025,19:55:00,00003500098631,Fabuloso Cleaner,14,26
+1259,winndixie,winndixie_app_json,11/15/2025,19:55:00,00002100065883,Kraft Mac & Cheese,14,26
+1260,winndixie,winndixie_app_json,11/15/2025,19:55:00,00004300002825,Kool Aid Drinks,14,26
+1261,winndixie,winndixie_app_json,11/15/2025,19:55:00,00003825911499,SEG Whipped Toppng,14,26
+1262,winndixie,winndixie_app_json,11/15/2025,19:55:00,00060788030744,k&l Corn,14,26
+1263,winndixie,winndixie_app_json,11/15/2025,19:55:00,00007035331620,Blue Runner Beans,14,26
+1264,winndixie,winndixie_app_json,11/15/2025,19:55:00,00020224500000,Sliced Strwberries,14,26
+1265,winndixie,winndixie_app_json,11/15/2025,19:55:00,00080882910688,LSS Toothpaste,14,26
+1266,winndixie,winndixie_app_json,11/15/2025,19:55:00,00080882906093,Home Select Foil,14,26
+1267,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003825915384,SEG White Bread,24,46
+1268,winndixie,winndixie_app_json,11/13/2025,14:28:00,00004610040010,Sargento Cheese,24,46
+1269,winndixie,winndixie_app_json,11/13/2025,14:28:00,00004610040094,Sargento Cheese,24,46
+1270,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003760039885,Hormel Pepperoni,24,46
+1271,winndixie,winndixie_app_json,11/13/2025,14:28:00,00020742400000,SEG Ham,24,46
+1272,winndixie,winndixie_app_json,11/13/2025,14:28:00,00020587000000,D&W Turkey,24,46
+1273,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003825913969,SEG Fruit Punch,24,46
+1274,winndixie,winndixie_app_json,11/13/2025,14:28:00,00060788030629,know & love Cheese,24,46
+1275,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003825912110,SEG Eraser Pads,24,46
+1276,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003825912354,SE Grocers Olives,24,46
+1277,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003890000473,Dole Can Pineapple,24,46
+1278,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003000065800,Pearl Millng Syrup,24,46
+1279,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003825912237,SEG Water Enhancer,24,46
+1280,winndixie,winndixie_app_json,11/13/2025,14:28:00,00007234300059,MID'S SAUSAGE PIZZ,24,46
+1281,winndixie,winndixie_app_json,11/13/2025,14:28:00,00004900007932,Powerade Drink,24,46
+1282,winndixie,winndixie_app_json,11/13/2025,14:28:00,00004900007931,Powerade Drink,24,46
+1283,winndixie,winndixie_app_json,11/13/2025,14:28:00,00001657191030,Sparkling Ice Wtr,24,46
+1284,winndixie,winndixie_app_json,11/13/2025,14:28:00,00001657194033,Sparkling Ice Wtr,24,46
+1285,winndixie,winndixie_app_json,11/13/2025,14:28:00,00001657191032,Sparkling Ice Wtr,24,46
+1286,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003320097495,A&H Scent Boosters,24,46
+1287,winndixie,winndixie_app_json,11/13/2025,14:28:00,00001657195210,Sparkling Ice Wtr,24,46
+1288,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003320000416,SCENT BOOSTERS,24,46
+1289,winndixie,winndixie_app_json,11/13/2025,14:28:00,00001657195920,SI Starburst Straw,24,46
+1290,winndixie,winndixie_app_json,01/18/2026,15:06:00,00003077209403,Dawn Dshwshng Lqud,9,18
+1291,winndixie,winndixie_app_json,01/18/2026,15:06:00,00003680049808,Top Care Nitetime,9,18
+1292,winndixie,winndixie_app_json,01/18/2026,15:06:00,00004150001310,French'S Sauce,9,18
+1293,winndixie,winndixie_app_json,01/18/2026,15:06:00,00004300095369,Kool Aid Drinks,9,18
+1294,winndixie,winndixie_app_json,01/18/2026,15:06:00,00007035331620,Blue Runner Beans,9,18
+1295,winndixie,winndixie_app_json,01/18/2026,15:06:00,00007747912341,Mp Seasoning Mix,9,18
+1296,winndixie,winndixie_app_json,01/18/2026,15:06:00,00003800028142,PRINGLES MINGLES W,9,18
+1297,winndixie,winndixie_app_json,01/18/2026,15:06:00,00001657194033,Sparkling Ice Wtr,9,18
+1298,winndixie,winndixie_app_json,01/18/2026,15:06:00,00005200004344,Gatorade Beverage,9,18
+1299,winndixie,winndixie_app_json,01/12/2026,18:13:00,00004400000489,Honey Maid Grahams,4,8
+1300,winndixie,winndixie_app_json,01/12/2026,18:13:00,00002200000067,Hubba Bubba Gum,4,8
+1301,winndixie,winndixie_app_json,01/12/2026,18:13:00,00003400017038,Hershey's XL Bar,4,8
+1302,winndixie,winndixie_app_json,01/12/2026,18:13:00,00060069966116,JET-PUF MARSHMA,4,8
+1303,winndixie,winndixie_app_json,01/08/2026,19:58:00,00007102501003,Bunny Bread,1,2
+1304,winndixie,winndixie_app_json,01/05/2026,19:32:00,00067984410442,Dewafelbakkr Pncks,6,8
+1305,winndixie,winndixie_app_json,01/05/2026,19:32:00,00009027700001,Hugbi Pies,6,8
+1306,winndixie,winndixie_app_json,01/05/2026,19:32:00,00004900003076,Fanta Soda,6,8
+1307,winndixie,winndixie_app_json,01/05/2026,19:32:00,00004900004284,Coca Cola Cola,6,8
+1308,winndixie,winndixie_app_json,01/01/2026,20:18:00,00007102501612,Bunny Bread,30,56
+1309,winndixie,winndixie_app_json,01/01/2026,20:18:00,00007189900375,Blue Bell IceCream,30,56
+1310,winndixie,winndixie_app_json,01/01/2026,20:18:00,00002840067905,LAYS 10CT,30,56
+1311,winndixie,winndixie_app_json,01/01/2026,20:18:00,00002430004484,Little Debbie Snck,30,56
+1312,winndixie,winndixie_app_json,01/01/2026,20:18:00,00001740010076,Success Rice,30,56
+1313,winndixie,winndixie_app_json,01/01/2026,20:18:00,00001530044051,Pasta Roni Pasta,30,56
+1314,winndixie,winndixie_app_json,01/01/2026,20:18:00,00007035331620,Blue Runner Beans,30,56
+1315,winndixie,winndixie_app_json,01/01/2026,20:18:00,00060788030831,k&l Canned Beans,30,56
+1316,winndixie,winndixie_app_json,01/01/2026,20:18:00,00002100065883,Kraft Mac & Cheese,30,56
+1317,winndixie,winndixie_app_json,01/01/2026,20:18:00,00001200001672,Strbucks Frppccino,30,56
+1318,winndixie,winndixie_app_json,01/01/2026,20:18:00,00060788030744,k&l Corn,30,56
+1319,winndixie,winndixie_app_json,01/01/2026,20:18:00,00007035330100,Blue Runner Beans,30,56
+1320,winndixie,winndixie_app_json,01/01/2026,20:18:00,00004300095369,Kool Aid Drinks,30,56
+1321,winndixie,winndixie_app_json,01/01/2026,20:18:00,00003680036726,Topcare Liquid Rlf,30,56
+1322,winndixie,winndixie_app_json,01/01/2026,20:18:00,00060788030757,k&l Green Beans,30,56
+1323,winndixie,winndixie_app_json,01/01/2026,20:18:00,00080381023497,Milk Magic Straws,30,56
+1324,winndixie,winndixie_app_json,01/01/2026,20:18:00,00003825910599,SE Grocers Pasta,30,56
+1325,winndixie,winndixie_app_json,01/01/2026,20:18:00,00003000016920,Quaker Rice Crisps,30,56
+1326,winndixie,winndixie_app_json,01/01/2026,20:18:00,00002100003045,Brkstn Cottage Chs,30,56
+1327,winndixie,winndixie_app_json,01/01/2026,20:18:00,00003890000473,Dole Can Pineapple,30,56
+1328,winndixie,winndixie_app_json,01/01/2026,20:18:00,00004900005026,Fanta Soda,30,56
+1329,winndixie,winndixie_app_json,01/01/2026,20:18:00,00002114002478,HS Applewood Bacon,30,56
+1330,winndixie,winndixie_app_json,01/01/2026,20:18:00,00002959900180,Manda Sausage,30,56
+1331,winndixie,winndixie_app_json,01/01/2026,20:18:00,00023083400000,Chicken Cutlets,30,56
+1332,winndixie,winndixie_app_json,01/01/2026,20:18:00,00001657195210,Sparkling Ice Wtr,30,56
+1333,winndixie,winndixie_app_json,01/01/2026,20:18:00,00001657191030,Sparkling Ice Wtr,30,56
+1334,winndixie,winndixie_app_json,01/01/2026,20:18:00,00001657194033,Sparkling Ice Wtr,30,56
+1335,winndixie,winndixie_app_json,01/01/2026,20:18:00,00001657191032,Sparkling Ice Wtr,30,56
+1336,winndixie,winndixie_app_json,12/30/2025,18:21:00,00060788010248,Pure Value Milk,3,6
+1337,winndixie,winndixie_app_json,12/30/2025,18:21:00,00007102501612,Bunny Bread,3,6
+1338,winndixie,winndixie_app_json,12/30/2025,18:21:00,00020647800000,SEG Ham,3,6
+1339,winndixie,winndixie_app_json,12/27/2025,18:40:00,00003825913189,SE Grocers Bleach,13,22
+1340,winndixie,winndixie_app_json,12/27/2025,18:40:00,00003825914341,SEG Sprklng Water,13,22
+1341,winndixie,winndixie_app_json,12/27/2025,18:40:00,00004400003113,Ritz Crackers,13,22
+1342,winndixie,winndixie_app_json,12/27/2025,18:40:00,00088399068120,Good2Grow 100% Jce,13,22
+1343,winndixie,winndixie_app_json,12/27/2025,18:40:00,00000980055227,Chocolate Bar,13,22
+1344,winndixie,winndixie_app_json,12/27/2025,18:40:00,00003825912925,SEG 100% Juice,13,22
+1345,winndixie,winndixie_app_json,12/27/2025,18:40:00,00003825912227,SEG Drink Mix,13,22
+1346,winndixie,winndixie_app_json,12/27/2025,18:40:00,00003825912234,SEG Drink Mix,13,22
+1347,winndixie,winndixie_app_json,12/27/2025,18:40:00,00064420929047,Mrs. B Syrup,13,22
+1348,winndixie,winndixie_app_json,12/27/2025,18:40:00,00002740026499,CC Oil Spread,13,22
+1349,winndixie,winndixie_app_json,12/27/2025,18:40:00,00005200004344,Gatorade Beverage,13,22
+1350,winndixie,winndixie_app_json,12/24/2025,15:29:00,00019830602542,Whole Carrots,5,10
+1351,winndixie,winndixie_app_json,12/24/2025,15:29:00,00003825912925,SEG 100% Juice,5,10
+1352,winndixie,winndixie_app_json,12/24/2025,15:29:00,00085004220306,Rght Grd Ddrnt,5,10
+1353,winndixie,winndixie_app_json,12/24/2025,15:29:00,00086174500002,VITAL ORG DOZEN,5,10
+1354,winndixie,winndixie_app_json,12/24/2025,15:29:00,00002178850695,Lotus Cookie Buttr,5,10
+1355,winndixie,winndixie_app_json,12/24/2025,12:56:00,00007116922703,BC Sprinkles,12,24
+1356,winndixie,winndixie_app_json,12/24/2025,12:56:00,00007116970003,BC Icing,12,24
+1357,winndixie,winndixie_app_json,12/24/2025,12:56:00,00007116970005,BC Icing,12,24
+1358,winndixie,winndixie_app_json,12/24/2025,12:56:00,00001600030630,BC Cookie Mix,12,24
+1359,winndixie,winndixie_app_json,12/24/2025,12:56:00,00003825915389,SEG Hamburger Buns,12,24
+1360,winndixie,winndixie_app_json,12/24/2025,12:56:00,00007102501612,Bunny Bread,12,24
+1361,winndixie,winndixie_app_json,12/24/2025,12:56:00,00060788031032,k&l Pasta Sauce,12,24
+1362,winndixie,winndixie_app_json,12/24/2025,12:56:00,00060788030011,k&l Milk,12,24
+1363,winndixie,winndixie_app_json,12/24/2025,12:56:00,00001800000918,Pillsbury Biscuits,12,24
+1364,winndixie,winndixie_app_json,12/24/2025,12:56:00,00024370300000,93% Ground Beef,12,24
+1365,winndixie,winndixie_app_json,12/24/2025,12:56:00,00020320100000,Pork Shoulder,12,24
+1366,winndixie,winndixie_app_json,12/24/2025,12:56:00,00020320100000,Pork Shoulder,12,24
+1367,winndixie,winndixie_app_json,12/22/2025,17:57:00,00005000014578,Coffee Mate Creamr,9,18
+1368,winndixie,winndixie_app_json,12/22/2025,17:57:00,00002100065883,Kraft Mac & Cheese,9,18
+1369,winndixie,winndixie_app_json,12/22/2025,17:57:00,00002430004156,LITTLE DEBBIE CAKE,9,18
+1370,winndixie,winndixie_app_json,12/22/2025,17:57:00,00003825910071,SE Grocers Cheese,9,18
+1371,winndixie,winndixie_app_json,12/22/2025,17:57:00,00001657195210,Sparkling Ice Wtr,9,18
+1372,winndixie,winndixie_app_json,12/22/2025,17:57:00,00001657194033,Sparkling Ice Wtr,9,18
+1373,winndixie,winndixie_app_json,12/22/2025,17:57:00,00025712700000,Wildflower Ham,9,18
+1374,winndixie,winndixie_app_json,12/22/2025,17:57:00,00023083400000,Chicken Cutlets,9,18
+1375,winndixie,winndixie_app_json,12/22/2025,17:57:00,00020321100000,Bnls Pork Stew,9,18
+1376,winndixie,winndixie_app_json,12/21/2025,22:22:00,00007800003526,DR PEPPER 12PK,10,16
+1377,winndixie,winndixie_app_json,12/21/2025,22:22:00,00004900003076,Fanta Soda,10,16
+1378,winndixie,winndixie_app_json,12/21/2025,22:22:00,00009027700001,Hugbi Pies,10,16
+1379,winndixie,winndixie_app_json,12/21/2025,22:22:00,00004470002411,Lunchables Snack,10,16
+1380,winndixie,winndixie_app_json,12/21/2025,22:22:00,00005150005722,Smucker's Spread,10,16
+1381,winndixie,winndixie_app_json,12/21/2025,22:22:00,00004530000065,Peter Pan Pnt Bttr,10,16
+1382,winndixie,winndixie_app_json,12/21/2025,22:22:00,00004900004284,Coca Cola Cola,10,16
+1383,winndixie,winndixie_app_json,12/21/2025,22:22:00,00004470010320,OM BASICS TURKEY-A,10,16
+1384,winndixie,winndixie_app_json,12/20/2025,22:06:00,00009027700001,Hugbi Pies,5,8
+1385,winndixie,winndixie_app_json,12/20/2025,22:06:00,00003000065800,Pearl Millng Syrup,5,8
+1386,winndixie,winndixie_app_json,12/20/2025,22:06:00,00060788030013,k&l Milk,5,8
+1387,winndixie,winndixie_app_json,12/20/2025,22:06:00,00007102501612,Bunny Bread,5,8
+1388,winndixie,winndixie_app_json,12/17/2025,20:03:00,00007064000663,Bomb Pop Popsicles,5,8
+1389,winndixie,winndixie_app_json,12/17/2025,20:03:00,00071514150349,EB Eggs,5,8
+1390,winndixie,winndixie_app_json,12/17/2025,20:03:00,00007373107109,Mission Tortillas,5,8
+1391,winndixie,winndixie_app_json,12/17/2025,20:03:00,00004119210211,KELLOGG RAISN BRAN,5,8
+1392,winndixie,winndixie_app_json,12/12/2025,20:42:00,00026765600000,Cupcakes 6ct,17,24
+1393,winndixie,winndixie_app_json,12/12/2025,20:42:00,00005150005711,Smucker's Jelly,17,24
+1394,winndixie,winndixie_app_json,12/12/2025,20:42:00,00067984410457,Dewafelbakkr Pncks,17,24
+1395,winndixie,winndixie_app_json,12/12/2025,20:42:00,00004530000065,Peter Pan Pnt Bttr,17,24
+1396,winndixie,winndixie_app_json,12/12/2025,20:42:00,00007102501612,Bunny Bread,17,24
+1397,winndixie,winndixie_app_json,12/12/2025,20:42:00,00005200004344,Gatorade Beverage,17,24
+1398,winndixie,winndixie_app_json,12/12/2025,20:42:00,00060788030013,k&l Milk,17,24
+1399,winndixie,winndixie_app_json,12/12/2025,20:42:00,00007480601500,Little Hug Drink,17,24
+1400,winndixie,winndixie_app_json,12/12/2025,20:42:00,00003825914341,SEG Sprklng Water,17,24
+1401,winndixie,winndixie_app_json,12/12/2025,20:42:00,00007054311311,Kleinpeter Milk,17,24
+1402,winndixie,winndixie_app_json,12/12/2025,20:42:00,00007800003526,DR PEPPER 12PK,17,24
+1403,winndixie,winndixie_app_json,12/12/2025,20:42:00,00004900004255,CocaCola Soda,17,24
+1404,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003825910876,SEG Containers,23,36
+1405,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003825910874,SEG Containers,23,36
+1406,winndixie,winndixie_app_json,12/07/2025,18:58:00,00020165300000,Ground Beef,23,36
+1407,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003700047971,FBRZ AIR OCEAN,23,36
+1408,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003825912264,SEG BOIL-N-BAG,23,36
+1409,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003825910815,SEG Crm Chs Spread,23,36
+1410,winndixie,winndixie_app_json,12/07/2025,18:58:00,00060788030615,know & love Cheese,23,36
+1411,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003825913508,SEG Pasta,23,36
+1412,winndixie,winndixie_app_json,12/07/2025,18:58:00,00060788030679,know & love Cheese,23,36
+1413,winndixie,winndixie_app_json,12/07/2025,18:58:00,00007708340420,Rosina Meatballs,23,36
+1414,winndixie,winndixie_app_json,12/07/2025,18:58:00,00004400006924,WHT THNS SNDRD TMT,23,36
+1415,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003825911010,SE Grocers Pasta,23,36
+1416,winndixie,winndixie_app_json,12/07/2025,18:58:00,00060788030991,k&l Kidney Beans,23,36
+1417,winndixie,winndixie_app_json,12/07/2025,18:58:00,00007035331620,Blue Runner Beans,23,36
+1418,winndixie,winndixie_app_json,12/07/2025,18:58:00,00060788031078,k&l Ricotta Cheese,23,36
+1419,winndixie,winndixie_app_json,12/07/2025,18:58:00,00003825910957,SE Grocers Soup,23,36
+1420,winndixie,winndixie_app_json,12/07/2025,18:58:00,00060788031032,k&l Pasta Sauce,23,36
+1421,winndixie,winndixie_app_json,12/07/2025,18:58:00,00005200010310,Gatorade Beverage,23,36
+1422,winndixie,winndixie_app_json,12/06/2025,22:09:00,00009027700001,Hugbi Pies,3,4
+1423,winndixie,winndixie_app_json,12/06/2025,22:09:00,00007102501004,Bunny Bread,3,4
+1424,winndixie,winndixie_app_json,12/06/2025,22:06:00,00004119210474,KELLOGG RAISIN BRA,2,4
+1425,winndixie,winndixie_app_json,12/06/2025,22:06:00,00060788030013,k&l Milk,2,4
+1426,winndixie,winndixie_app_json,12/04/2025,16:24:00,00003320080101,A&H FRSH BOOST,29,52
+1427,winndixie,winndixie_app_json,12/04/2025,16:24:00,00007373107109,Mission Tortillas,29,52
+1428,winndixie,winndixie_app_json,12/04/2025,16:24:00,00007064002435,BB MINI SWIRL CONE,29,52
+1429,winndixie,winndixie_app_json,12/04/2025,16:24:00,00005200004344,Gatorade Beverage,29,52
+1430,winndixie,winndixie_app_json,12/04/2025,16:24:00,00024370200000,Ground Beef Rnd,29,52
+1431,winndixie,winndixie_app_json,12/04/2025,16:24:00,00060788030669,know & love Cheese,29,52
+1432,winndixie,winndixie_app_json,12/04/2025,16:24:00,00007142909980,Zatarain's Mix,29,52
+1433,winndixie,winndixie_app_json,12/04/2025,16:24:00,00004300004191,Crystal Light Mix,29,52
+1434,winndixie,winndixie_app_json,12/04/2025,16:24:00,00020587000000,D&W Turkey,29,52
+1435,winndixie,winndixie_app_json,12/04/2025,16:24:00,00020574500000,Chisesi Ham,29,52
+1436,winndixie,winndixie_app_json,12/04/2025,16:24:00,00005210003495,MC Taco Seasoning,29,52
+1437,winndixie,winndixie_app_json,12/04/2025,16:24:00,00002100065883,Kraft Mac & Cheese,29,52
+1438,winndixie,winndixie_app_json,12/04/2025,16:24:00,00002959900188,Manda Sausage,29,52
+1439,winndixie,winndixie_app_json,12/04/2025,16:24:00,00004660003387,Armour Lunchmakers,29,52
+1440,winndixie,winndixie_app_json,12/04/2025,16:24:00,00004660003427,Armour Crunchers,29,52
+1441,winndixie,winndixie_app_json,12/04/2025,16:24:00,00004900004284,Coca Cola Cola,29,52
+1442,winndixie,winndixie_app_json,12/04/2025,16:24:00,00004900003076,Fanta Soda,29,52
+1443,winndixie,winndixie_app_json,12/04/2025,16:24:00,00004900004121,Fanta Soda,29,52
+1444,winndixie,winndixie_app_json,12/04/2025,16:24:00,00004178900621,Maruchan Ramen Sup,29,52
+1445,winndixie,winndixie_app_json,12/04/2025,16:24:00,00006414404302,Chef Boyardee Psta,29,52
+1446,winndixie,winndixie_app_json,12/04/2025,16:24:00,00003825914040,SEG STHRN HMSTYLE,29,52
+1447,winndixie,winndixie_app_json,12/04/2025,16:24:00,00003825912354,SE Grocers Olives,29,52
+1448,winndixie,winndixie_app_json,12/04/2025,16:24:00,00003825911053,SEG Sour Cream,29,52
+1449,winndixie,winndixie_app_json,12/04/2025,16:24:00,00060788030744,k&l Corn,29,52
+1450,winndixie,winndixie_app_json,12/04/2025,16:24:00,00003077215785,Cascade Lemon 9Ct,29,52
+1451,winndixie,winndixie_app_json,12/04/2025,16:24:00,00003825915387,SEG Sandwich Bread,29,52
+1452,winndixie,winndixie_app_json,11/30/2025,20:02:00,00005200004344,Gatorade Beverage,3,6
+1453,winndixie,winndixie_app_json,11/30/2025,20:02:00,00003825915387,SEG Sandwich Bread,3,6
+1454,winndixie,winndixie_app_json,11/30/2025,20:02:00,00003825910157,SE Grocers Pizza,3,6
+1455,winndixie,winndixie_app_json,11/29/2025,19:28:00,00004900004284,Coca Cola Cola,6,8
+1456,winndixie,winndixie_app_json,11/29/2025,19:28:00,00071514171943,Egglands Best Eggs,6,8
+1457,winndixie,winndixie_app_json,11/29/2025,19:28:00,00004530000065,Peter Pan Pnt Bttr,6,8
+1458,winndixie,winndixie_app_json,11/29/2025,19:28:00,00004300004191,Crystal Light Mix,6,8
+1459,winndixie,winndixie_app_json,11/26/2025,18:45:00,00060788030013,k&l Milk,39,60
+1460,winndixie,winndixie_app_json,11/26/2025,18:45:00,00007054311311,Kleinpeter Milk,39,60
+1461,winndixie,winndixie_app_json,11/26/2025,18:45:00,00005150005722,Smucker's Spread,39,60
+1462,winndixie,winndixie_app_json,11/26/2025,18:45:00,00074938492002,Jiffy Foil Pan,39,60
+1463,winndixie,winndixie_app_json,11/26/2025,18:45:00,00004145811704,Edwards Pies,39,60
+1464,winndixie,winndixie_app_json,11/26/2025,18:45:00,00004145854891,Edwards Pies,39,60
+1465,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003663203640,Danimals Smoothie,39,60
+1466,winndixie,winndixie_app_json,11/26/2025,18:45:00,00004133400154,Jonny Cat Liners,39,60
+1467,winndixie,winndixie_app_json,11/26/2025,18:45:00,00006414403021,Pam Cooking Spray,39,60
+1468,winndixie,winndixie_app_json,11/26/2025,18:45:00,00060788030966,k&l Peanuts,39,60
+1469,winndixie,winndixie_app_json,11/26/2025,18:45:00,00084037090145,Kraft Cheese,39,60
+1470,winndixie,winndixie_app_json,11/26/2025,18:45:00,00004660003428,Armour Crunchers,39,60
+1471,winndixie,winndixie_app_json,11/26/2025,18:45:00,00000000004078,Yellow Corn,39,60
+1472,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003825915387,SEG Sandwich Bread,39,60
+1473,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003825910799,SEG Soup Stock,39,60
+1474,winndixie,winndixie_app_json,11/26/2025,18:45:00,00060788030744,k&l Corn,39,60
+1475,winndixie,winndixie_app_json,11/26/2025,18:45:00,00002114042700,HS Regular Bacon,39,60
+1476,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003825911052,SEG Sour Cream,39,60
+1477,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003825914039,SEG STHR HMST STIK,39,60
+1478,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003825910601,SE Grocers Pasta,39,60
+1479,winndixie,winndixie_app_json,11/26/2025,18:45:00,00001657195210,Sparkling Ice Wtr,39,60
+1480,winndixie,winndixie_app_json,11/26/2025,18:45:00,00001657191032,Sparkling Ice Wtr,39,60
+1481,winndixie,winndixie_app_json,11/26/2025,18:45:00,00001657191030,Sparkling Ice Wtr,39,60
+1482,winndixie,winndixie_app_json,11/26/2025,18:45:00,00007084789621,Monster Energy,39,60
+1483,winndixie,winndixie_app_json,11/26/2025,18:45:00,00000000004093,Jumbo Yellow Onion,39,60
+1484,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003338365325,Celery,39,60
+1485,winndixie,winndixie_app_json,11/26/2025,18:45:00,00000000004072,Russet Potato,39,60
+1486,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003710004213,Libby's Peas,39,60
+1487,winndixie,winndixie_app_json,11/26/2025,18:45:00,00003338399987,Mini Carnation,39,60
+1488,winndixie,winndixie_app_json,11/26/2025,18:45:00,00026779000000,12COOKIECAKE,39,60
+1489,winndixie,winndixie_app_json,11/20/2025,11:25:00,00003825915387,SEG Sandwich Bread,13,16
+1490,winndixie,winndixie_app_json,11/20/2025,11:25:00,00060788030013,k&l Milk,13,16
+1491,winndixie,winndixie_app_json,11/20/2025,11:25:00,00004900004255,CocaCola Soda,13,16
+1492,winndixie,winndixie_app_json,11/20/2025,11:25:00,00004900006090,CocaCola Soda,13,16
+1493,winndixie,winndixie_app_json,11/20/2025,11:25:00,00007800003526,DR PEPPER 12PK,13,16
+1494,winndixie,winndixie_app_json,11/20/2025,11:25:00,00081829001857,Chobani Yogurt,13,16
+1495,winndixie,winndixie_app_json,11/20/2025,11:25:00,00003825912978,SE Grocers Oats,13,16
+1496,winndixie,winndixie_app_json,11/20/2025,11:25:00,00060788030022,k&l Milk,13,16
+1497,winndixie,winndixie_app_json,11/17/2025,18:59:00,00003825914339,SEG Sprklng Water,15,26
+1498,winndixie,winndixie_app_json,11/17/2025,18:59:00,00003825914341,SEG Sprklng Water,15,26
+1499,winndixie,winndixie_app_json,11/17/2025,18:59:00,00007208027431,Golden Flake Skins,15,26
+1500,winndixie,winndixie_app_json,11/17/2025,18:59:00,00003680036726,Topcare Liquid Rlf,15,26
+1501,winndixie,winndixie_app_json,11/17/2025,18:59:00,00002178850695,Lotus Cookie Buttr,15,26
+1502,winndixie,winndixie_app_json,11/17/2025,18:59:00,00007084789948,Monster Enrgy Drnk,15,26
+1503,winndixie,winndixie_app_json,11/17/2025,18:59:00,00007056097060,Pictsweet Vegetble,15,26
+1504,winndixie,winndixie_app_json,11/17/2025,18:59:00,00081026402712,Kevins Thai Style,15,26
+1505,winndixie,winndixie_app_json,11/17/2025,18:59:00,00004470036002,Lunchables Snack,15,26
+1506,winndixie,winndixie_app_json,11/17/2025,18:59:00,00004660003387,Armour Lunchmakers,15,26
+1507,winndixie,winndixie_app_json,11/17/2025,18:59:00,00028245100000,Pork Chops,15,26
+1508,winndixie,winndixie_app_json,11/17/2025,18:59:00,00028245100000,Pork Chops,15,26
+1509,winndixie,winndixie_app_json,11/17/2025,18:59:00,00000980000055,Kinder Bueno,15,26
+1510,winndixie,winndixie_app_json,11/15/2025,19:55:00,00060788030013,k&l Milk,14,26
+1511,winndixie,winndixie_app_json,11/15/2025,19:55:00,00005200004346,Gatorade Beverage,14,26
+1512,winndixie,winndixie_app_json,11/15/2025,19:55:00,00005200004344,Gatorade Beverage,14,26
+1513,winndixie,winndixie_app_json,11/15/2025,19:55:00,00000980083003,Nutella Biscuits,14,26
+1514,winndixie,winndixie_app_json,11/15/2025,19:55:00,00003500098631,Fabuloso Cleaner,14,26
+1515,winndixie,winndixie_app_json,11/15/2025,19:55:00,00002100065883,Kraft Mac & Cheese,14,26
+1516,winndixie,winndixie_app_json,11/15/2025,19:55:00,00004300002825,Kool Aid Drinks,14,26
+1517,winndixie,winndixie_app_json,11/15/2025,19:55:00,00003825911499,SEG Whipped Toppng,14,26
+1518,winndixie,winndixie_app_json,11/15/2025,19:55:00,00060788030744,k&l Corn,14,26
+1519,winndixie,winndixie_app_json,11/15/2025,19:55:00,00007035331620,Blue Runner Beans,14,26
+1520,winndixie,winndixie_app_json,11/15/2025,19:55:00,00020224500000,Sliced Strwberries,14,26
+1521,winndixie,winndixie_app_json,11/15/2025,19:55:00,00080882910688,LSS Toothpaste,14,26
+1522,winndixie,winndixie_app_json,11/15/2025,19:55:00,00080882906093,Home Select Foil,14,26
+1523,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003825915384,SEG White Bread,24,46
+1524,winndixie,winndixie_app_json,11/13/2025,14:28:00,00004610040010,Sargento Cheese,24,46
+1525,winndixie,winndixie_app_json,11/13/2025,14:28:00,00004610040094,Sargento Cheese,24,46
+1526,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003760039885,Hormel Pepperoni,24,46
+1527,winndixie,winndixie_app_json,11/13/2025,14:28:00,00020742400000,SEG Ham,24,46
+1528,winndixie,winndixie_app_json,11/13/2025,14:28:00,00020587000000,D&W Turkey,24,46
+1529,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003825913969,SEG Fruit Punch,24,46
+1530,winndixie,winndixie_app_json,11/13/2025,14:28:00,00060788030629,know & love Cheese,24,46
+1531,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003825912110,SEG Eraser Pads,24,46
+1532,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003825912354,SE Grocers Olives,24,46
+1533,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003890000473,Dole Can Pineapple,24,46
+1534,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003000065800,Pearl Millng Syrup,24,46
+1535,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003825912237,SEG Water Enhancer,24,46
+1536,winndixie,winndixie_app_json,11/13/2025,14:28:00,00007234300059,MID'S SAUSAGE PIZZ,24,46
+1537,winndixie,winndixie_app_json,11/13/2025,14:28:00,00004900007932,Powerade Drink,24,46
+1538,winndixie,winndixie_app_json,11/13/2025,14:28:00,00004900007931,Powerade Drink,24,46
+1539,winndixie,winndixie_app_json,11/13/2025,14:28:00,00001657191030,Sparkling Ice Wtr,24,46
+1540,winndixie,winndixie_app_json,11/13/2025,14:28:00,00001657194033,Sparkling Ice Wtr,24,46
+1541,winndixie,winndixie_app_json,11/13/2025,14:28:00,00001657191032,Sparkling Ice Wtr,24,46
+1542,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003320097495,A&H Scent Boosters,24,46
+1543,winndixie,winndixie_app_json,11/13/2025,14:28:00,00001657195210,Sparkling Ice Wtr,24,46
+1544,winndixie,winndixie_app_json,11/13/2025,14:28:00,00003320000416,SCENT BOOSTERS,24,46
+1545,winndixie,winndixie_app_json,11/13/2025,14:28:00,00001657195920,SI Starburst Straw,24,46
