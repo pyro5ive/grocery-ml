@@ -92,8 +92,8 @@ class GroceryMLCore:
     def build_trip_interveral_feautres(self, df):
         logger.info("build_trip_interveral_feautres(): start")
         trip_df = (df[["date"]] .drop_duplicates() .sort_values("date") .reset_index(drop=True))
-        trip_df["daysSinceLastTrip_raw"] = TemporalFeatures.create_days_since_last_trip(trip_df)
-        trip_df["avgDaysBetweenTrips_feat"] = TemporalFeatures.compute_avg_days_between_trips(trip_df)
+        # trip_df["daysSinceLastTrip_raw"] = TemporalFeatures.create_days_since_last_trip(trip_df)
+        # trip_df["avgDaysBetweenTrips_feat"] = TemporalFeatures.compute_avg_days_between_trips(trip_df)
         logger.info("build_trip_interveral_feautres(): done")
         return df.merge(trip_df, on="date", how="left")
     ##############################################################################################
@@ -120,22 +120,22 @@ class GroceryMLCore:
         df[colName] = 1
         return df; 
     ##############################################################################################
-    def add_item_total_purchase_count_feat(self, df, feature_name: str):
-        """
-        Adds a history-only cumulative purchase count per item.
-        For each row, the count reflects how many times the item
-        has been purchased up to and including that day.
-        """
-    
-        logger.info("add_item_total_purchase_count_feat()")
-    
-        # Ensure correct temporal order per item
-        df = df.sort_values(["itemId", "date"]).copy()
-    
-        # History-only cumulative count
-        df[feature_name] = (df.groupby("itemId")["didBuy_target"] .cumsum() .astype(int) )
-    
-        return df
+    # def add_item_total_purchase_count_feat(self, df, feature_name: str):
+    #     """
+    #     Adds a history-only cumulative purchase count per item.
+    #     For each row, the count reflects how many times the item
+    #     has been purchased up to and including that day.
+    #     """
+    #
+    #     logger.info("add_item_total_purchase_count_feat()")
+    #
+    #     # Ensure correct temporal order per item
+    #     df = df.sort_values(["itemId", "date"]).copy()
+    #
+    #     # History-only cumulative count
+    #     df[feature_name] = (df.groupby("itemId")["didBuy_target"] .cumsum() .astype(int) )
+    #
+    #     return df
     ##############################################################################################
     def build_holiday_features(self, df):
         logger.info("build_holiday_features()")
@@ -155,17 +155,17 @@ class GroceryMLCore:
         df = df.merge(holiday_feats, on="date", how="left")
         return df
     ##############################################################################################
-    def build_school_schedule_features(self, df):
-        logger.info("build_school_schedule_features(): start")
-        
-        df = df.drop(columns=["daysUntilSchoolStart_raw","daysUntilSchoolEnd_raw","schoolSeasonIndex_feat"], errors="ignore")
-        grouped_df = (df[["date"]].drop_duplicates().sort_values("date").reset_index(drop=True))
-        grouped_df["daysUntilSchoolStart_raw"] = SchoolFeatures.compute_days_until_school_start(grouped_df["date"])
-        grouped_df["daysUntilSchoolEnd_raw"] = SchoolFeatures.compute_days_until_school_end(grouped_df["date"])
-        grouped_df["schoolSeasonIndex_feat"] = SchoolFeatures.compute_school_season_index(grouped_df["date"])
-        df = df.merge(grouped_df, on="date", how="left")
-        logger.info("build_school_schedule_features(): done")
-        return df
+    # def build_school_schedule_features(self, df):
+    #     logger.info("build_school_schedule_features(): start")
+    #
+    #     df = df.drop(columns=["daysUntilSchoolStart_raw","daysUntilSchoolEnd_raw","schoolSeasonIndex_feat"], errors="ignore")
+    #     grouped_df = (df[["date"]].drop_duplicates().sort_values("date").reset_index(drop=True))
+    #     grouped_df["daysUntilSchoolStart_raw"] = SchoolFeatures.compute_days_until_school_start(grouped_df["date"])
+    #     grouped_df["daysUntilSchoolEnd_raw"] = SchoolFeatures.compute_days_until_school_end(grouped_df["date"])
+    #     grouped_df["schoolSeasonIndex_feat"] = SchoolFeatures.compute_school_season_index(grouped_df["date"])
+    #     df = df.merge(grouped_df, on="date", how="left")
+    #     logger.info("build_school_schedule_features(): done")
+    #     return df
     ##############################################################################################
     ## TODO:build_purchase_item_freq_cols  is broken 
     # def build_purchase_item_freq_cols(self, df):

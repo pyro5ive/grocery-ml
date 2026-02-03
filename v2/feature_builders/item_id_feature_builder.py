@@ -2,21 +2,21 @@ import logging
 import json
 
 
-class ItemIdMapper:
-    def __init__(self, logger: logging.Logger | None = None):
-        thisClassName = self.__class__.__name__
-        self.logger = logger if logger is not None else logging.getLogger(thisClassName)
+class ItemIdFeatureBuilder:
+
+    def __init__(self):
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.item_to_id: dict[str, int] | None = None
         self.id_to_item: dict[int, str] | None = None
         self.logger.info("ItemIdMapper initialized")
-################################################################################
+    ################################################################################
 
-    def create_item_ids(self, df):
+    def build_feature(self, df):
         self.logger.info("create_item_ids(): start rows=%s mapping_exists=%s", len(df), self.item_to_id is not None)
         if self.item_to_id is None:
             return self._build_item_ids(df)
         return self._map_existing_item_ids(df)
-################################################################################
+    ################################################################################
 
     def _build_item_ids(self, df):
         if "item" not in df.columns:
@@ -42,7 +42,7 @@ class ItemIdMapper:
         df.reset_index(drop=True, inplace=True)
         self.logger.info("_build_item_ids(): mapping_size=%s", len(self.item_to_id))
         return df
-################################################################################
+    ################################################################################
 
     def _map_existing_item_ids(self, df):
         if "item" not in df.columns:

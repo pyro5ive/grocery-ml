@@ -1,8 +1,12 @@
+# noinspection
+
+
 import numpy as np
 import pytz
 import datetime
 from math import exp
 import pandas as pd
+
 
 class TemporalFeatures:
 
@@ -36,56 +40,56 @@ class TemporalFeatures:
     #     #return df; 
    ################################################
     @staticmethod
-    def compute_expected_gap_ewma_feat(df, alpha=0.3):
-        """
-        Computes an exponentially weighted moving average (EWMA)
-        of days between purchases, per item.
-    
-        - Only didBuy_target == 1 advances the EWMA
-        - Negative rows inherit the last known expected gap
-        - Alpha controls adaptation speed (0.2–0.4 typical)
-        """
-    
-        print("compute_expected_gap_ewma()");
-        df = df.sort_values(["itemId", "date"]).reset_index(drop=True)
-    
-        df["expectedDaysBetweenPurchases_ewma_feat"] = 0.0
-    
-        last_purchase_date_by_item = {}
-        ewma_gap_by_item = {}
-    
-        for i in range(len(df)):
-            itemId = df.at[i, "itemId"]
-            current_date = df.at[i, "date"]
-            didBuy = df.at[i, "didBuy_target"]
-    
-            if didBuy == 1:
-                if itemId in last_purchase_date_by_item:
-                    gap_days = (current_date - last_purchase_date_by_item[itemId]).days
-    
-                    if itemId in ewma_gap_by_item:
-                        prev_ewma = ewma_gap_by_item[itemId]
-                        new_ewma = (alpha * gap_days) + ((1.0 - alpha) * prev_ewma)
-                    else:
-                        new_ewma = float(gap_days)
-    
-                    ewma_gap_by_item[itemId] = new_ewma
-                    df.at[i, "expectedDaysBetweenPurchases_ewma_feat"] = new_ewma
-                else:
-                    # first purchase → no gap yet
-                    df.at[i, "expectedDaysBetweenPurchases_ewma_feat"] = 0.0
-    
-                last_purchase_date_by_item[itemId] = current_date
-    
-            else:
-                # carry forward last known EWMA
-                if itemId in ewma_gap_by_item:
-                    df.at[i, "expectedDaysBetweenPurchases_ewma_feat"] = ewma_gap_by_item[itemId]
-                else:
-                    df.at[i, "expectedDaysBetweenPurchases_ewma_feat"] = 0.0
-    
-        return df
-    ############################################################
+    # def compute_expected_gap_ewma_feat(df, alpha=0.3):
+    #     """
+    #     Computes an exponentially weighted moving average (EWMA)
+    #     of days between purchases, per item.
+    #
+    #     - Only didBuy_target == 1 advances the EWMA
+    #     - Negative rows inherit the last known expected gap
+    #     - Alpha controls adaptation speed (0.2–0.4 typical)
+    #     """
+    #
+    #     print("compute_expected_gap_ewma()");
+    #     df = df.sort_values(["itemId", "date"]).reset_index(drop=True)
+    #
+    #     df["expectedDaysBetweenPurchases_ewma_feat"] = 0.0
+    #
+    #     last_purchase_date_by_item = {}
+    #     ewma_gap_by_item = {}
+    #
+    #     for i in range(len(df)):
+    #         itemId = df.at[i, "itemId"]
+    #         current_date = df.at[i, "date"]
+    #         didBuy = df.at[i, "didBuy_target"]
+    #
+    #         if didBuy == 1:
+    #             if itemId in last_purchase_date_by_item:
+    #                 gap_days = (current_date - last_purchase_date_by_item[itemId]).days
+    #
+    #                 if itemId in ewma_gap_by_item:
+    #                     prev_ewma = ewma_gap_by_item[itemId]
+    #                     new_ewma = (alpha * gap_days) + ((1.0 - alpha) * prev_ewma)
+    #                 else:
+    #                     new_ewma = float(gap_days)
+    #
+    #                 ewma_gap_by_item[itemId] = new_ewma
+    #                 df.at[i, "expectedDaysBetweenPurchases_ewma_feat"] = new_ewma
+    #             else:
+    #                 # first purchase → no gap yet
+    #                 df.at[i, "expectedDaysBetweenPurchases_ewma_feat"] = 0.0
+    #
+    #             last_purchase_date_by_item[itemId] = current_date
+    #
+    #         else:
+    #             # carry forward last known EWMA
+    #             if itemId in ewma_gap_by_item:
+    #                 df.at[i, "expectedDaysBetweenPurchases_ewma_feat"] = ewma_gap_by_item[itemId]
+    #             else:
+    #                 df.at[i, "expectedDaysBetweenPurchases_ewma_feat"] = 0.0
+    #
+    #     return df
+    # ############################################################
     # @staticmethod
     # def compute_days_since_last_purchase_for_item(df, colName: str, reference_date_col="date"):
     #     return TemporalFeatures.compute_days_since_last_purchase_for_item_exclusive(
@@ -157,13 +161,13 @@ class TemporalFeatures:
 # #
     ############################################################    
     @staticmethod
-    def compute_avg_days_between_item_purchases(df, colName: str):
-        df = df.sort_values(["itemId", "date"]).reset_index(drop=True)
-        purchase_gap = df.where(df["didBuy_target"] == 1).groupby("itemId")["date"].diff().dt.days
-        avg_gap = purchase_gap.groupby(df["itemId"]).expanding().mean().reset_index(level=0, drop=True)
-        df[colName] = avg_gap.groupby(df["itemId"]).ffill().fillna(0)
-
-        return df
+    # def compute_avg_days_between_item_purchases(df, colName: str):
+    #     df = df.sort_values(["itemId", "date"]).reset_index(drop=True)
+    #     purchase_gap = df.where(df["didBuy_target"] == 1).groupby("itemId")["date"].diff().dt.days
+    #     avg_gap = purchase_gap.groupby(df["itemId"]).expanding().mean().reset_index(level=0, drop=True)
+    #     df[colName] = avg_gap.groupby(df["itemId"]).ffill().fillna(0)
+    #
+    #     return df
     #######################################################
     @staticmethod
     def compute_item_due_ratio(df, cap=3.0):
@@ -174,18 +178,18 @@ class TemporalFeatures:
 
     ######## TRIP #######
     @staticmethod
-    def create_days_since_last_trip(targetDf):
-        return targetDf["date"].diff().dt.days.fillna(0)
+    # def create_days_since_last_trip(targetDf):
+    #     return targetDf["date"].diff().dt.days.fillna(0)
     #######################################################
-    @staticmethod
-    def compute_days_since_last_trip_value(df, prediction_date, date_col: str = "date"):
-        prediction_date_ts = pd.to_datetime(prediction_date)
-        last_trip_date = pd.to_datetime(df[date_col]).max()
-
-        if pd.isna(last_trip_date):
-            return None
-
-        return int((prediction_date_ts - last_trip_date).days)
+    # @staticmethod
+    # def compute_days_since_last_trip_value(df, prediction_date, date_col: str = "date"):
+    #     prediction_date_ts = pd.to_datetime(prediction_date)
+    #     last_trip_date = pd.to_datetime(df[date_col]).max()
+    #
+    #     if pd.isna(last_trip_date):
+    #         return None
+    #
+    #     return int((prediction_date_ts - last_trip_date).days)
     ########################################################
     # @staticmethod
     # def compute_avg_days_between_trips(targetDf):
@@ -245,11 +249,11 @@ class TemporalFeatures:
         return group
     ####################################################################################################
     @staticmethod
-    def is_dst_series(date_series: pd.Series, tz="America/Chicago") -> pd.Series:
-        s = pd.to_datetime(date_series)
-        return s.map(
-            lambda d: 1 if pytz.timezone(tz).localize(d).dst() != pd.Timedelta(0) else 0
-        )  
+    # def is_dst_series(date_series: pd.Series, tz="America/Chicago") -> pd.Series:
+    #     s = pd.to_datetime(date_series)
+    #     return s.map(
+    #         lambda d: 1 if pytz.timezone(tz).localize(d).dst() != pd.Timedelta(0) else 0
+    #     )
     ####################################################################################################
 
   
