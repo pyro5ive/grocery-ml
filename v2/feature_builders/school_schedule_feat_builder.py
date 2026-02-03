@@ -19,7 +19,6 @@ class SchoolSchedule_FeatureBuilder:
     def __init__(this, dateCol: str = "date"):
         this.logger = logging.getLogger(this.__class__.__name__)
         this.dateCol = dateCol
-
     #-----------------------------------------------------------------#
 
     def build_feature(this, df: pd.DataFrame) -> pd.DataFrame:

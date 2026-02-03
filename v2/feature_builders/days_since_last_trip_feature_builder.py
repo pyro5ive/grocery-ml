@@ -3,19 +3,19 @@ import logging
 import pandas as pd
 import numpy as np
 
-class DaysBetweenTrips_FeatureBuilder:
+class DaysSinceLastTrip_FeatureBuilder:
 
-    daysSinceLastTripRawColName = "daysBetweenTrips_raw";
-    daysSinceLastTripTransformedColName = "daysBetweenTrips_log1p_feat";
+    daysSinceLastTripRawColName = "daysSinceLastTrip_raw";
+    daysSinceLastTripTransformedColName = "daysSinceLastTrip_log1p_feat";
+    dateCol = "date";
 
-    requiredFeatures = ["date"];
+    requiredFeatures = [dateCol];
+    requiredFeatureTypes = {dateCol: pd.api.types.is_datetime64_any_dtype};
+
     producedFeatures = [ daysSinceLastTripTransformedColName, daysSinceLastTripRawColName ];
 
-    def __init__(this,  reference_date_col):
+    def __init__(this):
         this.logger = logging.getLogger(this.__class__.__name__);
-        this.dateCol = reference_date_col;
-        this.requiredFeatures.append(reference_date_col);
-        this.requiredFeatureTypes[reference_date_col] = pd.api.types.is_datetime64_any_dtype
     #-----------------------------------------------------------------#
     
     def build_feature(this, df):

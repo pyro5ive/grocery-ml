@@ -2,20 +2,24 @@ import logging
 import pandas as pd
 
 class ExpectedGapEwma_FeatureBuilder:
+
+    alpha = 0.3;
+    dateCol = "date";
+    targetCol = "didBuy_target";
+    itemIdCol = "itemId";
     expectedGapEwmaColName = "expectedDaysBetweenPurchases_ewma_feat";
-    requiredFeatures = [ "itemId", "date", "didBuy_target" ];
+
+    requiredFeatureTypes = {};
+    requiredFeatureTypes[itemIdCol] = pd.api.types.is_integer_dtype;
+    requiredFeatureTypes[dateCol] = pd.api.types.is_datetime64_any_dtype;
+    requiredFeatureTypes[targetCol] = pd.api.types.is_bool_dtype;
+
+    requiredFeatures = [ itemIdCol, dateCol, targetCol ];
     producedFeatures = [ expectedGapEwmaColName ];
-    def __init__(this, alpha: float = 0.3, item_id_col: str = "itemId", date_col: str = "date", target_col: str = "didBuy_target"):
+
+    def __init__(this,  ):
         this.logger = logging.getLogger(this.__class__.__name__);
-        this.alpha = float(alpha);
-        this.itemIdCol = item_id_col;
-        this.dateCol = date_col;
-        this.targetCol = target_col;
-        this.requiredFeatureTypes = {};
-        this.requiredFeatureTypes = {};
-        this.requiredFeatureTypes[this.itemIdCol] = pd.api.types.is_integer_dtype;
-        this.requiredFeatureTypes[this.dateCol] = pd.api.types.is_datetime64_any_dtype;
-        this.requiredFeatureTypes[this.targetCol] = pd.api.types.is_bool_dtype;
+
     #======================================================================#
     def build_feature(this, df):
         this._validate_required_columns(df);

@@ -4,11 +4,11 @@ import numpy as np
 
 class AvgDaysBetweenTrips_FeatureBuilder:
 
-    daysSinceLastTripRawColName = "daysBetweenTrips_raw";
+    daysSinceLastTripRawColName = "daysSinceLastTrip_raw";
     avgDaysBetweenTripsRawColName = "avgDaysBetweenTrips_raw";
     avgDaysBetweenTripsTransformedColName = "avgDaysBetweenTrips_log1p_feat";
 
-    requiredFeatures = [ daysSinceLastTripRawColName ];
+    requiredFeatures = [ daysSinceLastTripRawColName];
     producedFeatures = [ avgDaysBetweenTripsTransformedColName, avgDaysBetweenTripsRawColName ];
 
     def __init__(this):

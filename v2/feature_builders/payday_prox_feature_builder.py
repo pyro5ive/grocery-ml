@@ -75,10 +75,14 @@ class PaydayProximity_FeatureBuilder:
         df[self.cosCol] = np.cos(angleSeries)
 
         return df
+    #--------------------------#
 
-#--------------------------#
+    def build_feature(self, df):
+        df = self._buildAll(df);
+        return df;
 
-    def buildAll(self, df: pd.DataFrame) -> pd.DataFrame:
+    # --------------------------#
+    def _buildAll(self, df: pd.DataFrame) -> pd.DataFrame:
         self.logger.info("Building all payday features for %s", self.personName)
 
         df = df.copy()

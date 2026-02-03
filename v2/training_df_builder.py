@@ -7,6 +7,8 @@ from feature_builders.item_supply_level_feature_builder import ItemSupplyLevel_F
 from feature_builders.school_schedule_feat_builder import SchoolSchedule_FeatureBuilder
 from feature_builders.days_since_last_purchase_feat_builder import DaysSinceLastPurchase_FeatBuilder
 from feature_builders.item_id_feature_builder import ItemIdFeatureBuilder
+from feature_builders.days_since_last_trip_feature_builder import DaysSinceLastTrip_FeatureBuilder
+from feature_builders.avg_days_between_item_purchases_feature_builder import AvgDaysBetweenItemPurchases_FeatureBuilder
 from feature_builders.avg_days_between_trips_feature_builder import AvgDaysBetweenTrips_FeatureBuilder
 from feature_builders.expected_gap_ewma_feature_builder import ExpectedGapEwma_FeatureBuilder
 from feature_builders.item_total_purchase_count_feature_builder import ItemTotalPurchaseCount_FeatureBuilder
@@ -22,8 +24,8 @@ class TrainingDataBuilder:
         this.featureBuilders = [];
         this._register_feature_builders();
     #======================================================================#
-    def build_training_df(this):
-        this.logger.info("build_training_df() start");
+    def build_df(this):
+        this.logger.info("build_df() start");
         df = this._build_event_dfs();
         df = this._build_target_col(df);
         df = this._apply_feature_pipeline(df);
@@ -48,9 +50,11 @@ class TrainingDataBuilder:
         this.featureBuilders.append(PaydayProximity_FeatureBuilder("sjm", pd.Timestamp("2026-01-30", tz="US/Central")));
         this.featureBuilders.append(ItemIdFeatureBuilder());
         this.featureBuilders.append(DaysSinceLastPurchase_FeatBuilder());
-        this.featureBuilders.append(ItemTotalPurchaseCount_FeatureBuilder());
+        this.featureBuilders.append(AvgDaysBetweenItemPurchases_FeatureBuilder());
+        this.featureBuilders.append(DaysSinceLastTrip_FeatureBuilder());
+        this.featureBuilders.append(AvgDaysBetweenTrips_FeatureBuilder());
         this.featureBuilders.append(ExpectedGapEwma_FeatureBuilder());
-        this.featureBuilders.append(AvgDaysBetweenTrips_FeatureBuilder("date"));
+        this.featureBuilders.append(ItemTotalPurchaseCount_FeatureBuilder());
         this.featureBuilders.append(ItemSupplyLevel_FeatureBuilder());
     #======================================================================#
     def _apply_feature_pipeline(this, df):

@@ -5,15 +5,15 @@ import numpy as np
 
 class DaysSinceLastPurchase_FeatBuilder:
 
+    dateCol = "date"
+    featColNameTransformed = "daysSinceLastPurchase_log1p_feat";
+    featColNameRaw = "daysSinceLastPurchase_raw";
+
     requiredFeatures = ["itemId", "didBuy_target"];
+    producedFeatures = [featColNameTransformed, featColNameRaw];
 
-    producedFeatures = ["daysSinceLastPurchase_feat"];
-
-    def __init__(this,  dateCol: str = "date"):
+    def __init__(this,):
         this.logger = logging.getLogger(this.__class__.__name__);
-        this.dateCol = dateCol;
-        this.featColNameTransformed = "daysSinceLastPurchase_log1p_feat";
-        this.featColNameRaw = "daysSinceLastPurchase_raw";
     ############################################################################
     
     def build_feature(this, df):

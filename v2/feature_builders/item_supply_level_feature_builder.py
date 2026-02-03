@@ -3,19 +3,21 @@ import pandas as pd
 import numpy as np
 
 class ItemSupplyLevel_FeatureBuilder:
+
     itemSupplyLevelRawColName = "itemSupplyLevel_raw";
     itemSupplyLevelClippedFeatColName = "itemSupplyLevel_clipped_feat";
 
-    requiredFeatures = [ "daysSinceThisItemLastPurchased_raw", "avgDaysBetweenItemPurchases_feat" ];
-    producedFeatures = [ itemSupplyLevelRawColName, itemSupplyLevelClippedFeatColName ];
+    daysSinceCol: str = "daysSinceLastPurchase_raw";
+    avgGapCol: str = "avgDaysBetweenItemPurchases_raw";
 
-    def __init__(this, days_since_col: str = "daysSinceThisItemLastPurchased_raw", avg_gap_col: str = "avgDaysBetweenItemPurchases_feat"):
+    producedFeatures = [itemSupplyLevelRawColName, itemSupplyLevelClippedFeatColName];
+    requiredFeatures = [ daysSinceCol, avgGapCol ];
+    requiredFeatureTypes = {};
+    requiredFeatureTypes[daysSinceCol] = pd.api.types.is_numeric_dtype;
+    requiredFeatureTypes[avgGapCol] = pd.api.types.is_numeric_dtype;
+
+    def __init__(this, ):
         this.logger = logging.getLogger(this.__class__.__name__);
-        this.daysSinceCol = days_since_col;
-        this.avgGapCol = avg_gap_col;
-        this.requiredFeatureTypes = {};
-        this.requiredFeatureTypes[this.daysSinceCol] = pd.api.types.is_numeric_dtype;
-        this.requiredFeatureTypes[this.avgGapCol] = pd.api.types.is_numeric_dtype;
     #======================================================================#
 
     def build_feature(this, df):
