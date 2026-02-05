@@ -7,10 +7,10 @@ class AvgDaysBetweenItemPurchases_FeatureBuilder:
     dateCol = "date";
     targetCol = "didBuy_target";
     itemIdCol = "itemId";
-    daysSinceCol = "daysSinceLastPurchase_raw";
+    daysSinceCol = "daysSinceLast_Purchase_raw";
 
-    avgDaysBetweenItemPurchasesRawColName = "avgDaysBetweenItemPurchases_raw";
-    avgDaysBetweenItemPurchasesFeatColName = "avgDaysBetweenItemPurchases_feat";
+    avgDaysBetweenItemPurchasesRawColName = "avgDaysBetween_ItemPurchases_raw";
+    avgDaysBetweenItemPurchasesFeatColName = "avgDaysBetween_ItemPurchases_feat";
 
     requiredFeatureTypes = {};
     requiredFeatureTypes[itemIdCol] = pd.api.types.is_integer_dtype;

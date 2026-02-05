@@ -7,7 +7,7 @@ class ExpectedGapEwma_FeatureBuilder:
     dateCol = "date";
     targetCol = "didBuy_target";
     itemIdCol = "itemId";
-    expectedGapEwmaColName = "expectedDaysBetweenPurchases_ewma_feat";
+    expectedGapEwmaColName = "expectedDaysBetween_Purchases_ewma_feat";
 
     requiredFeatureTypes = {};
     requiredFeatureTypes[itemIdCol] = pd.api.types.is_integer_dtype;

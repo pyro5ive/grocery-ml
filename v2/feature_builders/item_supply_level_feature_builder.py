@@ -7,8 +7,8 @@ class ItemSupplyLevel_FeatureBuilder:
     itemSupplyLevelRawColName = "itemSupplyLevel_raw";
     itemSupplyLevelClippedFeatColName = "itemSupplyLevel_clipped_feat";
 
-    daysSinceCol: str = "daysSinceLastPurchase_raw";
-    avgGapCol: str = "avgDaysBetweenItemPurchases_raw";
+    daysSinceCol: str = "daysSinceLast_Purchase_raw";
+    avgGapCol: str = "avgDaysBetween_ItemPurchases_raw";
 
     producedFeatures = [itemSupplyLevelRawColName, itemSupplyLevelClippedFeatColName];
     requiredFeatures = [ daysSinceCol, avgGapCol ];

@@ -6,7 +6,7 @@ class WeatherHistory_FeatureBuilder:
     sourcePath = "../data/weather/VisualCrossing-70062 2000-01-01 to 2026-23-1.csv";
 
     requiredFeatures = [];
-    producedFeatures = ["temp_feat","feelsLike_feat","humidity_feat","precip_feat","windspeed_feat","sealevelpressure_feat"];
+    producedFeatures = ["feelsLike_feat","humidity_feat","precip_feat"];
 
     def __init__(this, dateCol: str = "date"):
         this.logger = logging.getLogger(this.__class__.__name__);
@@ -27,17 +27,25 @@ class WeatherHistory_FeatureBuilder:
     def _load_weather_df(this):
         df = pd.read_csv(
             WeatherHistory_FeatureBuilder.sourcePath,
-            usecols=["datetime","temp","feelslike","humidity","precip","windspeed","sealevelpressure"]
-        );
+            usecols=[
+                "datetime",
+                # "temp",
+                "feelslike",
+                "humidity",
+                "precip"
+                # "windspeed",
+                # "sealevelpressure"
+            ]
+         );
         df["datetime"] = pd.to_datetime(df["datetime"]);
         df["date"] = df["datetime"].dt.normalize();
         df = df.rename(columns={
-            "temp":"temp_feat",
+            # "temp":"temp_feat",
             "feelslike":"feelsLike_feat",
             "humidity":"humidity_feat",
             "precip":"precip_feat",
-            "windspeed":"windspeed_feat",
-            "sealevelpressure":"sealevelpressure_feat"
+            # "windspeed":"windspeed_feat",
+            # "sealevelpressure":"sealevelpressure_feat"
         });
         df = df.drop(columns=["datetime"]).groupby("date", as_index=True).mean();
         return df;

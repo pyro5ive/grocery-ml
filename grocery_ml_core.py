@@ -64,10 +64,7 @@ class GroceryMLCore:
         df = WeatherFeatures.merge_weather_features(weatherDf, df);
         return df;
     ###########################################################################################   
-    def drop_rare_purchases(self, df):
-        logger.info("drop_rare_purchases()")
-        df = df[df["itemPurchaseCount_raw"] != 1].reset_index(drop=True)
-        return df;
+
     ###########################################################################################
     def log_feature(self, values: pd.Series) -> pd.Series:
         # guard: negatives are clipped, zeros allowed
@@ -97,28 +94,28 @@ class GroceryMLCore:
         logger.info("build_trip_interveral_feautres(): done")
         return df.merge(trip_df, on="date", how="left")
     ##############################################################################################
-    def create_item_supply_level_feat(self, df):
-        logger.info("create_item_supply_level_feat()")
-    
-        try:
-            ratio = np.where(
-                df["avgDaysBetweenItemPurchases_feat"] > 0,
-                df["daysSinceThisItemLastPurchased_raw"] / df["avgDaysBetweenItemPurchases_feat"],
-                0.0
-            )
-    
-            df["itemSupplyLevel_feat"] = np.clip(1.0 - ratio, 0.0, 1.0)
-        except Exception as ex:
-            logger.info("create_item_supply_level_feat() failed")
-            logger.info(ex)
-            raise
-    
-        return df
+    # def create_item_supply_level_feat(self, df):
+    #     logger.info("create_item_supply_level_feat()")
+    #
+    #     try:
+    #         ratio = np.where(
+    #             df["avgDaysBetweenItemPurchases_feat"] > 0,
+    #             df["daysSinceThisItemLastPurchased_raw"] / df["avgDaysBetweenItemPurchases_feat"],
+    #             0.0
+    #         )
+    #
+    #         df["itemSupplyLevel_feat"] = np.clip(1.0 - ratio, 0.0, 1.0)
+    #     except Exception as ex:
+    #         logger.info("create_item_supply_level_feat() failed")
+    #         logger.info(ex)
+    #         raise
+    #
+    #     return df
     ###########################################################################################
-    def create_didBuy_target_col(self, df, colName):
-        logger.info(f"creating target col: {colName}");
-        df[colName] = 1
-        return df; 
+    # def create_didBuy_target_col(self, df, colName):
+    #     logger.info(f"creating target col: {colName}");
+    #     df[colName] = 1
+    #     return df;
     ##############################################################################################
     # def add_item_total_purchase_count_feat(self, df, feature_name: str):
     #     """

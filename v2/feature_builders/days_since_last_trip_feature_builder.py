@@ -5,8 +5,8 @@ import numpy as np
 
 class DaysSinceLastTrip_FeatureBuilder:
 
-    daysSinceLastTripRawColName = "daysSinceLastTrip_raw";
-    daysSinceLastTripTransformedColName = "daysSinceLastTrip_log1p_feat";
+    daysSinceLastTripRawColName = "daysSinceLast_Trip_raw";
+    daysSinceLastTripTransformedColName = "daysSinceLast_Trip_log1p_feat";
     dateCol = "date";
 
     requiredFeatures = [dateCol];
