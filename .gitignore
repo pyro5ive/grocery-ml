@@ -6,3 +6,4 @@ data/food.csv
 v2/trainignDf.csv
 v2/trainignDf.csv
 v2/trainingDf.csv
+*.pyc
