@@ -26,6 +26,7 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[logging.StreamHandler(sys.stdout)]
 )
+
 class TrainingDataBuilder:
 
     def __init__(this, sources):

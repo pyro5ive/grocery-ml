@@ -3,8 +3,8 @@ import pandas as pd
 from datetime import datetime
 from purchase_event_builders.winn_dixie_events_df_builder import WinnDixieEventsDfBuilder
 from training_df_builder import TrainingDataBuilder
-
-
+from feature_normalizer.continous_feature_normalizer import ContinousFeatureNormalizer
+from feature_schema import FeatureSchema
 class ExperimentRunner:
 
     trainingSources  = {
@@ -24,38 +24,22 @@ class ExperimentRunner:
     def __init__(this):
         this.logger = logging.getLogger(this.__class__.__name__);
         this.trainingDfBuilder = TrainingDataBuilder(this.trainingSources);
+        this.continuousFeatureNormalizer = ContinousFeatureNormalizer();
+        this.featureSchema = FeatureSchema();
     ###########################################################################
     
     def run(this):
         this.trainingDf = TrainingDataBuilder(this.trainingSources).build_df();
+        featCols = this.featureSchema.get_continuous_cols(this.trainingDf);
+        this.continuousFeatureNormalizer.fit_normalization_params( featCols, this.trainingDf,);
+        this.trainingDf  = this.continuousFeatureNormalizer.normalize_features(this.trainingDf);
         this.trainingDf.info();
         this._export_df_for_debug();
     ###########################################################################
 
-    # def _build_event_dfs(this):
-    #     this.trainingDf = this.winndixieDfBuilder.build_df()
-    ###########################################################################
-    
-    # def _build_targetCol(this):
-    #     this.trainingDf["didBuy_target"] = 1;
-    ###########################################################################
 
     def _export_df_for_debug(this):
         timeStamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         this.trainingDf.to_csv(f"trainingDf-{timeStamp}.csv");
     ###########################################################################
-
-    # def _build_featues(this):
-    #     this.trainingDf = this.weatherHistoryFeatureBuilder.build_feature(this.trainingDf);
-    #     this.trainingDf = this.schoolSchedule_featureBuidler.build_feature(this.trainingDf);
-    #     this.trainingDf = this.payDayFeatueBuilder_angie.buildAll(this.trainingDf);
-    #     this.trainingDf = this.payDayFeatueBuilder_steve.buildAll(this.trainingDf);
-    #     this.trainingDf = this.itemIdFeatureBuilder.build_feature(this.trainingDf);
-    #     this.trainingDf = this.daysSinceLastPurchaseFeatureuBuilder.build_feature(this.trainingDf);
-    #     this.trainingDf = this.ex
-    #     this.trainingDf.info();
-    #     pass;
-
-    #------------------------------------------------------------------------#
-        
         

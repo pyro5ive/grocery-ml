@@ -50,4 +50,3 @@ class WeatherHistory_FeatureBuilder:
         df = df.drop(columns=["datetime"]).groupby("date", as_index=True).mean();
         return df;
     #-----------------------------------------------------------------#
-  
