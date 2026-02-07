@@ -50,8 +50,8 @@ class ExperimentRunner:
         normParams = this.continuousFeatureNormalizer.get_params();
 
         this.modelArtifacts = ModelArtifacts(model, this.trainingDf, normParams, history, buildParams, trainingParams);
-
-        print(this.modelArtifacts);
+        print(model.summary());
+        print(this.modelArtifacts.build_params);
 
     ###########################################################################
 

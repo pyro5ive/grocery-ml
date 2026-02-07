@@ -106,7 +106,7 @@ class KerasModelBuilder:
             validation_data=([x_feat_te, x_item_te], y_te),
             epochs=this.trainConfig.epochs,
             batch_size=this.trainConfig.batchSize,
-            verbose=0,
+            verbose=1,
             callbacks=[
                 tf.keras.callbacks.EarlyStopping(
                     monitor="val_loss",
