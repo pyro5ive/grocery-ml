@@ -45,7 +45,7 @@ class SchoolFeatures:
         end = SchoolFeatures._get_school_end(dates)
 
         in_session = (dates >= start) | (dates <= end)
-        return in_session.astype(int)
+        return in_session.astype(bool)
 
     ####################################################################
 

@@ -11,7 +11,7 @@ class SchoolSchedule_FeatureBuilder:
     producedFeatures = [
         "daysUntilSchool_Start_raw",
         "daysUntilSchool_End_raw",
-        "isSchoolInSession_feat",
+        "isSchoolInSession_bin_feat",
         "schoolCycle_sin_feat",
         "schoolCycle_cos_feat"
     ]
@@ -33,7 +33,7 @@ class SchoolSchedule_FeatureBuilder:
         df["daysUntilSchool_Start_raw"] = SchoolFeatures.compute_days_until_school_start(dates)
         df["daysUntilSchool_End_raw"] = SchoolFeatures.compute_days_until_school_end(dates)
 
-        df["isSchoolInSession_feat"] = SchoolFeatures.compute_is_school_in_session(dates)
+        df["isSchoolInSession_bin_feat"] = SchoolFeatures.compute_is_school_in_session(dates)
 
         cycle_pos = SchoolFeatures.compute_school_cycle_position(dates)
 

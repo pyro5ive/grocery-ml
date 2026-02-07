@@ -10,7 +10,7 @@ class AvgDaysBetweenItemPurchases_FeatureBuilder:
     daysSinceCol = "daysSinceLast_Purchase_raw";
 
     avgDaysBetweenItemPurchasesRawColName = "avgDaysBetween_ItemPurchases_raw";
-    avgDaysBetweenItemPurchasesFeatColName = "avgDaysBetween_ItemPurchases_feat";
+    avgDaysBetweenItemPurchasesFeatColName = "avgDaysBetween_ItemPurchases_log1p_cont";
 
     requiredFeatureTypes = {};
     requiredFeatureTypes[itemIdCol] = pd.api.types.is_integer_dtype;
@@ -20,20 +20,25 @@ class AvgDaysBetweenItemPurchases_FeatureBuilder:
 
     requiredFeatures = [ itemIdCol, dateCol, targetCol, daysSinceCol ];
     producedFeatures = [ avgDaysBetweenItemPurchasesRawColName, avgDaysBetweenItemPurchasesFeatColName ];
+
     def __init__(this):
         this.logger = logging.getLogger(this.__class__.__name__);
     #======================================================================#
     def build_feature(this, df):
         this._validate_required_columns(df);
         this._validate_required_column_types(df);
-        df = df.sort_values([ this.itemIdCol, this.dateCol ]).reset_index(drop=True);
+        df = df.sort_values([this.itemIdCol, this.dateCol]).reset_index(drop=True);
         df = this._compute_avg_gap(df);
+        df = this._apply_log1p_transformation(df);
         return df;
     #======================================================================#
+
     def _compute_avg_gap(this, df):
         df[this.avgDaysBetweenItemPurchasesRawColName] = 0.0;
         df[this.avgDaysBetweenItemPurchasesFeatColName] = 0.0;
+
         grouped = df.groupby(this.itemIdCol);
+
         for itemId, group in grouped:
             idx = group.index;
             gaps = group[this.daysSinceCol];
@@ -41,14 +46,23 @@ class AvgDaysBetweenItemPurchases_FeatureBuilder:
             purchaseGaps = gaps.where(purchaseMask);
             expandingMean = purchaseGaps.expanding().mean().shift(1);
             df.loc[idx, this.avgDaysBetweenItemPurchasesRawColName] = expandingMean.fillna(0.0);
-        df[this.avgDaysBetweenItemPurchasesFeatColName] = np.log1p(df[this.avgDaysBetweenItemPurchasesRawColName]);
+
         return df;
     #======================================================================#
+
+    def _apply_log1p_transformation(this, df):
+        df[this.avgDaysBetweenItemPurchasesFeatColName] = np.log1p(
+            df[this.avgDaysBetweenItemPurchasesRawColName]
+        );
+        return df;
+    #======================================================================#
+
     def _validate_required_columns(this, df):
         missing = [f for f in this.requiredFeatures if f not in df.columns];
         if missing:
             raise Exception(f"{this.__class__.__name__} missing required columns: {missing}");
     #======================================================================#
+
     def _validate_required_column_types(this, df):
         for col, validator in this.requiredFeatureTypes.items():
             if not validator(df[col]):

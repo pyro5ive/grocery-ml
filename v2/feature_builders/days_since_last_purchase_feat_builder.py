@@ -6,7 +6,7 @@ import numpy as np
 class DaysSinceLastPurchase_FeatBuilder:
 
     dateCol = "date"
-    featColNameTransformed = "daysSinceLast_Purchase_log1p_feat";
+    featColNameTransformed = "daysSinceLast_Purchase_log1p_cont";
     featColNameRaw = "daysSinceLast_Purchase_raw";
 
     requiredFeatures = ["itemId", "didBuy_target"];

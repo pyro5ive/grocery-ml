@@ -64,7 +64,7 @@ class ContinousFeatureNormalizer:
         for col, cfg in effective_params.items():
             mean_val = cfg["mean"]
             std_val = cfg["std"]
-            norm_col = col.replace("_feat", "_feat_norm")
+            norm_col = col.replace("_cont", "_cont_norm_feat")
 
             if std_val == 0:
                 normalized_df[norm_col] = 0.0

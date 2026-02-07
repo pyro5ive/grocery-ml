@@ -6,7 +6,7 @@ class WeatherHistory_FeatureBuilder:
     sourcePath = "../data/weather/VisualCrossing-70062 2000-01-01 to 2026-23-1.csv";
 
     requiredFeatures = [];
-    producedFeatures = ["feelsLike_feat","humidity_feat","precip_feat"];
+    producedFeatures = ["feelsLike_cont","humidity_cont","precip_cont"];
 
     def __init__(this, dateCol: str = "date"):
         this.logger = logging.getLogger(this.__class__.__name__);
@@ -41,9 +41,9 @@ class WeatherHistory_FeatureBuilder:
         df["date"] = df["datetime"].dt.normalize();
         df = df.rename(columns={
             # "temp":"temp_feat",
-            "feelslike":"feelsLike_feat",
-            "humidity":"humidity_feat",
-            "precip":"precip_feat",
+            "feelslike":"feelsLike_cont",
+            "humidity":"humidity_cont",
+            "precip":"precip_cont",
             # "windspeed":"windspeed_feat",
             # "sealevelpressure":"sealevelpressure_feat"
         });

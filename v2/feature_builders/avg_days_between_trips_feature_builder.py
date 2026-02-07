@@ -6,7 +6,7 @@ class AvgDaysBetweenTrips_FeatureBuilder:
 
     daysSinceLastTripRawColName = "daysSinceLast_Trip_raw";
     avgDaysBetweenTripsRawColName = "avgDaysBetween_Trips_raw";
-    avgDaysBetweenTripsTransformedColName = "avgDaysBetween_Trips_log1p_feat";
+    avgDaysBetweenTripsTransformedColName = "avgDaysBetween_Trips_log1p_cont";
 
     requiredFeatures = [ daysSinceLastTripRawColName];
     producedFeatures = [ avgDaysBetweenTripsTransformedColName, avgDaysBetweenTripsRawColName ];

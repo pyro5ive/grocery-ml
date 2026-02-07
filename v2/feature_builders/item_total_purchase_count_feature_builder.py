@@ -5,7 +5,7 @@ import numpy as np
 class ItemTotalPurchaseCount_FeatureBuilder:
 
     totalPurchaseCountRawColName = "itemTotalPurchCountToDate_raw";
-    totalPurchaseCountTransformedColName = "itemTotalPurchCountToDate_log1p_feat";
+    totalPurchaseCountTransformedColName = "itemTotalPurchCountToDate_log1p_cont";
     itemIdCol: str = "itemId";
     dateCol: str = "date";
     targetCol: str = "didBuy_target"

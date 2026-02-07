@@ -3,7 +3,7 @@ import json
 import pandas as pd
 import tensorflow as tf
 from typing import Dict, Any
-from model_artifacts import ModelArtifacts
+from .model_artifacts import ModelArtifacts
 
 class KerasFileSystemModelRepository:
 

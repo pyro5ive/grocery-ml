@@ -5,7 +5,7 @@ import numpy as np
 class ItemSupplyLevel_FeatureBuilder:
 
     itemSupplyLevelRawColName = "itemSupplyLevel_raw";
-    itemSupplyLevelClippedFeatColName = "itemSupplyLevel_clipped_feat";
+    itemSupplyLevelClippedFeatColName = "itemSupplyLevel_clipped_cont";
 
     daysSinceCol: str = "daysSinceLast_Purchase_raw";
     avgGapCol: str = "avgDaysBetween_ItemPurchases_raw";

@@ -5,7 +5,7 @@ import pytz
 class IsDst_FeatureBuilder:
 
     dateCol = "date";
-    isDstColName = "isDst_feat";
+    isDstColName = "isDst_bin_feat";
     timeZoneName: str = "America/Chicago"
     requiredFeatures = [ "date" ];
     producedFeatures = [ isDstColName ];
@@ -24,17 +24,18 @@ class IsDst_FeatureBuilder:
     #======================================================================#
     def _compute_is_dst(this, df):
         tzObj = pytz.timezone(this.timeZoneName);
-        df[this.isDstColName] = 0;
+        df[this.isDstColName] = False;
         rowCount = int(len(df));
         i = 0;
         while i < rowCount:
             currentDate = df.at[i, this.dateCol];
             localizedDate = tzObj.localize(currentDate);
             if localizedDate.dst() != pd.Timedelta(0):
-                df.at[i, this.isDstColName] = 1;
+                df.at[i, this.isDstColName] = True;
             else:
-                df.at[i, this.isDstColName] = 0;
+                df.at[i, this.isDstColName] = False;
             i = i + 1;
+        df[this.isDstColName] = df[this.isDstColName].astype(bool);
         return df;
     #======================================================================#
     def _validate_required_columns(this, df):

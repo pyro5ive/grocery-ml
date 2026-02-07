@@ -12,11 +12,11 @@ class PaydayProximity_FeatureBuilder:
         self.dateCol = dateCol
         self.cycleLength = 14
         self.rawCol = f"payday_{self.personName}_raw"
-        self.proximityCol = f"payday_proximity_{self.personName}_feat"
-        self.scaledCol = f"payday_proximity_{self.personName}_feat_scaled"
-        self.sinCol = f"payday_proximity_{self.personName}_feat_sin"
-        self.cosCol = f"payday_proximity_{self.personName}_feat_cos"
-        self.isPaydayCol = f"isPayday_{self.personName}_feat"
+        self.proximityCol = f"payday_proximity_{self.personName}"
+        self.scaledCol = f"payday_proximity_{self.personName}_scaled_cont"
+        self.sinCol = f"payday_proximity_{self.personName}_sin_feat"
+        self.cosCol = f"payday_proximity_{self.personName}_cos_feat"
+        self.isPaydayCol = f"isPayday_{self.personName}_bin_feat"
         self.logger = logging.getLogger(self.__class__.__name__)
 
     #===================================#
@@ -33,7 +33,7 @@ class PaydayProximity_FeatureBuilder:
         self.logger.info("Building isPayday feature for %s", self.personName)
         df = df.copy()
         df = self.buildProximity(df)
-        df[self.isPaydayCol] = (df[self.proximityCol] == 0)
+        df[self.isPaydayCol] = (df[self.proximityCol] == 0).astype(bool)
         return df
 
     #===================================#
@@ -67,7 +67,7 @@ class PaydayProximity_FeatureBuilder:
         angle = 2.0 * np.pi * (df[self.proximityCol] / float(self.cycleLength))
         df[self.sinCol] = np.sin(angle)
         df[self.cosCol] = np.cos(angle)
-        df[self.isPaydayCol] = (df[self.proximityCol] == 0)
+        df[self.isPaydayCol] = (df[self.proximityCol] == 0).astype(bool)
         return df
 
     #===================================#
