@@ -1,63 +1,70 @@
 import logging
-import pandas as pd
 from datetime import datetime
-from purchase_event_builders.winn_dixie_events_df_builder import WinnDixieEventsDfBuilder
 from training_df_builder import TrainingDataBuilder
 from feature_normalizer.continous_feature_normalizer import ContinousFeatureNormalizer
 from feature_schema import FeatureSchema
 from model_builder.keras_model_builder import KerasModelBuilder
-from model_repo.model_repo import ModelArtifacts
-from model_repo.model_repo import KerasFileSystemModelRepository
-
+from prediction_service import PredictionService
+from model_repo.model_bundle import  ModelBundle
+from model_repo.keras_file_system_model_bundle_repo import KerasFileSystemModelRepository
 
 class ExperimentRunner:
-
-    trainingSources  = {
-        "walmart": r"data\training\walmart",
+    trainingSources = {
+        "walmart": r"..\data\training\walmart",
         "winndixie": r"..\data\training\winndixie\txt",
-        "winndixieAdditional" : r"..\data\training\winndixie\additionalTxtRcpts",
-        "weather": r"data\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv"
+        "winndixieAdditional": r"..\data\training\winndixie\additionalTxtRcpts",
+        "weather": r"..\data\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv"
+    }
+
+    liveSources = {
+        "walmart": r"..\data\live\walmart",
+        "winndixie": r"..\data\live\winndixie\txt",
+        "winndixieAdditional": r"..\data\live\winndixie\additionalTxtRcpts",
+        "weather": r"..\date\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv"
     }
     
-    liveSources  = {
-        "walmart": r"data\live\walmart",
-        "winndixie": r"data\live\winndixie\txt",
-        "winndixieAdditional" : r"data\live\winndixie\additionalTxtRcpts",
-        "weather": r"data\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv"
-    }
-    
-    def __init__(this):
-        this.logger = logging.getLogger(this.__class__.__name__);
-        this.trainingDfBuilder = TrainingDataBuilder(this.trainingSources);
-        this.continuousFeatureNormalizer = ContinousFeatureNormalizer();
-        this.featureSchema = FeatureSchema();
-        this.kerasModelBuilder = KerasModelBuilder();
-        this.modelArtifacts: ModelArtifacts = None;
-        this.modelRepo = KerasFileSystemModelRepository();
+    def __init__(self):
+        self.logger = logging.getLogger(self.__class__.__name__);
+        self.trainingDfBuilder = TrainingDataBuilder(self.trainingSources);
+        self.continuousFeatureNormalizer = ContinousFeatureNormalizer();
+        self.featureSchema = FeatureSchema();
+        self.kerasModelBuilder = KerasModelBuilder();
+        self.modelBundle: ModelBundle = None;
+        self.normParams = None;
+        self.trainingDf = None;
+        self.trainingDfNorm = None;
+        self.modelRepo = KerasFileSystemModelRepository();
+        self.predictionService = None;
+        # self.predictionInputDfBuilder = PredictionInputDfBuilder(self.liveSources, self.trainingSources, datetime(2026, 2, 8))
     ###########################################################################
     
-    def run(this, buildParams, trainingParams):
-        this.trainingDf = TrainingDataBuilder(this.trainingSources).build_df();
-        contCols = this.featureSchema.get_continuous_cols(this.trainingDf);
-        this.continuousFeatureNormalizer.fit_normalization_params( contCols, this.trainingDf,);
-        this.trainingDf  = this.continuousFeatureNormalizer.normalize_features(this.trainingDf);
-        this.trainingDf.info();
-        this._export_df_for_debug();
-        featCols = this.featureSchema.get_feature_cols(this.trainingDf);
-        targetCol = this.featureSchema.get_target_col(this.trainingDf);
-        model, history = this.kerasModelBuilder.build_and_train_model(this.trainingDf, featCols, buildParams, trainingParams, targetCol);
+    def run(self, buildParams, trainingParams, baseDir):
 
-        normParams = this.continuousFeatureNormalizer.get_params();
+        # df = self.predictionInputDfBuilder.build_df();
+        # self._export_df_for_debug(df);
 
-        this.modelArtifacts = ModelArtifacts(model, this.trainingDf, normParams, history, buildParams, trainingParams);
+        self.trainingDf = self.trainingDfBuilder.build_df();
+        contCols = self.featureSchema.get_continuous_cols(self.trainingDf);
+        self.normParams = self.continuousFeatureNormalizer.fit_normalization_params( contCols, self.trainingDf,);
+        self.trainingDfNorm  = self.continuousFeatureNormalizer.normalize_features(self.trainingDf, self.normParams);
+        self.trainingDf.info();
+
+        featCols = self.featureSchema.get_feature_cols(self.trainingDfNorm);
+        targetCol = self.featureSchema.get_target_col(self.trainingDfNorm);
+        model, history = self.kerasModelBuilder.build_and_train_model(self.trainingDfNorm, featCols, buildParams, trainingParams, targetCol);
+        self.modelBundle = ModelBundle(model, self.trainingDfNorm, self.normParams, history, buildParams, trainingParams);
+        self.modelRepo.save_all(self.modelBundle, baseDir);
+
+        ## prediciton
+        testPredDate = datetime.now();
+        self.predictionService = PredictionService(testPredDate);
+
         print(model.summary());
-        print(this.modelArtifacts.build_params);
-
     ###########################################################################
 
 
-    def _export_df_for_debug(this):
+    def _export_df_for_debug(self,df):
         timeStamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        this.trainingDf.to_csv(fr"debug\trainingDf-{timeStamp}.csv");
+        df.to_csv(fr"debug\df-{timeStamp}.csv");
     ###########################################################################
         

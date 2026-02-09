@@ -15,10 +15,10 @@ from feature_builders.avg_days_between_trips_feature_builder import AvgDaysBetwe
 from feature_builders.expected_gap_ewma_feature_builder import ExpectedGapEwma_FeatureBuilder
 from feature_builders.item_total_purchase_count_feature_builder import ItemTotalPurchaseCount_FeatureBuilder
 from feature_builders.is_dst_feature_builder import IsDst_FeatureBuilder
-from purchase_event_builders.winn_dixie_events_df_builder import WinnDixieEventsDfBuilder
 from negative_sample_builders.same_trip_negative_sample_builder import  SameTripNegativeSampleBuilder
 from negative_sample_builders.non_trip_negative_sample_builder import NonTripNegativeSampleBuilder
 from sample_filters.combine_same_trip_qty import SameTripQtyCombiner
+from purchase_event_builders.purchase_event_aggregate_builder import PurchaseEventsDfBuilder
 
 
 logging.basicConfig(
@@ -32,7 +32,7 @@ class TrainingDataBuilder:
     def __init__(this, sources):
         this.logger = logging.getLogger(this.__class__.__name__);
         this.sources = sources;
-        this.winndixieDfBuilder = WinnDixieEventsDfBuilder(this.sources);
+        this.purchaseEventsDfBuilder = PurchaseEventsDfBuilder(sources);
         this.featureBuilders = [];
         this._register_feature_builders();
         this.sameTripNegativeSampleBuilder = SameTripNegativeSampleBuilder();
@@ -42,7 +42,7 @@ class TrainingDataBuilder:
     #======================================================================#
     def build_df(this):
         this.logger.info("build_df() start");
-        df = this._build_event_dfs();
+        df = this.purchaseEventsDfBuilder.build_df();
         df = this._build_target_col(df);
         df = this.itemIdFeatueBuilder.build_feature(df);
         df = this._build_negative_samples(df);
@@ -51,10 +51,6 @@ class TrainingDataBuilder:
         this.logger.info("build_training_df() done rows=%s cols=%s", len(df), len(df.columns));
 
         return df;
-    #======================================================================#
-    def _build_event_dfs(this):
-        this.logger.info("_build_event_dfs()");
-        return this.winndixieDfBuilder.build_df();
     #======================================================================#
     def _build_target_col(this, df):
         this.logger.info("_build_target_col()");

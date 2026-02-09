@@ -1,8 +1,10 @@
 import logging
 import pandas as pd
+import os
+from purchase_event_builders.wallmart_rcpt_parser import WallmartRecptParser
+
 
 class WalMartEventsDfBuilder:
-
 
     purchaseEventsDf: pd.Dataframe;
        
@@ -11,17 +13,15 @@ class WalMartEventsDfBuilder:
         self.logger = logging.getLogger(thisClassName)
         self.purchaseEventsDf = None;
         self.recptParser = recptParser;
-    ############################################################
-    def build_df(self): 
+    #==============================================================================#
+    def build_df(self, dataSourcePath):
         self.logger.info("Building Walmart purchase events");
-        purchaseEventsDf = self._build_wall_mart_df(data_sources.get("walmart"));
-
+        purchaseEventsDf = self._build_wall_mart_df(dataSourcePath.get("walmart"));
 
         self.logger.info("Walmart purchase events builder is complete");
-        return purchaseEventsDf
-    ###########################################################
-
-      def _build_wall_mart_df(folder_path: str) -> pd.DataFrame:
+        return purchaseEventsDf;
+    #==============================================================================#
+    def _build_wall_mart_df(folder_path: str) -> pd.DataFrame:
         """
         Import all Walmart receipt CSV files from a folder.
         Adds a 'source' column set to the CSV filename.
@@ -46,8 +46,7 @@ class WalMartEventsDfBuilder:
             .str.replace("Freshness Guaranteed", "", regex=False)
             .str.strip()
         )
-        
-        
+
         ## remove some non-food items
         df = df[
             ~df["Product Description"].str.contains("Mainstays", case=False, na=False)
@@ -66,3 +65,4 @@ class WalMartEventsDfBuilder:
         df["date"] = pd.to_datetime(df["date"])
         
         return df
+    # ==============================================================================#

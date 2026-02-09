@@ -1,6 +1,9 @@
 from experiment_runner import ExperimentRunner
 from models.models import *
 
+from datetime import datetime
+import os
+
 expRunner = ExperimentRunner();
 
 layers_cfg = [
@@ -22,4 +25,7 @@ train_config = TrainingParams(
     batchSize=4
 )
 
-expRunner.run(build_config, train_config);
+timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+run_dir = os.path.join("debug", f"test-exp_{timestamp}")
+
+expRunner.run(build_config, train_config, run_dir);

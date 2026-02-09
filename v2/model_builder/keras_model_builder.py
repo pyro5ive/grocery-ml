@@ -116,4 +116,4 @@ class KerasModelBuilder:
             ]
         )
 
-        return history
+        return history.history
