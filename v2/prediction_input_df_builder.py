@@ -17,6 +17,8 @@ from sample_filters.combine_same_trip_qty import SameTripQtyCombiner
 from datetime import datetime
 from purchase_event_builders.purchase_event_aggregate_builder import PurchaseEventAggregateBuilder
 from purchase_event_builders.prediction_date_events_df_builder import PredictionDateEventsDfBuilder
+from feature_builders.weather_forecast_feature_builder import WeatherForecastFeatureBuilder
+from services.weather.weather_service import NwsWeatherService
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -39,6 +41,10 @@ class PredictionInputDfBuilder:
         self.predictionDateEventsDfBuilder = PredictionDateEventsDfBuilder();
         self.historicalEventsDfCache = None
         self.newPurchaseEventsDfCache = None
+        self.weatherForcastService = None
+        self.weatherService = NwsWeatherService();
+        self.weatherForcastFeatureBuilder = WeatherForecastFeatureBuilder(self.weatherService, 29.9934, -90.2580);
+
     #======================================================================#
     def build_df(self, predDate: datetime) -> pd.DataFrame:
         self.logger.info(f"Building the prediction input df. Prediction date is {predDate}");
@@ -46,9 +52,13 @@ class PredictionInputDfBuilder:
         self._build_events_df(predDate);
         self._build_target_col();
         self.predInputDf = self.itemIdFeatureBuilder.build_feature(self.predInputDf);
-        self.predInputDf = self.sameTripQtyCombiner.filter_df(self.predInputDf);
         self.predInputDf = self._apply_feature_pipeline(self.predInputDf);
 
+        latestDate = self.predInputDf["date"].max();
+        latestRowsDf = self.predInputDf[self.predInputDf["date"] == latestDate];
+        latestRowsDf = self.weatherForcastFeatureBuilder.build_df(latestRowsDf, latestDate);
+        # self.predInputDf = self.sameTripQtyCombiner.filter_df(self.predInputDf);
+        
         return self.predInputDf;
     #======================================================================#
     def _build_events_df(self, predDate: datetime):

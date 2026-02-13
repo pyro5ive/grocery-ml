@@ -15,14 +15,6 @@ class ExperimentRunner:
         "winndixieAdditional": r"..\data\training\winndixie\additionalTxtRcpts",
         "weather": r"..\data\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv"
     }
-
-    liveSources = {
-        "walmart": r"..\data\live\walmart",
-        "winndixie": r"..\data\live\winndixie\txt",
-        "winndixieAdditional": r"..\data\live\winndixie\additionalTxtRcpts",
-        "weather": r"..\date\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv"
-    }
-    
     def __init__(self):
         self.logger = logging.getLogger(self.__class__.__name__);
         self.trainingDfBuilder = TrainingDataBuilder(self.trainingSources);
@@ -30,7 +22,7 @@ class ExperimentRunner:
         self.featureSchema = FeatureSchema();
         self.kerasModelBuilder = KerasModelBuilder();
         self.modelBundle: ModelBundle = None;
-        self.normParams = None;
+        # self.normParams = None;
         self.trainingDf = None;
         self.trainingDfNorm = None;
         self.modelRepo = KerasFileSystemModelRepository();
@@ -38,26 +30,33 @@ class ExperimentRunner:
         # self.predictionInputDfBuilder = PredictionInputDfBuilder(self.liveSources, self.trainingSources, datetime(2026, 2, 8))
     ###########################################################################
     
-    def run(self, buildParams, trainingParams, baseDir):
-
+    def run(self, buildParams, trainingParams, expDir):
         # df = self.predictionInputDfBuilder.build_df();
         # self._export_df_for_debug(df);
 
-        self.trainingDf = self.trainingDfBuilder.build_df();
-        contCols = self.featureSchema.get_continuous_cols(self.trainingDf);
-        self.normParams = self.continuousFeatureNormalizer.fit_normalization_params( contCols, self.trainingDf,);
-        self.trainingDfNorm  = self.continuousFeatureNormalizer.normalize_features(self.trainingDf, self.normParams);
-        self.trainingDf.info();
+        # build normalized training df
+        trainingDf = self.trainingDfBuilder.build_df();
+        continuousCols = self.featureSchema.get_continuous_cols(trainingDf);
+        normParams = self.continuousFeatureNormalizer.fit_normalization_params(continuousCols, trainingDf);
+        trainingDfNorm  = self.continuousFeatureNormalizer.normalize_features( trainingDf, continuousCols, normParams );
+        trainingDfNorm.info();
+        #
+        featCols = self.featureSchema.get_feature_cols(trainingDfNorm);
+        targetCol = self.featureSchema.get_target_col(trainingDfNorm);
+        # build/train model.
+        model, modelTrainingHistory = self.kerasModelBuilder.build_and_train_model(trainingDfNorm, featCols, buildParams, trainingParams, targetCol);
+        itemMappingDf = (trainingDf[['item', 'itemId']].drop_duplicates().copy())
+        # Create Bundle
 
-        featCols = self.featureSchema.get_feature_cols(self.trainingDfNorm);
-        targetCol = self.featureSchema.get_target_col(self.trainingDfNorm);
-        model, history = self.kerasModelBuilder.build_and_train_model(self.trainingDfNorm, featCols, buildParams, trainingParams, targetCol);
-        self.modelBundle = ModelBundle(model, self.trainingDfNorm, self.normParams, history, buildParams, trainingParams);
-        self.modelRepo.save_all(self.modelBundle, baseDir);
+        modelBundle = ModelBundle(model, itemMappingDf, trainingDfNorm, normParams, modelTrainingHistory, buildParams, trainingParams);
+        # Save bundle
+        self.modelRepo.save(modelBundle, expDir);
 
         ## prediciton
         testPredDate = datetime.now();
-        self.predictionService = PredictionService(testPredDate);
+        testPredictionService = PredictionService();
+        predictionsResultDf = testPredictionService.run_prediction(modelBundle, testPredDate);
+        predictionsResultDf.to_csv(expDir + "/predictions.csv");
 
         print(model.summary());
     ###########################################################################

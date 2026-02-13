@@ -50,18 +50,13 @@ class ContinousFeatureNormalizer:
 
         return True
     #========================================================================#
-    def normalize_features(this, df, params: dict | None = None):
+    def normalize_features(this, df, featCols, normParams, ):
         this.logger.info("normalize_features()")
-        if params is None:
-            effective_params = this.normParamaters;
-        else:
-            effective_params = params;
-
-        if effective_params is None:
+        if normParams == None:
             raise RuntimeError("No normalization params available")
 
         normalized_df = df.copy()
-        for col, cfg in effective_params.items():
+        for col, cfg in normParams.items():
             mean_val = cfg["mean"]
             std_val = cfg["std"]
             norm_col = col.replace("_cont", "_cont_norm_feat")

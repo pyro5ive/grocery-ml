@@ -12,15 +12,17 @@ class NwsWeatherService:
         self.points_url = "https://api.weather.gov/points"
 
         self.cached_periods = None
-        self.cached_latest = None
+        self.cached_latest = None  # always datetime.date
 
         self.cached_current = None
         self.cached_current_time = None
         self.current_ttl = timedelta(minutes=10)
 
         logger.info("NwsWeatherService initialized")
-#############################################
+
+    #===================================================================#
     def _load_forecast_cache(self, latitude, longitude):
+
         logger.info("Loading forecast cache lat=%s lon=%s", latitude, longitude)
 
         url = f"{self.points_url}/{latitude},{longitude}"
@@ -41,14 +43,19 @@ class NwsWeatherService:
             len(periods),
             self.cached_latest
         )
-#############################################
+
+    #===================================================================#
     def _get_forecast_periods(self, latitude, longitude):
+
         if self.cached_periods is None:
             logger.info("Forecast cache empty, loading")
             self._load_forecast_cache(latitude, longitude)
+
         return self.cached_periods
-#############################################
+
+    #===================================================================#
     def get_current_conditions(self, latitude, longitude):
+
         if (
             self.cached_current is not None
             and datetime.now() - self.cached_current_time < self.current_ttl
@@ -79,6 +86,7 @@ class NwsWeatherService:
             "humidity_pct": latest["relativeHumidity"]["value"],
             "rain_mm_last_hour": rain_mm_last_hour
         }
+
         self.cached_current_time = datetime.now()
 
         logger.info(
@@ -89,9 +97,14 @@ class NwsWeatherService:
         )
 
         return self.cached_current
-#############################################
+
+    #===================================================================#
     def get_forecast_by_date(self, latitude, longitude, target_date):
+
         logger.info("Fetching forecast for date=%s", target_date)
+
+        if isinstance(target_date, datetime):
+            target_date = target_date.date()
 
         periods = self._get_forecast_periods(latitude, longitude)
 
@@ -101,9 +114,11 @@ class NwsWeatherService:
             periods = self.cached_periods
 
         matched = []
+
         for p in periods:
-            pd = datetime.fromisoformat(p["startTime"]).date()
-            if pd == target_date:
+            period_date = datetime.fromisoformat(p["startTime"]).date()
+
+            if period_date == target_date:
                 rh = p.get("relativeHumidity")
                 humidity_pct = rh.get("value") if rh and rh.get("value") is not None else None
 
@@ -116,9 +131,17 @@ class NwsWeatherService:
 
         logger.info("Forecast matches found=%s", len(matched))
         return matched
-#############################################
-    def get_weather_for_date(self, latitude, longitude, date_str):
-        target_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+
+    #===================================================================#
+    def get_weather_for_date(self, latitude, longitude, date_value):
+
+        if isinstance(date_value, str):
+            target_date = datetime.fromisoformat(date_value).date()
+        elif isinstance(date_value, datetime):
+            target_date = date_value.date()
+        else:
+            target_date = date_value
+
         logger.info("Weather request for date=%s", target_date)
 
         if target_date == date.today():
@@ -126,14 +149,5 @@ class NwsWeatherService:
             return self.get_current_conditions(latitude, longitude)
 
         return self.get_forecast_by_date(latitude, longitude, target_date)
-#############################################
 
-
-class WeatherConditions:
-    def __init__(self, date_value, temp_c, humidity_pct, precip_mm, short_forecast):
-        self.date_value = date_value
-        self.temp_c = temp_c
-        self.humidity_pct = humidity_pct
-        self.precip_mm = precip_mm
-        self.short_forecast = short_forecast
-#############################################
+    #===================================================================#

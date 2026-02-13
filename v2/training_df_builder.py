@@ -18,8 +18,7 @@ from feature_builders.is_dst_feature_builder import IsDst_FeatureBuilder
 from negative_sample_builders.same_trip_negative_sample_builder import  SameTripNegativeSampleBuilder
 from negative_sample_builders.non_trip_negative_sample_builder import NonTripNegativeSampleBuilder
 from sample_filters.combine_same_trip_qty import SameTripQtyCombiner
-from purchase_event_builders.purchase_event_aggregate_builder import PurchaseEventsDfBuilder
-
+from purchase_event_builders.purchase_event_aggregate_builder import PurchaseEventAggregateBuilder
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -32,7 +31,7 @@ class TrainingDataBuilder:
     def __init__(this, sources):
         this.logger = logging.getLogger(this.__class__.__name__);
         this.sources = sources;
-        this.purchaseEventsDfBuilder = PurchaseEventsDfBuilder(sources);
+        this.purchaseEventsDfBuilder = PurchaseEventAggregateBuilder(sources);
         this.featureBuilders = [];
         this._register_feature_builders();
         this.sameTripNegativeSampleBuilder = SameTripNegativeSampleBuilder();

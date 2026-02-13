@@ -3,7 +3,7 @@ import json
 import pandas as pd
 import tensorflow as tf
 from typing import Dict, Any
-from .model_bundle import ModelArtifacts
+from .model_bundle import ModelBundle
 from models.models import BuildParams, TrainingParams
 import logging
 
@@ -17,41 +17,41 @@ class KerasFileSystemModelRepository:
     # Public API
     # -------------------------------------------------------------
 
-    def save_all(self, artifacts: ModelArtifacts, base_dir: str) -> None:
+    def save(self,  bundle:ModelBundle, base_dir: str) -> None:
 
-        if artifacts.model is not None:
-            self.save_model(artifacts.model, base_dir)
+        if bundle.model is not None:
+            self.save_model(bundle.model, base_dir)
         else:
-            self.logger.warning("ModelArtifacts.model is None. Skipping save_model().")
+            self.logger.warning("Modelbundle.model is None. Skipping save_model().")
 
-        if artifacts.training_df is not None:
-            self.save_training_snapshot(artifacts.training_df, base_dir)
+        if bundle.training_df is not None:
+            self.save_training_snapshot(bundle.training_df, base_dir)
         else:
-            self.logger.warning("ModelArtifacts.training_df is None. Skipping save_training_snapshot().")
+            self.logger.warning("Modelbundle.training_df is None. Skipping save_training_snapshot().")
 
-        if artifacts.normalization_params is not None:
-            self.save_normalization_params(artifacts.normalization_params, base_dir)
+        if bundle.normalization_params is not None:
+            self.save_normalization_params(bundle.normalization_params, base_dir)
         else:
-            self.logger.warning("ModelArtifacts.normalization_params is None. Skipping save_normalization_params().")
+            self.logger.warning("Modelbundle.normalization_params is None. Skipping save_normalization_params().")
 
-        if artifacts.history is not None:
-            self.save_history(artifacts.history, base_dir)
+        if bundle.history is not None:
+            self.save_history(bundle.history, base_dir)
         else:
-            self.logger.warning("ModelArtifacts.history is None. Skipping save_history().")
+            self.logger.warning("Modelbundle.history is None. Skipping save_history().")
 
-        if artifacts.build_params is not None:
-            self.save_build_params(artifacts.build_params, base_dir)
+        if bundle.build_params is not None:
+            self.save_build_params(bundle.build_params, base_dir)
         else:
-            self.logger.warning("ModelArtifacts.build_params is None. Skipping save_build_params().")
+            self.logger.warning("Modelbundle.build_params is None. Skipping save_build_params().")
 
-        if artifacts.train_params is not None:
-            self.save_train_params(artifacts.train_params, base_dir)
+        if bundle.train_params is not None:
+            self.save_train_params(bundle.train_params, base_dir)
         else:
-            self.logger.warning("ModelArtifacts.train_params is None. Skipping save_train_params().")
+            self.logger.warning("Modelbundle.train_params is None. Skipping save_train_params().")
 
     # -------------------------------------------------------------
 
-    def load_all(self, base_dir: str) -> ModelArtifacts:
+    def load(self, base_dir: str) -> ModelBundle:
         model = self.load_model(base_dir)
         training_df = self.load_training_snapshot(base_dir)
         normalization_params = self.load_normalization_params(base_dir)
@@ -59,7 +59,7 @@ class KerasFileSystemModelRepository:
         build_params = self.load_build_params(base_dir)
         train_params = self.load_train_params(base_dir)
 
-        return ModelArtifacts(
+        return ModelBundle(
             model=model,
             training_df=training_df,
             normalization_params=normalization_params,
