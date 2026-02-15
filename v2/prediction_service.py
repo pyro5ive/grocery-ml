@@ -49,7 +49,18 @@ class PredictionService:
         x_features = inputDfNorm[featCols].to_numpy(np.float32)
         x_item_idx = inputDfNorm["itemId"].to_numpy(np.int32)
 
+        # known_ids = set(combined_df_frozen["itemId"].unique())
+        # mask = pred_input["prediction_df"]["itemId"].isin(known_ids)
+        #
+        # pred_input["prediction_df"] = pred_input["prediction_df"][mask].reset_index(drop=True)
+        # pred_input["x_item_idx"] = pred_input["x_item_idx"][mask]
+        # pred_input["x_features"] = pred_input["x_features"][mask]
+        #
+        # logger.info(f"kept {mask.sum()} rows out of {mask.size}")
+
         # inputDfNorm = self.itemIdMapper.map_item_ids_to_names(inputDfNorm)
+
+
         prediction_values_col = modelBundle.model.predict(x_features, x_item_idx);
         inputDfNorm.insert(3, "readyToBuy_proabability", prediction_values_col)
         predDf = inputDfNorm.sort_values("readyToBuy_proabability", ascending=False).reset_index(drop=True)

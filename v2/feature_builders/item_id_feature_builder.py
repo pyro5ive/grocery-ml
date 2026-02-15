@@ -1,65 +1,135 @@
 import logging
-import json
+import pandas as pd
+from abstractions.feature_builder_base import FeatureBuilderBase
+from abstractions.services.item_index_builder_service_base import ItemIndexBuilderServiceBase
 
 
-class ItemIdFeatureBuilder:
+#======================================================#
+class ItemIdFeatureBuilder(FeatureBuilderBase):
+    """
+    Feature builder that derives an integer item ID column from an item name column.
+    Delegates item-to-index mapping state to ItemIndexBuilderServiceBase.
+    State is managed by the injected service, allowing it to survive the train/predict cycle.
+    """
 
-    def __init__(self):
+    itemNameColName: str
+    itemIdColName: str
+    indexBuilder: ItemIndexBuilderServiceBase
+    logger: logging.Logger
+
+    #======================================================#
+    def __init__(self, indexBuilder: ItemIndexBuilderServiceBase, itemNameColName: str, itemIdColName: str):
+        """
+        :param indexBuilder: Injected index builder service that owns the item mapping state.
+        :type indexBuilder: ItemIndexBuilderServiceBase
+        :param itemNameColName: DataFrame column name containing item name strings.
+        :type itemNameColName: str
+        :param itemIdColName: DataFrame column name to write integer item IDs into.
+        :type itemIdColName: str
+        """
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.item_to_id: dict[str, int] | None = None
-        self.id_to_item: dict[int, str] | None = None
-        self.logger.info("ItemIdMapper initialized")
-    ################################################################################
+        self.indexBuilder = indexBuilder
+        self.itemNameColName = itemNameColName
+        self.itemIdColName = itemIdColName
+        self.logger.info(
+            "ItemIdFeatureBuilder initialized itemNameColName=%s itemIdColName=%s",
+            self.itemNameColName,
+            self.itemIdColName
+        )
 
-    def build_feature(self, df):
-        self.logger.info("create_item_ids(): start rows=%s mapping_exists=%s", len(df), self.item_to_id is not None)
-        if self.item_to_id is None:
+    #======================================================#
+    def build(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Build the item ID feature column from the item name column.
+        Builds the index mapping if not yet initialized, otherwise maps existing.
+        Drops rows containing unseen items with a warning.
+
+        :param df: Input DataFrame containing the item name column.
+        :type df: pd.DataFrame
+        :returns: DataFrame with item ID column added.
+        :rtype: pd.DataFrame
+        :raises ValueError: If the item name column is missing from the DataFrame.
+        :raises RuntimeError: If unexpected NaNs are detected after mapping.
+        """
+        self.logger.info("build(): start rows=%s", len(df))
+
+        if self.itemNameColName not in df.columns:
+            raise ValueError(f"build(): df missing required column '{self.itemNameColName}'")
+
+        if self.indexBuilder.size() == 0:
             return self._build_item_ids(df)
+
         return self._map_existing_item_ids(df)
-    ################################################################################
 
-    def _build_item_ids(self, df):
-        if "item" not in df.columns:
-            raise ValueError("_build_item_ids(): df missing required column 'item'")
+    #======================================================#
+    def get_feature_names_in(self) -> list[str]:
+        """
+        Return the input column names this builder requires.
 
-        self.logger.info("_build_item_ids(): building new itemId mapping rows=%s", len(df))
+        :returns: List containing the item name column name.
+        :rtype: list[str]
+        """
+        return [self.itemNameColName]
 
-        self.item_to_id = {}
-        self.id_to_item = {}
+    #======================================================#
+    def get_feature_names_out(self) -> list[str]:
+        """
+        Return the output column names this builder produces.
 
-        for item in df["item"].unique():
-            new_id = len(self.item_to_id)
-            self.item_to_id[item] = new_id
-            self.id_to_item[new_id] = item
+        :returns: List containing the item ID column name.
+        :rtype: list[str]
+        """
+        return [self.itemIdColName]
 
-        df["itemId"] = df["item"].map(self.item_to_id)
+    #======================================================#
+    def _build_item_ids(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Build a new index mapping from the item name column and apply it to the DataFrame.
 
-        if df["itemId"].isna().any():
-            nan_count = int(df["itemId"].isna().sum())
+        :param df: Input DataFrame containing the item name column.
+        :type df: pd.DataFrame
+        :returns: DataFrame with item ID column added.
+        :rtype: pd.DataFrame
+        :raises RuntimeError: If NaNs are detected after mapping.
+        """
+        self.logger.info("_build_item_ids(): start rows=%s", len(df))
+
+        itemSeries: pd.Series = df[self.itemNameColName]
+        self.indexBuilder.build(itemSeries)
+
+        df[self.itemIdColName] = self.indexBuilder.to_index(itemSeries)
+
+        if df[self.itemIdColName].isna().any():
+            nan_count: int = int(df[self.itemIdColName].isna().sum())
             self.logger.error("_build_item_ids(): NaNs detected after mapping count=%s", nan_count)
             raise RuntimeError("itemId mapping produced NaNs during build")
 
         df.reset_index(drop=True, inplace=True)
-        self.logger.info("_build_item_ids(): mapping_size=%s", len(self.item_to_id))
+        self.logger.info("_build_item_ids(): done mapping_size=%s", self.indexBuilder.size())
         return df
-    ################################################################################
 
-    def _map_existing_item_ids(self, df):
-        if "item" not in df.columns:
-            raise ValueError("_map_existing_item_ids(): df missing required column 'item'")
+    #======================================================#
+    def _map_existing_item_ids(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Map item name column to existing index mapping, dropping unseen items with a warning.
 
+        :param df: Input DataFrame containing the item name column.
+        :type df: pd.DataFrame
+        :returns: DataFrame with item ID column added, unseen items dropped.
+        :rtype: pd.DataFrame
+        :raises RuntimeError: If unexpected NaNs are detected after mapping.
+        """
         self.logger.info("_map_existing_item_ids(): start rows=%s", len(df))
 
-        known_items = set(self.item_to_id.keys())
-        unseen_mask = ~df["item"].isin(known_items)
-        dropped_count = int(unseen_mask.sum())
+        itemSeries: pd.Series = df[self.itemNameColName]
+        unseen_mask: pd.Series = ~itemSeries.apply(self.indexBuilder.contains)
+        dropped_count: int = int(unseen_mask.sum())
 
         if dropped_count > 0:
-            unseen_items = df.loc[unseen_mask, "item"].dropna().unique().tolist()
-            preview = unseen_items[:10]
+            unseen_items: list[str] = itemSeries[unseen_mask].dropna().unique().tolist()
             self.logger.warning(
                 "_map_existing_item_ids(): dropping unseen items rows_dropped=%s unique_items=%s preview=%s",
-                dropped_count, len(unseen_items), preview
+                dropped_count, len(unseen_items), unseen_items[:10]
             )
             df = df.loc[~unseen_mask].copy()
 
@@ -67,58 +137,13 @@ class ItemIdFeatureBuilder:
             self.logger.warning("_map_existing_item_ids(): all rows dropped due to unseen items")
             return df.reset_index(drop=True)
 
-        df["itemId"] = df["item"].map(self.item_to_id)
+        df[self.itemIdColName] = self.indexBuilder.to_index(df[self.itemNameColName])
 
-        if df["itemId"].isna().any():
-            nan_count = int(df["itemId"].isna().sum())
+        if df[self.itemIdColName].isna().any():
+            nan_count: int = int(df[self.itemIdColName].isna().sum())
             self.logger.error("_map_existing_item_ids(): unexpected NaNs after mapping count=%s", nan_count)
             raise RuntimeError("Unexpected NaNs after itemId mapping")
 
         df.reset_index(drop=True, inplace=True)
         self.logger.info("_map_existing_item_ids(): done rows=%s", len(df))
         return df
-################################################################################
-
-    def export_mapping(self, path: str):
-        if self.item_to_id is None or self.id_to_item is None:
-            raise RuntimeError("export_mapping(): mapping not initialized")
-
-        payload = {
-            "item_to_id": self.item_to_id,
-            "id_to_item": self.id_to_item
-        }
-
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(payload, f, ensure_ascii=False, indent=2)
-
-        self.logger.info("export_mapping(): saved mapping path=%s items=%s", path, len(self.item_to_id))
-################################################################################
-
-    def import_mapping(self, path: str):
-        with open(path, "r", encoding="utf-8") as f:
-            payload = json.load(f)
-
-        if "item_to_id" not in payload or "id_to_item" not in payload:
-            raise RuntimeError("import_mapping(): invalid mapping file")
-
-        self.item_to_id = {k: int(v) for k, v in payload["item_to_id"].items()}
-        self.id_to_item = {int(k): v for k, v in payload["id_to_item"].items()}
-
-        self.logger.info("import_mapping(): loaded mapping path=%s items=%s", path, len(self.item_to_id))
-################################################################################
-
-    def get_id_to_item(self) -> dict[int, str]:
-        if self.id_to_item is None:
-            raise RuntimeError("ItemId mapping not initialized")
-        self.logger.info("get_id_to_item(): size=%s", len(self.id_to_item))
-        return self.id_to_item
-################################################################################
-
-    def map_item_ids_to_names(self, df, col_name: str = "item"):
-        if self.id_to_item is None:
-            raise RuntimeError("ItemId mapping not initialized")
-        self.logger.info("map_item_ids_to_names(): start rows=%s col_name='%s'", len(df), col_name)
-        df[col_name] = df["itemId"].map(self.id_to_item)
-        self.logger.info("map_item_ids_to_names(): done")
-        return df
-################################################################################

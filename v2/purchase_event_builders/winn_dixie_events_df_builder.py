@@ -1,30 +1,54 @@
 import logging
 import pandas as pd
 from pathlib import Path
-
+from abstractions.event_df_builder_base import EventDfBuilderBase
 from .winn_dixie_recpt_parser import WinnDixieRecptParser
 
-class WinnDixieEventsDfBuilder:
 
-    vendorName = "winndixie"
+#======================================================#
+class WinnDixieEventsDfBuilder(EventDfBuilderBase):
+    """
+    Builds an events DataFrame from WinnDixie receipt files.
+    Parses both primary and additional text receipt files from injected data source paths.
+    Combines results into a single normalized DataFrame sorted by date.
+    """
 
-    def __init__(this, dataSources):
-        this.data_sources = dataSources
-        this.logger = logging.getLogger(this.__class__.__name__)
-        this.recptParser = WinnDixieRecptParser()
+    vendorName: str = "winndixie"
 
-    ###########################################
-    def build_df(this):
-        this.logger.info("WinDixie Events DF Builder started")
+    dataSources: dict
+    recptParser: WinnDixieRecptParser
+    logger: logging.Logger
 
-        winndixiePath = this.data_sources.get("winndixie")
-        winndixieAdditionalPath = this.data_sources.get("winndixieAdditional")
+    #======================================================#
+    def __init__(self, dataSources: dict):
+        """
+        :param dataSources: Dictionary of named data source paths keyed by vendor name.
+        :type dataSources: dict
+        """
+        self.logger = logging.getLogger(self.__class__.__name__)
+        self.dataSources = dataSources
+        self.recptParser = WinnDixieRecptParser()
+        self.logger.info("WinnDixieEventsDfBuilder initialized")
 
-        this.logger.info("winndixie path param: %s", winndixiePath)
-        this.logger.info("winndixieAdditional path param: %s", winndixieAdditionalPath)
+    #======================================================#
+    def build_df(self) -> pd.DataFrame:
+        """
+        Build the WinnDixie events DataFrame by parsing all receipt files
+        from primary and additional data source paths.
 
-        winndixieDf = this._build_winn_dixie_df(winndixiePath)
-        winndixieAdditionalDf = this._build_winn_dixie_additional_text_rcpts_df(winndixieAdditionalPath)
+        :returns: Combined DataFrame of all parsed receipt events sorted by date.
+        :rtype: pd.DataFrame
+        """
+        self.logger.info("build_df(): start")
+
+        winndixiePath: str = self.dataSources.get("winndixie")
+        winndixieAdditionalPath: str = self.dataSources.get("winndixieAdditional")
+
+        self.logger.info("build_df(): winndixiePath=%s", winndixiePath)
+        self.logger.info("build_df(): winndixieAdditionalPath=%s", winndixieAdditionalPath)
+
+        winndixieDf: pd.DataFrame = self._build_winn_dixie_df(winndixiePath)
+        winndixieAdditionalDf: pd.DataFrame = self._build_winn_dixie_additional_text_rcpts_df(winndixieAdditionalPath)
 
         dfs: list[pd.DataFrame] = []
 
@@ -35,97 +59,104 @@ class WinnDixieEventsDfBuilder:
             dfs.append(winndixieAdditionalDf)
 
         if len(dfs) == 0:
-            winndixieDf = pd.DataFrame()
-        else:
-            winndixieDf = pd.concat(dfs, ignore_index=True)
-
-        this.logger.info("WinDixie Events DF Builder finished rows=%s cols=%s",
-                         len(winndixieDf), len(winndixieDf.columns))
-
-        return winndixieDf
-
-    ###########################################
-    def _build_winn_dixie_additional_text_rcpts_df(this, folderPath):
-
-        rows = []
-        this.logger.info("_build_winn_dixie_additional_text_rcpts_df folderPath: %s", folderPath)
-
-        if folderPath is None:
-            this.logger.warning("No folderPath provided for winndixieAdditional")
+            self.logger.warning("build_df(): no data found returning empty DataFrame")
             return pd.DataFrame()
 
-        for p in Path(folderPath).glob("*.txt"):
-            this.logger.debug("Parsing additional receipt file: %s", p)
+        resultDf: pd.DataFrame = pd.concat(dfs, ignore_index=True)
 
-            result = this.recptParser.parse(p.read_text(encoding="utf-8", errors="ignore"))
+        self.logger.info("build_df(): done rows=%s cols=%s", len(resultDf), len(resultDf.columns))
+        return resultDf
 
-            for r in result["items"]:
-                rows.append({
-                    "vendor": this.vendorName,
-                    "source": p.name,
-                    "date": result["date"],
-                    "time": result["time"],
-                    "item": r["item"],
-                    "qty": r["qty"],
-                })
+    #======================================================#
+    def _build_winn_dixie_df(self, path: str) -> pd.DataFrame:
+        """
+        Parse primary WinnDixie receipt text files from the given folder path.
 
-        winndixie_df = pd.DataFrame(rows)
-
-        if winndixie_df.empty:
-            this.logger.warning("WinnDixieEventsDfBuilder produced empty dataframe. No receipts found Path: %s", folderPath);
-            # raise Exception("WinnDixieEventsDfBuilder produced empty dataframe. No receipts found.")
-
-        winndixie_df["date"] = pd.to_datetime(winndixie_df["date"])
-        winndixie_df["time"] = winndixie_df["time"].astype(str)
-
-        winndixie_df = WinnDixieRecptParser.remove_duplicate_receipt_files(winndixie_df)
-        winndixie_df = winndixie_df.sort_values(by=["date", "time"]).reset_index(drop=True)
-        winndixie_df = winndixie_df.drop(columns=["time"])
-
-        this.logger.info("Additional receipts processed rows=%s", len(winndixie_df))
-
-        return winndixie_df
-
-    ###########################################################################################
-    def _build_winn_dixie_df(this, path):
-
-        this.logger.info("_build_winn_dixie_df path: %s", path)
-
-        rows = []
+        :param path: Folder path containing primary receipt text files.
+        :type path: str
+        :returns: DataFrame of parsed receipt rows, or empty DataFrame if path is None or no files found.
+        :rtype: pd.DataFrame
+        """
+        self.logger.info("_build_winn_dixie_df(): path=%s", path)
 
         if path is None:
-            this.logger.warning("No path provided for winndixie")
+            self.logger.warning("_build_winn_dixie_df(): no path provided")
             return pd.DataFrame()
 
-        for p in Path(path).glob("*.txt"):
-            this.logger.debug("Parsing receipt file: %s", p)
+        rows: list = []
 
-            result = this.recptParser.parse(p.read_text(encoding="utf-8", errors="ignore"))
+        for p in Path(path).glob("*.txt"):
+            self.logger.debug("_build_winn_dixie_df(): parsing file=%s", p)
+            result: dict = self.recptParser.parse(p.read_text(encoding="utf-8", errors="ignore"))
 
             for r in result["items"]:
                 rows.append({
-                    "vendor": this.vendorName,
+                    "vendor": self.vendorName,
                     "source": p.name,
-                    "date": result["date"],
-                    "time": result["time"],
-                    "item": r["item"],
-                    "qty": r["qty"],
+                    "date":   result["date"],
+                    "time":   result["time"],
+                    "item":   r["item"],
+                    "qty":    r["qty"]
                 })
 
-        winndixie_df = pd.DataFrame(rows)
+        winndixieDf: pd.DataFrame = pd.DataFrame(rows)
 
-        if winndixie_df.empty:
-            this.logger.warning("WinnDixieEventsDfBuilder produced empty dataframe. No receipts found Path: %s",  path);
+        if winndixieDf.empty:
+            self.logger.warning("_build_winn_dixie_df(): empty DataFrame path=%s", path)
             return pd.DataFrame()
-            # raise Exception("WinnDixieEventsDfBuilder produced empty dataframe. No receipts found.")
 
-        winndixie_df["date"] = pd.to_datetime(winndixie_df["date"])
-        winndixie_df["time"] = winndixie_df["time"].astype(str)
+        winndixieDf["date"] = pd.to_datetime(winndixieDf["date"])
+        winndixieDf["time"] = winndixieDf["time"].astype(str)
+        winndixieDf = WinnDixieRecptParser.remove_duplicate_receipt_files(winndixieDf)
+        winndixieDf = winndixieDf.sort_values(by=["date", "time"]).reset_index(drop=True)
+        winndixieDf = winndixieDf.drop(columns=["time"])
 
-        winndixie_df = WinnDixieRecptParser.remove_duplicate_receipt_files(winndixie_df)
-        winndixie_df = winndixie_df.sort_values(by=["date", "time"]).reset_index(drop=True)
-        winndixie_df = winndixie_df.drop(columns=["time"])
+        self.logger.info("_build_winn_dixie_df(): done rows=%s", len(winndixieDf))
+        return winndixieDf
 
-        this.logger.info("Primary receipts processed rows=%s", len(winndixie_df))
+    #======================================================#
+    def _build_winn_dixie_additional_text_rcpts_df(self, folderPath: str) -> pd.DataFrame:
+        """
+        Parse additional WinnDixie receipt text files from the given folder path.
 
-        return winndixie_df
+        :param folderPath: Folder path containing additional receipt text files.
+        :type folderPath: str
+        :returns: DataFrame of parsed receipt rows, or empty DataFrame if path is None or no files found.
+        :rtype: pd.DataFrame
+        """
+        self.logger.info("_build_winn_dixie_additional_text_rcpts_df(): folderPath=%s", folderPath)
+
+        if folderPath is None:
+            self.logger.warning("_build_winn_dixie_additional_text_rcpts_df(): no folderPath provided")
+            return pd.DataFrame()
+
+        rows: list = []
+
+        for p in Path(folderPath).glob("*.txt"):
+            self.logger.debug("_build_winn_dixie_additional_text_rcpts_df(): parsing file=%s", p)
+            result: dict = self.recptParser.parse(p.read_text(encoding="utf-8", errors="ignore"))
+
+            for r in result["items"]:
+                rows.append({
+                    "vendor": self.vendorName,
+                    "source": p.name,
+                    "date":   result["date"],
+                    "time":   result["time"],
+                    "item":   r["item"],
+                    "qty":    r["qty"]
+                })
+
+        winndixieDf: pd.DataFrame = pd.DataFrame(rows)
+
+        if winndixieDf.empty:
+            self.logger.warning("_build_winn_dixie_additional_text_rcpts_df(): empty DataFrame folderPath=%s", folderPath)
+            return pd.DataFrame()
+
+        winndixieDf["date"] = pd.to_datetime(winndixieDf["date"])
+        winndixieDf["time"] = winndixieDf["time"].astype(str)
+        winndixieDf = WinnDixieRecptParser.remove_duplicate_receipt_files(winndixieDf)
+        winndixieDf = winndixieDf.sort_values(by=["date", "time"]).reset_index(drop=True)
+        winndixieDf = winndixieDf.drop(columns=["time"])
+
+        self.logger.info("_build_winn_dixie_additional_text_rcpts_df(): done rows=%s", len(winndixieDf))
+        return winndixieDf

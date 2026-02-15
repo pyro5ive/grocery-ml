@@ -1,24 +1,52 @@
 import logging
 import pandas as pd
+from abstractions.df_filter_base import DfFilterBase
 
-class SameTripQtyCombiner(object):
 
-    def __init__(this):
-        this.logger = logging.getLogger(__name__);
+#======================================================#
+class SameTripQtyCombiner(DfFilterBase):
+    """
+    Filters a DataFrame by summing quantities for duplicate date/itemId combinations.
+    Preserves all other columns by keeping the first occurrence of each date/itemId pair.
+    """
 
-    ###########################################################
+    dateCol: str = "date"
+    itemIdCol: str = "itemId"
+    qtyCol: str = "qty"
 
-    def filter_df(this, df):
-        this.logger.info("filtering df SameTripQtyCombiner")
+    logger: logging.Logger
 
-        # Sum quantities for duplicate date/itemId combinations
-        qty_summed = df.groupby(['date', 'itemId'], as_index=False)['qty'].sum()
+    #======================================================#
+    def __init__(self):
+        """
+        Initializes the filter.
+        """
+        self.logger = logging.getLogger(self.__class__.__name__)
+        self.logger.info("SameTripQtyCombiner initialized")
 
-        # Get all other columns (drop qty, keep first occurrence of each date/itemId)
-        other_cols = df.drop(columns=['qty']).drop_duplicates(subset=['date', 'itemId'])
+    #======================================================#
+    def filter(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Sum quantities for duplicate date/itemId combinations and merge
+        back with remaining columns.
 
-        # Merge summed qty back with other columns
-        df_combined = other_cols.merge(qty_summed, on=['date', 'itemId'], how='left')
+        :param df: Input DataFrame containing date, itemId and qty columns.
+        :type df: pd.DataFrame
+        :returns: DataFrame with quantities summed per date/itemId combination.
+        :rtype: pd.DataFrame
+        """
+        self.logger.info("filter(): start rows=%s", len(df))
 
-        return df_combined
-    ###########################################################
+        qtySummed: pd.DataFrame = df.groupby(
+            [self.dateCol, self.itemIdCol], as_index=False
+        )[self.qtyCol].sum()
+
+        otherCols: pd.DataFrame = (
+            df.drop(columns=[self.qtyCol])
+              .drop_duplicates(subset=[self.dateCol, self.itemIdCol])
+        )
+
+        df = otherCols.merge(qtySummed, on=[self.dateCol, self.itemIdCol], how="left")
+
+        self.logger.info("filter(): done rows=%s", len(df))
+        return df

@@ -1,96 +1,129 @@
 import logging
-import sys
-
 import pandas as pd
-
-from feature_builders.payday_prox_feature_builder import PaydayProximity_FeatureBuilder
-from feature_builders.weather_history_feat_builder import WeatherHistory_FeatureBuilder
-from feature_builders.item_supply_level_feature_builder import ItemSupplyLevel_FeatureBuilder
-from feature_builders.school_schedule_feat_builder import SchoolSchedule_FeatureBuilder
-from feature_builders.days_since_last_purchase_feat_builder import DaysSinceLastPurchase_FeatBuilder
+from abstractions.feature_builder_base import FeatureBuilderBase
+from abstractions.sample_builder_base import SampleBuilderBase
+from abstractions.df_filter_base import DfFilterBase
 from feature_builders.item_id_feature_builder import ItemIdFeatureBuilder
-from feature_builders.days_since_last_trip_feature_builder import DaysSinceLastTrip_FeatureBuilder
-from feature_builders.avg_days_between_item_purchases_feature_builder import AvgDaysBetweenItemPurchases_FeatureBuilder
-from feature_builders.avg_days_between_trips_feature_builder import AvgDaysBetweenTrips_FeatureBuilder
-from feature_builders.expected_gap_ewma_feature_builder import ExpectedGapEwma_FeatureBuilder
-from feature_builders.item_total_purchase_count_feature_builder import ItemTotalPurchaseCount_FeatureBuilder
-from feature_builders.is_dst_feature_builder import IsDst_FeatureBuilder
-from negative_sample_builders.same_trip_negative_sample_builder import  SameTripNegativeSampleBuilder
-from negative_sample_builders.non_trip_negative_sample_builder import NonTripNegativeSampleBuilder
-from sample_filters.combine_same_trip_qty import SameTripQtyCombiner
 from purchase_event_builders.purchase_event_aggregate_builder import PurchaseEventAggregateBuilder
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[logging.StreamHandler(sys.stdout)]
-)
 
+#======================================================#
 class TrainingDataBuilder:
+    """
+    Orchestrates the full training DataFrame construction pipeline.
+    Builds purchase events, applies negative sampling, runs the feature
+    pipeline, and returns a fully featured training DataFrame.
+    """
 
-    def __init__(this, sources):
-        this.logger = logging.getLogger(this.__class__.__name__);
-        this.sources = sources;
-        this.purchaseEventsDfBuilder = PurchaseEventAggregateBuilder(sources);
-        this.featureBuilders = [];
-        this._register_feature_builders();
-        this.sameTripNegativeSampleBuilder = SameTripNegativeSampleBuilder();
-        this.nonTripNegativeSampleBuilder = NonTripNegativeSampleBuilder();
-        this.itemIdFeatueBuilder = ItemIdFeatureBuilder();
-        this.sameTripQtyCombiner = SameTripQtyCombiner();
-    #======================================================================#
-    def build_df(this):
-        this.logger.info("build_df() start");
-        df = this.purchaseEventsDfBuilder.build_df();
-        df = this._build_target_col(df);
-        df = this.itemIdFeatueBuilder.build_feature(df);
-        df = this._build_negative_samples(df);
-        df = this.sameTripQtyCombiner.filter_df(df);
-        df = this._apply_feature_pipeline(df);
-        this.logger.info("build_training_df() done rows=%s cols=%s", len(df), len(df.columns));
+    purchaseEventAggregateBuilder: PurchaseEventAggregateBuilder
+    itemIdFeatureBuilder: ItemIdFeatureBuilder
+    sameTripNegativeSampleBuilder: SampleBuilderBase
+    nonTripNegativeSampleBuilder: SampleBuilderBase
+    sameTripQtyCombiner: DfFilterBase
+    featureBuilders: list[FeatureBuilderBase]
+    logger: logging.Logger
 
-        return df;
-    #======================================================================#
-    def _build_target_col(this, df):
-        this.logger.info("_build_target_col()");
-        df["didBuy_target"] = True;
-        df["didBuy_target"] = df["didBuy_target"].astype(bool);
-        return df;
-    # ======================================================================#
-    def _build_negative_samples(this, df):
-        this.logger.info("_build_negative_samples()");
-        df = this.sameTripNegativeSampleBuilder.build_samples(df);
-        df  = this.nonTripNegativeSampleBuilder.build_samples(df);
-        return df;
-    # ======================================================================#
-    # def _apply_core_fetures(this, df):
-    #     this.logger.info("_apply_core_fetures()");
-    #     df = this.itemIdFeatueBuilder.build_feature(df);
-    #     df = this._build_target_col(df);
-    #     return df;
+    #======================================================#
+    def __init__(
+        self,
+        purchaseEventAggregateBuilder: PurchaseEventAggregateBuilder,
+        itemIdFeatureBuilder: ItemIdFeatureBuilder,
+        sameTripNegativeSampleBuilder: SampleBuilderBase,
+        nonTripNegativeSampleBuilder: SampleBuilderBase,
+        sameTripQtyCombiner: DfFilterBase,
+        featureBuilders: list[FeatureBuilderBase]
+    ):
+        """
+        :param purchaseEventAggregateBuilder: Builds the raw purchase events DataFrame from all sources.
+        :type purchaseEventAggregateBuilder: PurchaseEventAggregateBuilder
+        :param itemIdFeatureBuilder: Builds the itemId feature column using the item index service.
+        :type itemIdFeatureBuilder: ItemIdFeatureBuilder
+        :param sameTripNegativeSampleBuilder: Inserts negative samples for same-trip days.
+        :type sameTripNegativeSampleBuilder: SampleBuilderBase
+        :param nonTripNegativeSampleBuilder: Inserts negative samples for non-trip days.
+        :type nonTripNegativeSampleBuilder: SampleBuilderBase
+        :param sameTripQtyCombiner: Combines duplicate date/itemId rows by summing qty.
+        :type sameTripQtyCombiner: DfFilterBase
+        :param featureBuilders: Ordered list of feature builders to apply in the pipeline.
+        :type featureBuilders: list[FeatureBuilderBase]
+        """
+        self.logger = logging.getLogger(self.__class__.__name__)
+        self.purchaseEventAggregateBuilder = purchaseEventAggregateBuilder
+        self.itemIdFeatureBuilder = itemIdFeatureBuilder
+        self.sameTripNegativeSampleBuilder = sameTripNegativeSampleBuilder
+        self.nonTripNegativeSampleBuilder = nonTripNegativeSampleBuilder
+        self.sameTripQtyCombiner = sameTripQtyCombiner
+        self.featureBuilders = featureBuilders
+        self.logger.info("TrainingDataBuilder initialized featureBuilders=%s", len(self.featureBuilders))
 
-    #======================================================================#
-    def _register_feature_builders(this):
-        this.logger.info("_register_feature_builders()");
-        this.featureBuilders.append(WeatherHistory_FeatureBuilder());
-        this.featureBuilders.append(SchoolSchedule_FeatureBuilder());
-        this.featureBuilders.append(IsDst_FeatureBuilder());
-        this.featureBuilders.append(PaydayProximity_FeatureBuilder("ang", pd.Timestamp("2026-01-23", tz="US/Central")));
-        this.featureBuilders.append(PaydayProximity_FeatureBuilder("sjm", pd.Timestamp("2026-01-30", tz="US/Central")));
-        this.featureBuilders.append(DaysSinceLastPurchase_FeatBuilder());
-        this.featureBuilders.append(AvgDaysBetweenItemPurchases_FeatureBuilder());
-        this.featureBuilders.append(DaysSinceLastTrip_FeatureBuilder());
-        this.featureBuilders.append(AvgDaysBetweenTrips_FeatureBuilder());
-        this.featureBuilders.append(ExpectedGapEwma_FeatureBuilder());
-        this.featureBuilders.append(ItemTotalPurchaseCount_FeatureBuilder());
-        this.featureBuilders.append(ItemSupplyLevel_FeatureBuilder());
-    #======================================================================#
-    def _apply_feature_pipeline(this, df):
-        this.logger.info("_apply_feature_pipeline() start");
-        for builder in this.featureBuilders:
-            builderName = builder.__class__.__name__;
-            this.logger.info("Applying feature builder: %s", builderName);
-            df = builder.build_feature(df);
-        this.logger.info("_apply_feature_pipeline() done");
-        return df;
-    #======================================================================#
+    #======================================================#
+    def build_df(self) -> pd.DataFrame:
+        """
+        Build the full training DataFrame by running the complete pipeline.
+
+        :returns: Fully featured training DataFrame.
+        :rtype: pd.DataFrame
+        """
+        self.logger.info("build_df(): start")
+
+        df: pd.DataFrame = self.purchaseEventAggregateBuilder.build_df()
+        df = self._build_target_col(df)
+        df = self.itemIdFeatureBuilder.build(df)
+        df = self._build_negative_samples(df)
+        df = self.sameTripQtyCombiner.filter(df)
+        df = self._apply_feature_pipeline(df)
+
+        self.logger.info("build_df(): done rows=%s cols=%s", len(df), len(df.columns))
+        return df
+
+    #======================================================#
+    def _build_target_col(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Add the didBuy_target boolean column, defaulting all rows to True.
+        Negative sample builders will set their rows to False after this step.
+
+        :param df: Input DataFrame of purchase events.
+        :type df: pd.DataFrame
+        :returns: DataFrame with didBuy_target column added.
+        :rtype: pd.DataFrame
+        """
+        self.logger.info("_build_target_col(): start")
+        df["didBuy_target"] = True
+        df["didBuy_target"] = df["didBuy_target"].astype(bool)
+        return df
+
+    #======================================================#
+    def _build_negative_samples(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Apply same-trip and non-trip negative sample builders to the DataFrame.
+
+        :param df: Input DataFrame containing positive purchase rows.
+        :type df: pd.DataFrame
+        :returns: Expanded DataFrame with negative samples inserted.
+        :rtype: pd.DataFrame
+        """
+        self.logger.info("_build_negative_samples(): start rows=%s", len(df))
+        df = self.sameTripNegativeSampleBuilder.build_samples(df)
+        df = self.nonTripNegativeSampleBuilder.build_samples(df)
+        self.logger.info("_build_negative_samples(): done rows=%s", len(df))
+        return df
+
+    #======================================================#
+    def _apply_feature_pipeline(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Apply all registered feature builders sequentially to the DataFrame.
+
+        :param df: Input DataFrame to run through the feature pipeline.
+        :type df: pd.DataFrame
+        :returns: DataFrame with all feature columns added.
+        :rtype: pd.DataFrame
+        """
+        self.logger.info("_apply_feature_pipeline(): start builders=%s", len(self.featureBuilders))
+
+        for builder in self.featureBuilders:
+            builderName: str = builder.__class__.__name__
+            self.logger.info("_apply_feature_pipeline(): applying builder=%s", builderName)
+            df = builder.build(df)
+
+        self.logger.info("_apply_feature_pipeline(): done rows=%s cols=%s", len(df), len(df.columns))
+        return df
