@@ -1,13 +1,13 @@
 import logging
 import pandas as pd
-import os
 import numpy as np
 
-from model_repo.model_bundle import ModelBundle
+from abstractions.normalizer_base import NormalizerBase
+from abstractions.prediction_feature_builder_base import PredictionFeatureBuilderBase
+from models.model_bundle import ModelBundle
 from prediction_input_df_builder import PredictionInputDfBuilder
-from feature_normalizer.continous_feature_normalizer import ContinousFeatureNormalizer
-from feature_builders.weather_forecast_feature_builder import  WeatherForecastFeatureBuilder
-from services.weather.weather_service import NwsWeatherService
+# from feature_normalizer.continous_feature_normalizer import ContinousFeatureNormalizer
+
 from feature_schema import FeatureSchema
 from datetime import datetime
 
@@ -27,14 +27,17 @@ class PredictionService:
         "weather": r"..\date\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv"
     }
 
-    def __init__(self):
-        self.logger = logging.getLogger(self.__class__.__name__);
-        self.predictionInputEventsDfBuilder = PredictionInputDfBuilder(self.liveSources, self.trainingSources);
-        self.continuousFeatureNormalizer = ContinousFeatureNormalizer();
-        self.featureSchema = FeatureSchema();
+    def __init__(
+            self,
+            predictionInputDfBuilder: PredictionInputDfBuilder,
+            normalizer: NormalizerBase,
 
-        self.weatherService = NwsWeatherService();
-        self.weatherForcastFeatureBuilder = WeatherForecastFeatureBuilder(self.weatherService, 29.9934, -90.2580);
+
+    ):
+        self.logger = logging.getLogger(self.__class__.__name__);
+        self.predictionInputEventsDfBuilder = predictionInputDfBuilder;
+        self.continuousFeatureNormalizer = normalizer;
+        self.featureSchema = FeatureSchema();
     #=================================================================================#
 
     def run_prediction(self, kerasModelBundle: ModelBundle, predictionDate: datetime):

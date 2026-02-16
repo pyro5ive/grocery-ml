@@ -1,13 +1,13 @@
 import logging
 from datetime import datetime
+
+from abstractions.model_builder_base import ModelBuilderBase
 from abstractions.normalizer_base import NormalizerBase
-from abstractions.event_df_builder_base import EventDfBuilderBase
-from training_df_builder import TrainingDataBuilder
 from feature_schema import FeatureSchema
-from model_builder.keras_model_builder import KerasModelBuilder
 from prediction_service import PredictionService
-from model_repo.model_bundle import ModelBundle
-from model_repo.keras_file_system_model_bundle_repo import KerasFileSystemModelRepository
+from models.model_bundle import ModelBundle
+from abstractions.repos.model_bundle_repository_base import  ModelBundleRepositoryBase
+from training_df_builder import TrainingDataBuilder
 
 
 #======================================================#
@@ -28,8 +28,8 @@ class ExperimentRunner:
     trainingDfBuilder: TrainingDataBuilder
     normalizer: NormalizerBase
     featureSchema: FeatureSchema
-    kerasModelBuilder: KerasModelBuilder
-    modelRepo: KerasFileSystemModelRepository
+    kerasModelBuilder: ModelBuilderBase
+    modelRepo: ModelBundleRepositoryBase
     predictionService: PredictionService
     modelBundle: ModelBundle
     logger: logging.Logger
@@ -40,8 +40,8 @@ class ExperimentRunner:
         trainingDfBuilder: TrainingDataBuilder,
         normalizer: NormalizerBase,
         featureSchema: FeatureSchema,
-        kerasModelBuilder: KerasModelBuilder,
-        modelRepo: KerasFileSystemModelRepository,
+        kerasModelBuilder: ModelBuilderBase,
+        modelRepo: ModelBundleRepositoryBase,
         predictionService: PredictionService
     ):
         """
@@ -110,9 +110,9 @@ class ExperimentRunner:
 
         self.modelRepo.save(modelBundle, expDir)
 
-        testPredDate: datetime = datetime.now()
-        predictionsResultDf = self.predictionService.run_prediction(modelBundle, testPredDate)
-        predictionsResultDf.to_csv(expDir + "/predictions.csv")
+        # testPredDate: datetime = datetime.now()
+        # predictionsResultDf = self.predictionService.run_prediction(modelBundle, testPredDate)
+        # predictionsResultDf.to_csv(expDir + "/predictions.csv")
 
         print(model.summary())
         self.logger.info("run(): done expDir=%s", expDir)

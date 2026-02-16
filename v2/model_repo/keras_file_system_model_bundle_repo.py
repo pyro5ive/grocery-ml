@@ -3,12 +3,15 @@ import json
 import pandas as pd
 import tensorflow as tf
 from typing import Dict, Any
-from .model_bundle import ModelBundle
+
+from abstractions.repos.model_bundle_repository_base import ModelBundleRepositoryBase
+from models.model_bundle import ModelBundle
 from models.models import BuildParams, TrainingParams
 import logging
 
 
-class KerasFileSystemModelRepository:
+
+class KerasFileSystemModelBundleRepository(ModelBundleRepositoryBase):
 
 
     def __init__(self) -> None:

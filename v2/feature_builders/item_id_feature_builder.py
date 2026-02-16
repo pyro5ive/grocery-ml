@@ -1,7 +1,7 @@
 import logging
 import pandas as pd
 from abstractions.feature_builder_base import FeatureBuilderBase
-from abstractions.services.item_index_builder_service_base import ItemIndexBuilderServiceBase
+from abstractions.services.item_id_index_service_base import ItemIndexBuilderServiceBase
 
 
 #======================================================#
