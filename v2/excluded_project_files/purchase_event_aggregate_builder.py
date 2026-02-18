@@ -2,7 +2,6 @@ import logging
 import pandas as pd
 
 from abstractions.event_df_builder_base import EventDfBuilderBase
-from purchase_event_builders.winn_dixie_events_df_builder import WinnDixieEventsDfBuilder
 
 
 class PurchaseEventAggregateBuilder:
@@ -12,10 +11,9 @@ class PurchaseEventAggregateBuilder:
     
     def __init__(
             self,
-            dataSourcePaths,
             purchaseEventDfBuilders: list[EventDfBuilderBase],
     ):
-        self.sourcePaths = dataSourcePaths;
+
         self.logger = logging.getLogger(self.__class__.__name__)
         self.eventsDfs = [];
         self.eventsDfBuilders = purchaseEventDfBuilders;

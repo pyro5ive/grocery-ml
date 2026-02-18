@@ -11,6 +11,8 @@ class ManualEntryEventsDfBuilder(EventDfBuilderBase):
     Expects a fixed schema defined by the PurchaseEvent domain model.
     """
 
+    sourceKey: str = "manual"
+
     expectedColumns: list[str] = [
         PurchaseEvent.SOURCE,
         PurchaseEvent.VENDOR,
@@ -19,31 +21,27 @@ class ManualEntryEventsDfBuilder(EventDfBuilderBase):
         PurchaseEvent.QTY
     ]
 
-    csvPath: str
     logger: logging.Logger
 
     #======================================================#
-    def __init__(self, csvPath: str):
-        """
-        :param csvPath: Path to the manually maintained events CSV file.
-        :type csvPath: str
-        """
+    def __init__(self):
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.csvPath = csvPath
-        self.logger.info("ManualEntryEventsDfBuilder initialized csvPath=%s", self.csvPath)
+        self.logger.info(
+            "ManualEntryEventsDfBuilder initialized sourceKey=%s",
+            self.sourceKey
+        )
 
     #======================================================#
-    def build_df(self) -> pd.DataFrame:
-        """
-        Build the manual entry events DataFrame from the configured CSV file.
+    def build_df(self, sourcePaths: dict) -> pd.DataFrame:
+        if self.sourceKey not in sourcePaths:
+            raise KeyError(
+                f"sourcePaths missing required key '{self.sourceKey}'"
+            )
 
-        :returns: DataFrame of manual entry purchase events.
-        :rtype: pd.DataFrame
-        :raises ValueError: If the CSV file is missing expected columns.
-        """
-        self.logger.info("build_df(): start csvPath=%s", self.csvPath)
+        csvPath: str = sourcePaths[self.sourceKey]
+        self.logger.info("build_df(): start csvPath=%s", csvPath)
 
-        df: pd.DataFrame = pd.read_csv(self.csvPath)
+        df: pd.DataFrame = pd.read_csv(csvPath)
 
         self._validate_columns(df)
 
@@ -55,13 +53,10 @@ class ManualEntryEventsDfBuilder(EventDfBuilderBase):
 
     #======================================================#
     def _validate_columns(self, df: pd.DataFrame) -> None:
-        """
-        Validate that all expected columns are present in the DataFrame.
-
-        :param df: DataFrame loaded from the CSV file.
-        :type df: pd.DataFrame
-        :raises ValueError: If any expected columns are missing.
-        """
-        missing: list[str] = [c for c in self.expectedColumns if c not in df.columns]
+        missing: list[str] = [
+            c for c in self.expectedColumns if c not in df.columns
+        ]
         if missing:
-            raise ValueError(f"{self.__class__.__name__} missing expected columns: {missing}")
+            raise ValueError(
+                f"{self.__class__.__name__} missing expected columns: {missing}"
+            )

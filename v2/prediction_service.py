@@ -13,19 +13,6 @@ from datetime import datetime
 
 class PredictionService:
 
-    trainingSources = {
-        "walmart": r"..\data\training\walmart",
-        "winndixie": r"..\data\training\winndixie\txt",
-        "winndixieAdditional": r"..\data\training\winndixie\additionalTxtRcpts",
-        "weather": r"..\data\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv"
-    }
-
-    liveSources = {
-        "walmart": r"..\data\live\walmart",
-        "winndixie": r"..\data\live\winndixie\txt",
-        "winndixieAdditional": r"..\data\live\winndixie\additionalTxtRcpts",
-        "weather": r"..\date\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv"
-    }
 
     def __init__(
             self,

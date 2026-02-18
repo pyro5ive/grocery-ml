@@ -2,11 +2,11 @@ import logging
 import pandas as pd
 from typing import List
 from datetime import datetime
-from abstractions.event_df_builder_base import EventDfBuilderBase
+
 
 
 #======================================================#
-class PredictionDateEventsDfBuilder(EventDfBuilderBase):
+class PredictionDateEventsDfBuilder:
     """
     Builds a prediction date event DataFrame containing one row per item
     for the given prediction date.

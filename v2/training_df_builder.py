@@ -1,9 +1,11 @@
 import logging
 import pandas as pd
+
+from abstractions.event_df_builder_base import EventDfBuilderBase
 from abstractions.feature_builder_base import FeatureBuilderBase
 from abstractions.sample_builder_base import SampleBuilderBase
 from abstractions.df_filter_base import DfFilterBase
-from purchase_event_builders.purchase_event_aggregate_builder import PurchaseEventAggregateBuilder
+from models.datasource_paths_config import DataSourcePathsConfig
 from abstractions.target_column_builder_base import  TargetColumnBuilderBase
 
 
@@ -15,8 +17,10 @@ class TrainingDataBuilder:
     applies filters, and executes the feature pipeline.
     """
 
-    purchaseEventAggregateBuilder: PurchaseEventAggregateBuilder
+    eventsDf: pd.DataFrame
     targetColumnBuilder: TargetColumnBuilderBase
+    trainingPaths: dict[str, str]
+    eventsDfBuilders: list[EventDfBuilderBase]
     sampleBuilders: list[SampleBuilderBase]
     featureBuilders: list[FeatureBuilderBase]
     sampleFilters: list[DfFilterBase]
@@ -25,11 +29,12 @@ class TrainingDataBuilder:
     #======================================================#
     def __init__(
             self,
-            purchaseEventAggregateBuilder: PurchaseEventAggregateBuilder,
+            eventsDfBuilders: list[EventDfBuilderBase],
             targetColumnBuilder: TargetColumnBuilderBase,
             sampleBuilders: list[SampleBuilderBase],
             featureBuilders: list[FeatureBuilderBase],
-            sampleFilters: list[DfFilterBase]
+            sampleFilters: list[DfFilterBase],
+            dataSourcePathConfig: DataSourcePathsConfig
     ):
         """
         Initialize the TrainingDataBuilder.
@@ -55,7 +60,9 @@ class TrainingDataBuilder:
         :type sampleFilters: list[DfFilterBase]
         """
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.purchaseEventAggregateBuilder = purchaseEventAggregateBuilder
+        self.trainingPaths = dataSourcePathConfig.trainingPaths
+        self.eventsDf = None
+        self.eventsDfBuilders = eventsDfBuilders
         self.targetColumnBuilder = targetColumnBuilder
         self.sampleBuilders = sampleBuilders
         self.featureBuilders = featureBuilders
@@ -78,8 +85,7 @@ class TrainingDataBuilder:
         """
         self.logger.info("build_df(): start")
 
-        df: pd.DataFrame = self.purchaseEventAggregateBuilder.build_df()
-
+        df = self._build_events_df();
         df = self.targetColumnBuilder.build(df)
         df = self._apply_feature_pipeline(df)
         df = self._build_negative_samples(df)
@@ -88,6 +94,22 @@ class TrainingDataBuilder:
         self.logger.info("build_df(): done rows=%s cols=%s", len(df), len(df.columns))
         return df
 
+    # ======================================================#
+    def _build_events_df(self) -> pd.DataFrame:
+        self.logger.info("Building Purchase event df.")
+        eventDfs: list[pd.DataFrame] = []
+        for builder in self.eventDfBuilders:
+            self.logger.info("running EventDfBuilder=%s", builder.__class__.__name__)
+
+            df: pd.DataFrame = builder.build_df(self.trainingPaths)
+            if df is not None and not df.empty:
+                eventDfs.append(df)
+
+        if len(eventDfs) == 0:
+            self.logger.error("eventDfBuilders produced no events")
+            raise RuntimeError("No event data produced by eventDfBuilders")
+
+        return pd.concat(eventDfs, ignore_index=True)
     #======================================================#
     def _build_sample_filters(self, df: pd.DataFrame) -> pd.DataFrame:
         """
