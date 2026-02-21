@@ -98,7 +98,7 @@ class TrainingDataBuilder:
     def _build_events_df(self) -> pd.DataFrame:
         self.logger.info("Building Purchase event df.")
         eventDfs: list[pd.DataFrame] = []
-        for builder in self.eventDfBuilders:
+        for builder in self.eventsDfBuilders:
             self.logger.info("running EventDfBuilder=%s", builder.__class__.__name__)
 
             df: pd.DataFrame = builder.build_df(self.trainingPaths)

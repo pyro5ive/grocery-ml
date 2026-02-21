@@ -11,6 +11,7 @@ from abstractions.model_builder_base import ModelBuilderBase
 from abstractions.normalizer_base import NormalizerBase
 from abstractions.prediction_feature_builder_base import PredictionFeatureBuilderBase
 from abstractions.purchase_event_mapper_base import PurchaseEventMapperBase
+from abstractions.repos.model_bundle_repository_base import ModelBundleRepositoryBase
 from abstractions.sample_builder_base import SampleBuilderBase
 from abstractions.services.item_id_index_service_base import ItemIndexBuilderServiceBase
 from abstractions.feature_builder_base import FeatureBuilderBase
@@ -35,14 +36,18 @@ from feature_builders.weather_history_feat_builder import WeatherHistoryFeatureB
 from feature_normalizer.continous_feature_normalizer import ContinuousFeatureNormalizer
 from feature_schema import FeatureSchema
 from model_builder.keras_model_builder import KerasModelBuilder
+from model_repo.keras_file_system_model_bundle_repo import KerasFileSystemModelBundleRepository
 from models.models import *
 from negative_sample_builders.non_trip_negative_sample_builder import NonTripNegativeSampleBuilder
 from negative_sample_builders.same_trip_negative_sample_builder import SameTripNegativeSampleBuilder
+from prediction_input_df_builder import PredictionInputDfBuilder
+from prediction_service import PredictionService
 from purchase_event_builders.event_df_builders.manual_events_df_builder import ManualEntryEventsDfBuilder
 from purchase_event_builders.event_df_builders.mappers.walmart_events_df_mapper import WalMartReceiptToPurchaseEventMapper
 from purchase_event_builders.event_df_builders.mappers.winn_dixie_events_df_mapper import WinnDixieReceiptToPurchaseEventMapper
 from purchase_event_builders.event_df_builders.mappers.winn_dixie_json_purchase_event_mapper import WinnDixieJsonToPurchaseEventMapper
 from purchase_event_builders.event_df_builders.walmart_events_df_builder import WalMartEventsDfBuilder
+from purchase_event_builders.event_df_builders.winn_dixie_recpt_parser import WinnDixieRecptParser
 from purchase_event_builders.prediction_date_events_df_builder import PredictionDateEventsDfBuilder
 from purchase_event_builders.event_df_builders.winn_dixie_events_df_builder import WinnDixieEventsDfBuilder
 from sample_filters.combine_same_trip_qty import SameTripQtyCombiner
@@ -69,8 +74,8 @@ liveSources = {
     "weather": r"..\data\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv"
 }
 
-dataSourcePaths = DataSourcePathsConfig();
-DataSourcePathsConfig(trainingSources, liveSources);
+dataSourcePaths = DataSourcePathsConfig(trainingSources, liveSources);
+
 serviceProvider = punq.Container();
 
 serviceProvider.register(ExperimentRunner)
@@ -79,7 +84,10 @@ serviceProvider.register(TargetColumnBuilderBase, TargetColumnBuilder, targetCol
 serviceProvider.register(WeatherServiceBase, NwsWeatherService, userAgent="(grocery-ml, nolabizit@gmail.com)")
 serviceProvider.register(FeatureSchema);
 serviceProvider.register(ModelBuilderBase, KerasModelBuilder);
-serviceProvider.register(TrainingDataBuilder)
+serviceProvider.register(ModelBundleRepositoryBase, KerasFileSystemModelBundleRepository);
+serviceProvider.register(PredictionService);
+serviceProvider.register(TrainingDataBuilder);
+serviceProvider.register(PredictionInputDfBuilder);
 # Normalizer
 serviceProvider.register(NormalizerBase, ContinuousFeatureNormalizer)
 #======================================================#
@@ -93,14 +101,15 @@ serviceProvider.register(SampleBuilderBase, NonTripNegativeSampleBuilder)
 #======================================================#
 # Purchase Events
 #  winndixie
-serviceProvider.register(EventDfBuilderBase, WinnDixieEventsDfBuilder)
 serviceProvider.register(PurchaseEventMapperBase, WinnDixieReceiptToPurchaseEventMapper)
+serviceProvider.register(WinnDixieRecptParser);
+serviceProvider.register(EventDfBuilderBase, WinnDixieEventsDfBuilder)
 #  winndixie json
 #serviceProvider.register(EventDfBuilderBase, WinnDixieEventsFromJsonDfBuilder)
 #serviceProvider.register(PurchaseEventMapperBase, WinnDixieJsonToPurchaseEventMapper)
 # walmart
-serviceProvider.register(EventDfBuilderBase, WalMartEventsDfBuilder)
-serviceProvider.register(PurchaseEventMapperBase, WalMartReceiptToPurchaseEventMapper)
+# serviceProvider.register(EventDfBuilderBase, WalMartEventsDfBuilder)
+# serviceProvider.register(PurchaseEventMapperBase, WalMartReceiptToPurchaseEventMapper)
 # manual
 # serviceProvider.register(EventDfBuilderBase, ManualEntryEventsDfBuilder)
 # serviceProvider.register(EventDfBuilderBase, ManualEntryEventsDfBuilder)
@@ -123,7 +132,7 @@ serviceProvider.register(FeatureBuilderBase, ItemSupplyLevelFeatureBuilder)
 serviceProvider.register(FeatureBuilderBase, DaysSinceLastTripFeatureBuilder)
 serviceProvider.register(FeatureBuilderBase, AvgDaysBetweenTripsFeatureBuilder)
 serviceProvider.register(FeatureBuilderBase, ExpectedGapEwmaFeatureBuilder)
-serviceProvider.register(ItemIndexBuilderServiceBase, ItemIndexBuilderService);
+serviceProvider.register(ItemIndexBuilderServiceBase, ItemIndexBuilderService, "itemId", "item");
 
 expRunner = serviceProvider.resolve(ExperimentRunner);
 

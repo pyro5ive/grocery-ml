@@ -12,9 +12,10 @@ class ItemIndexBuilderService(ItemIndexBuilderServiceBase):
     itemNameColName: str
     indexIdColName: str
 
-    def __init__(self, itemIdColName: str, itemNameColName: str,  existing_mapping: dict[str, int] | None = None ):
+    def __init__(self,   existing_mapping: dict[str, int] | None = None ):
         self.logger = logging.getLogger(self.__class__.__name__)
-
+        self.itemIdColName = "itemId";
+        self.itemNameColName = "item";
         if existing_mapping is not None:
             self.item_to_index: dict[str, int] = dict(existing_mapping)
             self.index_to_item: dict[int, str] = {v: k for k, v in existing_mapping.items()}

@@ -2,8 +2,9 @@ import logging
 import pandas as pd
 from pathlib import Path
 from abstractions.event_df_builder_base import EventDfBuilderBase
+from abstractions.purchase_event_mapper_base import PurchaseEventMapperBase
 from .winn_dixie_recpt_parser import WinnDixieRecptParser
-from purchase_event_builders.event_df_builders.mappers.winn_dixie_events_df_mapper import  WinnDixieReceiptToPurchaseEventMapper
+# from purchase_event_builders.event_df_builders.mappers.winn_dixie_events_df_mapper import  WinnDixieReceiptToPurchaseEventMapper
 
 
 #======================================================#
@@ -15,13 +16,13 @@ class WinnDixieEventsDfBuilder(EventDfBuilderBase):
 
     logger: logging.Logger
     recptParser: WinnDixieRecptParser
-    mapper: WinnDixieReceiptToPurchaseEventMapper
+    mapper: PurchaseEventMapperBase
 
     #======================================================#
     def __init__(
         self,
         recptParser: WinnDixieRecptParser,
-        mapper: WinnDixieReceiptToPurchaseEventMapper
+        mapper: PurchaseEventMapperBase
     ):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.recptParser = recptParser
