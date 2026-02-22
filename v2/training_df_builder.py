@@ -125,7 +125,7 @@ class TrainingDataBuilder:
         for builder in self.sampleFilters:
             builderName: str = builder.__class__.__name__
             self.logger.info("applying filter=%s", builderName)
-            df = builder.build(df)
+            df = builder.filter(df)
 
         self.logger.info("_build_sample_filters(): done rows=%s", len(df))
         return df
@@ -145,7 +145,7 @@ class TrainingDataBuilder:
         for builder in self.sampleBuilders:
             builderName: str = builder.__class__.__name__
             self.logger.info("applying sampleBuilder=%s", builderName)
-            df = builder.build(df)
+            df = builder.build_samples(df)
 
         self.logger.info("_build_negative_samples(): done rows=%s", len(df))
         return df

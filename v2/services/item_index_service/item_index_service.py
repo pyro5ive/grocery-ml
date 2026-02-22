@@ -26,10 +26,11 @@ class ItemIndexBuilderService(ItemIndexBuilderServiceBase):
             self.logger.info("initialized empty")
     # ------------------------------------------------------------ #
 
-    def build(self, series: pd.Series) -> None:
-        self.logger.info("build(): start rows=%s", len(series))
+    def build(self, series ) -> None:
 
         unique_items = series.dropna().unique()
+        # unique_items = df[self.itemNameColName].dropna().unique()
+        self.logger.info("build(): start rows=%s", len(unique_items))
         added_count = 0
 
         for item in unique_items:
@@ -85,17 +86,11 @@ class ItemIndexBuilderService(ItemIndexBuilderServiceBase):
         self.logger.info("to_item(): done")
         return result
 
-    # ------------------------------------------------------------ #
-
-    def contains(self, item: str) -> bool:
-        return item in self.item_to_index
-
-    # ------------------------------------------------------------ #
-
     def size(self) -> int:
         return len(self.item_to_index)
-
     # ------------------------------------------------------------ #
-
+    def contains(self, item: str) -> bool:
+        return item in self.item_to_index
+    # ------------------------------------------------------------ #
     def get_mapping(self) -> dict[str, int]:
         return dict(self.item_to_index)

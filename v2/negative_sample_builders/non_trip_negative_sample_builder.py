@@ -27,7 +27,7 @@ class NonTripNegativeSampleBuilder(SampleBuilderBase):
         Initializes the sample builder.
         """
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.logger.info("NonTripNegativeSampleBuilder initialized")
+        # self.logger.info("NonTripNegativeSampleBuilder initialized")
 
     #======================================================#
     def build_samples(self, df: pd.DataFrame) -> pd.DataFrame:

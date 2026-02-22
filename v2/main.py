@@ -52,6 +52,7 @@ from purchase_event_builders.prediction_date_events_df_builder import Prediction
 from purchase_event_builders.event_df_builders.winn_dixie_events_df_builder import WinnDixieEventsDfBuilder
 from sample_filters.combine_same_trip_qty import SameTripQtyCombiner
 from sample_filters.rare_purchase_sample_filter import RarePurchaseFilter
+from services.item_index_service.item_index_builder_service_factory import ItemIndexBuilderServiceFactory
 from services.item_index_service.item_index_service import ItemIndexBuilderService
 from services.weather.nws_weather_service import NwsWeatherService
 from target_col_builder.target_col_builder import TargetColumnBuilder
@@ -118,7 +119,17 @@ serviceProvider.register(DataSourcePathsConfig, instance=dataSourcePaths)
 serviceProvider.register(PredictionDateEventsDfBuilder)
 #======================================================#
 # Feature Builders
-serviceProvider.register(FeatureBuilderBase,ItemIdFeatureBuilder,itemNameColName="item",itemIdColName="itemId")
+serviceProvider.register(ItemIndexBuilderServiceFactory)
+
+serviceProvider.register(
+    FeatureBuilderBase,
+    factory=lambda: ItemIdFeatureBuilder(
+        indexBuilder=serviceProvider.resolve(ItemIndexBuilderServiceFactory).create(),
+        itemNameColName="item",
+        itemIdColName="itemId"
+    )
+)
+# serviceProvider.register(FeatureBuilderBase,ItemIdFeatureBuilder, factory.create(), itemNameColName="item",itemIdColName="itemId")
 serviceProvider.register(FeatureBuilderBase, WeatherHistoryFeatureBuilder, sourcePath=r"..\data\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv")
 serviceProvider.register(PredictionFeatureBuilderBase, WeatherForecastFeatureBuilder)
 serviceProvider.register(FeatureBuilderBase, SchoolScheduleFeatureBuilder)
@@ -132,7 +143,7 @@ serviceProvider.register(FeatureBuilderBase, ItemSupplyLevelFeatureBuilder)
 serviceProvider.register(FeatureBuilderBase, DaysSinceLastTripFeatureBuilder)
 serviceProvider.register(FeatureBuilderBase, AvgDaysBetweenTripsFeatureBuilder)
 serviceProvider.register(FeatureBuilderBase, ExpectedGapEwmaFeatureBuilder)
-serviceProvider.register(ItemIndexBuilderServiceBase, ItemIndexBuilderService, "itemId", "item");
+# serviceProvider.register(ItemIndexBuilderServiceFactory);
 
 expRunner = serviceProvider.resolve(ExperimentRunner);
 

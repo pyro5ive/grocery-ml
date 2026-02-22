@@ -18,7 +18,7 @@ class ItemIdFeatureBuilder(FeatureBuilderBase):
     logger: logging.Logger
 
     #======================================================#
-    def __init__(self, indexBuilder: ItemIndexBuilderServiceBase, itemNameColName: str, itemIdColName: str):
+    def __init__(self, indexBuilder, itemNameColName: str, itemIdColName: str):
         """
         :param indexBuilder: Injected index builder service that owns the item mapping state.
         :type indexBuilder: ItemIndexBuilderServiceBase
@@ -28,7 +28,8 @@ class ItemIdFeatureBuilder(FeatureBuilderBase):
         :type itemIdColName: str
         """
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.indexBuilder = indexBuilder
+
+        self.indexBuilder = indexBuilder;
         self.itemNameColName = itemNameColName
         self.itemIdColName = itemIdColName
         self.logger.info(
