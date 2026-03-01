@@ -88,7 +88,6 @@ class ExperimentRunner:
         continuousCols: list = self.featureSchema.get_continuous_cols(trainingDf)
         trainingDfNorm = self.normalizer.fit_transform(continuousCols, trainingDf)
         trainingDfNorm.info()
-
         featCols: list = self.featureSchema.get_feature_cols(trainingDfNorm)
         targetCol: str = self.featureSchema.get_target_col(trainingDfNorm)
 
@@ -100,8 +99,8 @@ class ExperimentRunner:
 
         modelBundle: ModelBundle = ModelBundle(
             model,
-            itemMappingDf,
             trainingDfNorm,
+            itemMappingDf,
             self.normalizer.get_params(),
             modelTrainingHistory,
             buildParams,

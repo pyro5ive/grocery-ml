@@ -83,6 +83,7 @@ class KerasFileSystemModelBundleRepository(ModelBundleRepositoryBase):
 
     def save_training_snapshot(self, training_df: pd.DataFrame, base_dir: str) -> None:
         model_dir = self._ensure_model_dir(base_dir)
+        training_df.to_csv(os.path.join(model_dir, "training_df_frozen.csv"), index=False)
         training_df.to_parquet(
             os.path.join(model_dir, "training_df_frozen.parquet"),
             compression="snappy"

@@ -20,7 +20,6 @@ class NonTripNegativeSampleBuilder(SampleBuilderBase):
     windowDays: int = 365
 
     logger: logging.Logger
-
     #======================================================#
     def __init__(self):
         """
@@ -62,32 +61,19 @@ class NonTripNegativeSampleBuilder(SampleBuilderBase):
 
     #======================================================#
     def _create(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Build a full item/date calendar and merge with existing data,
-        filling missing rows as negative samples.
+        originalColumns: list[str] = list(df.columns)
 
-        :param df: Input DataFrame containing positive purchase samples.
-        :type df: pd.DataFrame
-        :returns: Expanded DataFrame with negative samples filled in.
-        :rtype: pd.DataFrame
-        """
         df = df.copy()
         df[self.dateColName] = pd.to_datetime(df[self.dateColName]).dt.normalize()
 
-        itemLookup: pd.DataFrame = (
-            df[[self.itemIdColName, self.itemNameColName]]
-            .drop_duplicates(self.itemIdColName)
-        )
+        itemLookup: pd.DataFrame = df[[self.itemIdColName, self.itemNameColName]].drop_duplicates(self.itemIdColName)
 
         maxDate: pd.Timestamp = df[self.dateColName].max()
         minDate: pd.Timestamp = maxDate - pd.Timedelta(days=self.windowDays - 1)
 
         calendar: pd.DataFrame = (
             itemLookup[[self.itemIdColName]]
-            .merge(
-                pd.DataFrame({"date": pd.date_range(minDate, maxDate, freq="D")}),
-                how="cross"
-            )
+            .merge(pd.DataFrame({self.dateColName: pd.date_range(minDate, maxDate, freq="D")}), how="cross")
         )
 
         merged: pd.DataFrame = calendar.merge(df, on=[self.itemIdColName, self.dateColName], how="left")
@@ -101,4 +87,5 @@ class NonTripNegativeSampleBuilder(SampleBuilderBase):
 
         merged = merged.sort_values([self.itemIdColName, self.dateColName]).reset_index(drop=True)
 
-        return merged[[self.dateColName, self.sourceColName, self.itemIdColName, self.itemNameColName, "qty", self.didBuyTargetColName]]
+        return merged[originalColumns]
+    #--------------------------#

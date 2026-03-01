@@ -10,7 +10,7 @@ class RarePurchaseFilter(DfFilterBase):
     Removes rows where itemPurchaseCount_raw is less than or equal to the threshold.
     """
 
-    purchaseCountCol: str = "itemPurchaseCount_raw"
+    purchaseCountCol: str = "itemTotalPurchCountToDate_raw"
 
     minPurchaseThreshold: int
     logger: logging.Logger

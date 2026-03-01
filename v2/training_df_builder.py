@@ -3,8 +3,10 @@ import pandas as pd
 
 from abstractions.event_df_builder_base import EventDfBuilderBase
 from abstractions.feature_builder_base import FeatureBuilderBase
+from abstractions.item_id_builder_base import ItemIdBuilderBase
 from abstractions.sample_builder_base import SampleBuilderBase
 from abstractions.df_filter_base import DfFilterBase
+from dataframe_debug_service import DataFrameDebugExportService
 from models.datasource_paths_config import DataSourcePathsConfig
 from abstractions.target_column_builder_base import  TargetColumnBuilderBase
 
@@ -29,8 +31,10 @@ class TrainingDataBuilder:
     #======================================================#
     def __init__(
             self,
+            dfDebugExportService: DataFrameDebugExportService,
             eventsDfBuilders: list[EventDfBuilderBase],
             targetColumnBuilder: TargetColumnBuilderBase,
+            itemIdBuilder: ItemIdBuilderBase,
             sampleBuilders: list[SampleBuilderBase],
             featureBuilders: list[FeatureBuilderBase],
             sampleFilters: list[DfFilterBase],
@@ -59,6 +63,7 @@ class TrainingDataBuilder:
             sampling to clean, merge, or reduce the training data.
         :type sampleFilters: list[DfFilterBase]
         """
+        self.itemIdBuilder = itemIdBuilder;
         self.logger = logging.getLogger(self.__class__.__name__)
         self.trainingPaths = dataSourcePathConfig.trainingPaths
         self.eventsDf = None
@@ -67,13 +72,8 @@ class TrainingDataBuilder:
         self.sampleBuilders = sampleBuilders
         self.featureBuilders = featureBuilders
         self.sampleFilters = sampleFilters
+        self.dfDebugExport =  dfDebugExportService;
 
-        self.logger.info(
-            "TrainingDataBuilder initialized sampleBuilders=%s featureBuilders=%s sampleFilters=%s",
-            len(self.sampleBuilders),
-            len(self.featureBuilders),
-            len(self.sampleFilters)
-        )
 
     #======================================================#
     def build_df(self) -> pd.DataFrame:
@@ -87,9 +87,13 @@ class TrainingDataBuilder:
 
         df = self._build_events_df();
         df = self.targetColumnBuilder.build(df)
+        df = self.itemIdBuilder.build(df);
+        self.dfDebugExport.export(df, "training");
         df = self._apply_feature_pipeline(df)
+        self.dfDebugExport.export(df, "training");
         df = self._build_negative_samples(df)
-        df = self._build_sample_filters(df)
+        self.dfDebugExport.export(df, "training");
+        # df = self._build_sample_filters(df)
 
         self.logger.info("build_df(): done rows=%s cols=%s", len(df), len(df.columns))
         return df
@@ -153,19 +157,67 @@ class TrainingDataBuilder:
     #======================================================#
     def _apply_feature_pipeline(self, df: pd.DataFrame) -> pd.DataFrame:
         """
-        Apply all registered feature builders sequentially.
-
-        :param df: Input DataFrame to run through the feature pipeline.
-        :type df: pd.DataFrame
-        :returns: DataFrame with all feature columns added.
-        :rtype: pd.DataFrame
+        Apply all registered feature builders in dependency-resolved order.
         """
-        self.logger.info("_apply_feature_pipeline(): start builders=%s", len(self.featureBuilders))
 
-        for builder in self.featureBuilders:
-            builderName: str = builder.__class__.__name__
+        self.logger.info(
+            "_apply_feature_pipeline(): start builders=%s",
+            len(self.featureBuilders)
+        )
+
+        # Resolve execution order based on column dependencies
+        orderedBuilders = self.resolve_builder_order(self.featureBuilders, set(df.columns))
+
+        for builder in orderedBuilders:
+            builderName = builder.__class__.__name__
             self.logger.info("applying featureBuilder=%s", builderName)
             df = builder.build(df)
 
-        self.logger.info("_apply_feature_pipeline(): done rows=%s cols=%s", len(df), len(df.columns))
+        self.logger.info(
+            "_apply_feature_pipeline(): done rows=%s cols=%s",
+            len(df),
+            len(df.columns)
+        )
+
         return df
+    # ======================================================#
+
+    def resolve_builder_order(self, builders: list[FeatureBuilderBase], initialColumns: set[str]) -> list[FeatureBuilderBase]:
+        """
+        Resolve a valid execution order for feature builders based on
+        declared input/output column dependencies.
+
+        :param builders: Feature builders to order.
+        :param initialColumns: Columns initially present in the DataFrame.
+        :returns: Builders in executable order.
+        :raises RuntimeError: If dependencies cannot be resolved.
+        """
+        pending = list(builders)
+        availableCols = set(initialColumns)
+        ordered: list[FeatureBuilderBase] = []
+
+        while pending:
+            progress = False
+
+            for builder in list(pending):
+                required = set(builder.get_feature_names_in())
+
+                if required.issubset(availableCols):
+                    ordered.append(builder)
+                    availableCols.update(builder.get_feature_names_out())
+                    pending.remove(builder)
+                    progress = True
+
+            if not progress:
+                missingInfo = {
+                    b.__class__.__name__: list(
+                        set(b.get_feature_names_in()) - availableCols
+                    )
+                    for b in pending
+                }
+                raise RuntimeError(
+                    f"Feature dependency resolution failed: {missingInfo}"
+                )
+
+        return ordered
+    # ======================================================#
