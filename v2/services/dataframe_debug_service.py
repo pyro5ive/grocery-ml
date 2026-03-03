@@ -11,7 +11,7 @@ class DataFrameDebugExportService:
     def __init__(self, baseDir: str = "debug", enabled: bool = True):
         self.baseDir = baseDir
         self.enabled = enabled
-
+        self.prexFix = "debugExport-"
         if self.enabled:
             os.makedirs(self.baseDir, exist_ok=True)
 
@@ -22,7 +22,7 @@ class DataFrameDebugExportService:
 
         dfName: str = name or df.attrs.get("debug_name", "df")
         timestamp: str = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-        fileName: str = f"{dfName}-{timestamp}.csv"
+        fileName: str = f"{self.prexFix}-{dfName}-{timestamp}.csv"
         path: str = os.path.join(self.baseDir, fileName)
 
         df.to_csv(path, index=False)

@@ -7,6 +7,7 @@ from feature_schema import FeatureSchema
 from prediction_service import PredictionService
 from models.model_bundle import ModelBundle
 from abstractions.repos.model_bundle_repository_base import  ModelBundleRepositoryBase
+from services.dataframe_debug_service import DataFrameDebugExportService
 from training_df_builder import TrainingDataBuilder
 
 
@@ -37,6 +38,7 @@ class ExperimentRunner:
     #======================================================#
     def __init__(
         self,
+        dataframeExportService: DataFrameDebugExportService,
         trainingDfBuilder: TrainingDataBuilder,
         normalizer: NormalizerBase,
         featureSchema: FeatureSchema,
@@ -66,6 +68,7 @@ class ExperimentRunner:
         self.modelRepo = modelRepo
         self.predictionService = predictionService
         self.modelBundle = None
+        self.dataframeExportService = dataframeExportService;
         self.logger.info("ExperimentRunner initialized")
 
     #======================================================#
@@ -87,6 +90,7 @@ class ExperimentRunner:
 
         continuousCols: list = self.featureSchema.get_continuous_cols(trainingDf)
         trainingDfNorm = self.normalizer.fit_transform(continuousCols, trainingDf)
+        self.dataframeExportService.export(trainingDfNorm, "trainingDfNorm");
         trainingDfNorm.info()
         featCols: list = self.featureSchema.get_feature_cols(trainingDfNorm)
         targetCol: str = self.featureSchema.get_target_col(trainingDfNorm)
@@ -111,19 +115,7 @@ class ExperimentRunner:
 
         # testPredDate: datetime = datetime.now()
         # predictionsResultDf = self.predictionService.run_prediction(modelBundle, testPredDate)
-        # predictionsResultDf.to_csv(expDir + "/predictions.csv")
 
         print(model.summary())
         self.logger.info("run(): done expDir=%s", expDir)
-
-    #======================================================#
-    def _export_df_for_debug(self, df) -> None:
-        """
-        Export the DataFrame to a timestamped CSV file for debugging purposes.
-
-        :param df: DataFrame to export.
-        :type df: pd.DataFrame
-        """
-        timeStamp: str = datetime.now().strftime("%Y%m%d_%H%M%S")
-        df.to_csv(fr"debug\df-{timeStamp}.csv")
-        self.logger.info("_export_df_for_debug(): exported timeStamp=%s", timeStamp)
+    #===================================================================================================#

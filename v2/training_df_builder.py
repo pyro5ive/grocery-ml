@@ -6,7 +6,7 @@ from abstractions.feature_builder_base import FeatureBuilderBase
 from abstractions.item_id_builder_base import ItemIdBuilderBase
 from abstractions.sample_builder_base import SampleBuilderBase
 from abstractions.df_filter_base import DfFilterBase
-from dataframe_debug_service import DataFrameDebugExportService
+from services.dataframe_debug_service import DataFrameDebugExportService
 from models.datasource_paths_config import DataSourcePathsConfig
 from abstractions.target_column_builder_base import  TargetColumnBuilderBase
 
@@ -88,13 +88,12 @@ class TrainingDataBuilder:
         df = self._build_events_df();
         df = self.targetColumnBuilder.build(df)
         df = self.itemIdBuilder.build(df);
-        self.dfDebugExport.export(df, "training");
-        df = self._apply_feature_pipeline(df)
-        self.dfDebugExport.export(df, "training");
         df = self._build_negative_samples(df)
-        self.dfDebugExport.export(df, "training");
-        # df = self._build_sample_filters(df)
-
+        self.dfDebugExport.export(df, "training-afterNegatives");
+        df = self._apply_feature_pipeline(df)
+        self.dfDebugExport.export(df, "training-afterFeatures");
+        df = self._build_sample_filters(df)
+        self.dfDebugExport.export(df, "training-sampleFilters");
         self.logger.info("build_df(): done rows=%s cols=%s", len(df), len(df.columns))
         return df
 

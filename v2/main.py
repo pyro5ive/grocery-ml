@@ -9,6 +9,8 @@ from abstractions.df_filter_base import DfFilterBase
 from abstractions.event_df_builder_base import EventDfBuilderBase
 from abstractions.item_id_builder_base import ItemIdBuilderBase
 from abstractions.model_builder_base import ModelBuilderBase
+from abstractions.non_trip_neg_sample_builder.end_date_strategy_base import EndDateStrategyBase
+from abstractions.non_trip_neg_sample_builder.item_eligibility_strategy_base import ItemEligibilityStrategyBase
 from abstractions.normalizer_base import NormalizerBase
 from abstractions.prediction_feature_builder_base import PredictionFeatureBuilderBase
 from abstractions.purchase_event_mapper_base import PurchaseEventMapperBase
@@ -18,7 +20,12 @@ from abstractions.feature_builder_base import FeatureBuilderBase
 from abstractions.services.item_id_index_service_base import ItemIndexBuilderServiceBase
 from abstractions.services.weather_service_base import WeatherServiceBase
 from abstractions.target_column_builder_base import TargetColumnBuilderBase
-from dataframe_debug_service import DataFrameDebugExportService
+from negative_sample_builders.non_trip_negative_sample_builder.assume_silence_end_date_strategy import AssumeSilenceEndDateStrategy
+from negative_sample_builders.non_trip_negative_sample_builder.global_item_eligibility_strategy import GlobalItemEligibilityStrategy
+from negative_sample_builders.non_trip_negative_sample_builder.hard_stop_end_date_strategy import HardStopAtTruthEndDateStrategy
+from negative_sample_builders.non_trip_negative_sample_builder.item_effective_date_eligibility_strategy import ItemEffectiveDateEligibilityStrategy
+from negative_sample_builders.non_trip_negative_sample_builder.non_trip_negative_sample_builder import NonTripNegativeSampleBuilder
+from services.dataframe_debug_service import DataFrameDebugExportService
 from feature_builders.avg_days_between_item_purchases_feature_builder import AvgDaysBetweenItemPurchasesFeatureBuilder
 from feature_builders.avg_days_between_trips_feature_builder import AvgDaysBetweenTripsFeatureBuilder
 from feature_builders.days_since_last_purchase_feat_builder import DaysSinceLastPurchaseFeatureBuilder
@@ -41,7 +48,6 @@ from item_id.item_id_builder import ItemIdBuilder
 from model_builder.keras_model_builder import KerasModelBuilder
 from model_repo.keras_file_system_model_bundle_repo import KerasFileSystemModelBundleRepository
 from models.models import *
-from negative_sample_builders.non_trip_negative_sample_builder import NonTripNegativeSampleBuilder
 from negative_sample_builders.same_trip_negative_sample_builder import SameTripNegativeSampleBuilder
 from prediction_input_df_builder import PredictionInputDfBuilder
 from prediction_service import PredictionService
@@ -73,7 +79,7 @@ liveSources = {
     "weather": r"..\data\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv"
 }
 
-dataSourcePaths = DataSourcePathsConfig(trainingSources, liveSources);
+
 
 serviceProvider = punq.Container();
 serviceProvider.register(DataFrameDebugExportService);
@@ -96,39 +102,42 @@ serviceProvider.register(DfFilterBase, RarePurchaseFilter, minPurchaseThreshold=
 #======================================================#
 # Sample
 serviceProvider.register(SampleBuilderBase, SameTripNegativeSampleBuilder)
+#
 serviceProvider.register(SampleBuilderBase, NonTripNegativeSampleBuilder)
+serviceProvider.register(EndDateStrategyBase, AssumeSilenceEndDateStrategy)
+serviceProvider.register(ItemEligibilityStrategyBase, GlobalItemEligibilityStrategy)
+# serviceProvider.register(EndDateStrategyBase, HardStopAtTruthEndDateStrategy)
+# serviceProvider.register(ItemEligibilityStrategyBase, ItemEffectiveDateEligibilityStrategy)
+
+
 #======================================================#
-# Purchase Events
+# item id
+serviceProvider.register(ItemIndexBuilderServiceBase, ItemIndexBuilderService);
+serviceProvider.register(ItemIdBuilderBase, ItemIdBuilder)
+#======================================================#
 #  winndixie
 serviceProvider.register(PurchaseEventMapperBase, WinnDixieReceiptToPurchaseEventMapper)
 serviceProvider.register(WinnDixieRecptParser);
 serviceProvider.register(EventDfBuilderBase, WinnDixieEventsDfBuilder)
+#========================#
 #  winndixie json
 #serviceProvider.register(EventDfBuilderBase, WinnDixieEventsFromJsonDfBuilder)
 #serviceProvider.register(PurchaseEventMapperBase, WinnDixieJsonToPurchaseEventMapper)
+#========================#
 # walmart
 # serviceProvider.register(EventDfBuilderBase, WalMartEventsDfBuilder)
 # serviceProvider.register(PurchaseEventMapperBase, WalMartReceiptToPurchaseEventMapper)
+#========================#
 # manual
 # serviceProvider.register(EventDfBuilderBase, ManualEntryEventsDfBuilder)
 # serviceProvider.register(EventDfBuilderBase, ManualEntryEventsDfBuilder)
+#========================#
 # source path config for event df builders
+dataSourcePaths = DataSourcePathsConfig(trainingSources, liveSources);
 serviceProvider.register(DataSourcePathsConfig, instance=dataSourcePaths)
 serviceProvider.register(PredictionDateEventsDfBuilder)
 #======================================================#
 # Feature Builders
-#
-# serviceProvider.register(
-#     FeatureBuilderBase,
-#     factory=lambda: ItemIdFeatureBuilder(
-#         indexBuilder=serviceProvider.resolve(ItemIndexBuilderServiceFactory).create(),
-#         itemNameColName="item",
-#         itemIdColName="itemId"
-#     )
-# )
-# serviceProvider.register(ItemIndexBuilderServiceFactory);
-serviceProvider.register(ItemIndexBuilderServiceBase, ItemIndexBuilderService);
-serviceProvider.register(ItemIdBuilderBase, ItemIdBuilder)
 serviceProvider.register(FeatureBuilderBase, WeatherHistoryFeatureBuilder, sourcePath=r"..\data\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv")
 serviceProvider.register(PredictionFeatureBuilderBase, WeatherForecastFeatureBuilder)
 serviceProvider.register(FeatureBuilderBase, SchoolScheduleFeatureBuilder)
@@ -142,7 +151,6 @@ serviceProvider.register(FeatureBuilderBase, ItemSupplyLevelFeatureBuilder)
 serviceProvider.register(FeatureBuilderBase, DaysSinceLastTripFeatureBuilder)
 serviceProvider.register(FeatureBuilderBase, AvgDaysBetweenTripsFeatureBuilder)
 serviceProvider.register(FeatureBuilderBase, ExpectedGapEwmaFeatureBuilder)
-
 
 expRunner = serviceProvider.resolve(ExperimentRunner);
 
