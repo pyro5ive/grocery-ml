@@ -2,23 +2,30 @@ import requests
 import logging
 from datetime import datetime, date, timedelta
 
+from abstractions.services.weather_service_base import WeatherServiceBase
+
 logger = logging.getLogger(__name__)
 
-class NwsWeatherService:
+class NwsWeatherService(WeatherServiceBase):
 
-    def __init__(self):
+    def __init__(self, userAgent: str):
+        """
+        :param userAgent: User-Agent header value required by api.weather.gov.
+        :type userAgent: str
+        """
         self.session = requests.Session()
-        self.session.headers.update({"User-Agent": "(grocery-ml, nolabizit@gmail.com)"})
+        self.session.headers.update({"User-Agent": userAgent})
+
         self.points_url = "https://api.weather.gov/points"
 
         self.cached_periods = None
-        self.cached_latest = None  # always datetime.date
+        self.cached_latest = None  # datetime.date
 
         self.cached_current = None
         self.cached_current_time = None
         self.current_ttl = timedelta(minutes=10)
 
-        logger.info("NwsWeatherService initialized")
+        logger.info("NwsWeatherService initialized userAgent=%s", userAgent)
 
     #===================================================================#
     def _load_forecast_cache(self, latitude, longitude):

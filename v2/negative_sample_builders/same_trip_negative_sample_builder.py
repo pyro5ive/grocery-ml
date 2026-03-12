@@ -1,68 +1,114 @@
-import logging;
-import pandas as pd;
+import logging
+import pandas as pd
+from abstractions.sample_builder_base import SampleBuilderBase
 
 
-class SameTripNegativeSampleBuilder:
+#======================================================#
+class SameTripNegativeSampleBuilder(SampleBuilderBase):
 
-    # TODO: These should grow up to be a param some day.
-    didBuyTargetColName = 'didBuy_target';
-    itemIdColName = "itemId"
-    itemNameColName = "item"
-    dateColName = "date";
-    sourceColValue = "_same_trip_neg_sample_";
-    sourceColName = "source";
+    didBuyTargetColName: str = "didBuy_target"
+    itemIdColName: str = "itemId"
+    itemNameColName: str = "item"
+    dateColName: str = "date"
+    sourceColName: str = "source"
+    sourceColValue: str = "_same_trip_neg_sample_"
 
-    def __init__(this):
-        this.logger = logging.getLogger(__name__);
+    logger: logging.Logger
 
-    def build_samples(this, df):
-        this.logger.info("Inserting negative samples for on trip days");
-        df = this._insert_negative_samples(df)
-        return df;
+    #======================================================#
+    def __init__(self):
+        self.logger = logging.getLogger(self.__class__.__name__)
+        self.logger.info("SameTripNegativeSampleBuilder initialized")
 
-    def _insert_negative_samples(this, df):
-        this.logger.info("building negative samples");
+    #======================================================#
+    def build_samples(self, df: pd.DataFrame) -> pd.DataFrame:
+        self.logger.info("build_samples(): start rows=%s", len(df))
+        df = self._insert_negative_samples(df)
+        self.logger.info("build_samples(): done rows=%s", len(df))
+        return df
 
-        # ensure purchase flag exists
+    #======================================================#
+    def _insert_negative_samples(self, df: pd.DataFrame) -> pd.DataFrame:
+        self.logger.info("_insert_negative_samples(): start rows=%s", len(df))
+
         df = df.copy()
 
-        # itemId → item name lookup
-        item_lookup = (
-            df[[this.itemIdColName, this.itemNameColName]]
-            .drop_duplicates(subset=[this.itemIdColName])
+        itemLookup: pd.DataFrame = (
+            df[[self.itemIdColName, self.itemNameColName]]
+            .drop_duplicates(subset=[self.itemIdColName])
         )
 
-        # first purchase date per item (activation point)
-        first_purchase = (
-            df[df[this.didBuyTargetColName] == 1]
-            .groupby(this.itemIdColName)[this.dateColName]
+        firstPurchase: pd.Series = (
+            df[df[self.didBuyTargetColName] == 1]
+            .groupby(self.itemIdColName)[self.dateColName]
             .min()
         )
 
-        # build valid (date, itemId) pairs ONLY after activation
-        rows = []
-        all_dates = df[this.dateColName].unique()
+        rows: list = []
+        allDates: list = df[self.dateColName].unique()
 
-        for itemId, first_date in first_purchase.items():
-            valid_dates = all_dates[all_dates >= first_date]
-            for d in valid_dates:
-                rows.append({this.dateColName: d, this.itemIdColName: itemId})
+        for itemId, firstDate in firstPurchase.items():
+            validDates = allDates[allDates >= firstDate]
+            for d in validDates:
+                rows.append({self.dateColName: d, self.itemIdColName: itemId})
 
-        full = pd.DataFrame(rows)
+        fullDf: pd.DataFrame = pd.DataFrame(rows)
 
-        # merge back original data
-        df_full = full.merge(df, on=[this.dateColName, this.itemIdColName], how="left")
+        mergedDf: pd.DataFrame = fullDf.merge(
+            df,
+            on=[self.dateColName, self.itemIdColName],
+            how="left"
+        )
 
-        # fill negatives
-        df_full[this.didBuyTargetColName] = df_full[this.didBuyTargetColName].fillna(False).astype(bool)
+        mergedDf[self.didBuyTargetColName] = (
+            mergedDf[self.didBuyTargetColName]
+            .fillna(False)
+            .astype(bool)
+        )
 
-        # restore item names
-        df_full = df_full.merge(item_lookup, on=this.itemIdColName, how="left", suffixes=("", "_lookup"))
-        df_full[this.itemNameColName] = df_full[this.itemNameColName].fillna(df_full["item_lookup"])
-        df_full = df_full.drop(columns=["item_lookup"])
+        mergedDf = mergedDf.merge(
+            itemLookup,
+            on=self.itemIdColName,
+            how="left",
+            suffixes=("", "_lookup")
+        )
 
-        # fill source fields for negatives
-        df_full[this.sourceColName] = df_full[this.sourceColName].fillna(this.sourceColValue).astype(str)
+        mergedDf[self.itemNameColName] = mergedDf[self.itemNameColName].fillna(
+            mergedDf[f"{self.itemNameColName}_lookup"]
+        )
 
-        return df_full
+        mergedDf = mergedDf.drop(columns=[f"{self.itemNameColName}_lookup"])
 
+        mergedDf[self.sourceColName] = (
+            mergedDf[self.sourceColName]
+            .fillna(self.sourceColValue)
+            .astype(str)
+        )
+
+        mergedDf = self._reorder_columns(mergedDf)
+
+        self.logger.info("_insert_negative_samples(): done rows=%s", len(mergedDf))
+        return mergedDf
+
+    #======================================================#
+    def _reorder_columns(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Enforce stable column order:
+        index 3 -> item
+        index 4 -> itemId
+        """
+        cols = list(df.columns)
+
+        if self.itemNameColName not in cols:
+            raise ValueError(f"missing column '{self.itemNameColName}'")
+
+        if self.itemIdColName not in cols:
+            raise ValueError(f"missing column '{self.itemIdColName}'")
+
+        cols.remove(self.itemNameColName)
+        cols.remove(self.itemIdColName)
+
+        cols.insert(3, self.itemNameColName)
+        cols.insert(4, self.itemIdColName)
+
+        return df.reindex(columns=cols)

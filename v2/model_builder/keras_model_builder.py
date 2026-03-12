@@ -6,9 +6,10 @@ from tensorflow.keras.callbacks import TensorBoard
 import numpy as np
 from sklearn.model_selection import train_test_split
 
+from abstractions.model_builder_base import ModelBuilderBase
 from models.models import *
 
-class KerasModelBuilder:
+class KerasModelBuilder(ModelBuilderBase):
 
     featureColCount: int
     featureCols: list[str]

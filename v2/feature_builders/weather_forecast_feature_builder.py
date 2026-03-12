@@ -1,17 +1,20 @@
 import logging
 import pandas as pd
 from datetime import datetime
-from services.weather.weather_service import NwsWeatherService
+
+from abstractions.prediction_feature_builder_base import PredictionFeatureBuilderBase
+from abstractions.services.weather_service_base import WeatherServiceBase
 
 
-class WeatherForecastFeatureBuilder:
+class WeatherForecastFeatureBuilder(PredictionFeatureBuilderBase):
 
-    def __init__(self, weather_service: NwsWeatherService, latitude: float, longitude: float):
+    def __init__(self, weather_service: WeatherServiceBase):
         self.logger = logging.getLogger(__name__)
         self.weather_service = weather_service
-        self.latitude = latitude
-        self.longitude = longitude
-
+        # self.latitude = latitude
+        # self.longitude = longitude
+        self.latitude = 29.9934
+        self.longitude = -90.2580
     # ============================================================
     def build_df(self, df: pd.DataFrame, prediction_date: datetime) -> pd.DataFrame:
 
