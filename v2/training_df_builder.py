@@ -89,11 +89,11 @@ class TrainingDataBuilder:
         df = self.targetColumnBuilder.build(df)
         df = self.itemIdBuilder.build(df);
         df = self._build_negative_samples(df)
-        self.dfDebugExport.export(df, "training-afterNegatives");
+        self.dfDebugExport.export(df, "training-items-Negatives");
         df = self._apply_feature_pipeline(df)
-        self.dfDebugExport.export(df, "training-afterFeatures");
+        self.dfDebugExport.export(df, "training-items-negatives-features");
         df = self._build_sample_filters(df)
-        self.dfDebugExport.export(df, "training-sampleFilters");
+        self.dfDebugExport.export(df, "training-items-negatives-feats-filters");
         self.logger.info("build_df(): done rows=%s cols=%s", len(df), len(df.columns))
         return df
 

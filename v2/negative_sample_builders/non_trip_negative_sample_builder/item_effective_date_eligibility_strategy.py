@@ -37,4 +37,4 @@ class ItemEffectiveDateEligibilityStrategy(ItemEligibilityStrategyBase):
         )
 
         return calendar[calendar[dateColName] >= calendar["firstSeenDate"]]
-#--------------------------#
+    #====================================================================#

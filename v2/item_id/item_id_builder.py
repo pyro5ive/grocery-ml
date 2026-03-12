@@ -3,12 +3,17 @@ from abstractions.item_id_builder_base import ItemIdBuilderBase
 from abstractions.services.item_id_index_service_base import ItemIndexBuilderServiceBase
 
 
+import logging
+
 class ItemIdBuilder(ItemIdBuilderBase):
 
     def __init__(self, indexService: ItemIndexBuilderServiceBase):
         self.indexService = indexService
         self.itemNameColName = "item"
         self.itemIdColName = "itemId"
+
+        self.logger = logging.getLogger(self.__class__.__name__)
+
 
     # ------------------------------------------------------------ #
     def build(self, df: pd.DataFrame) -> pd.DataFrame:

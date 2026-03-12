@@ -4,7 +4,7 @@ from datetime import datetime
 from abstractions.model_builder_base import ModelBuilderBase
 from abstractions.normalizer_base import NormalizerBase
 from feature_schema import FeatureSchema
-from prediction_service import PredictionService
+from services.prediction_service import PredictionService
 from models.model_bundle import ModelBundle
 from abstractions.repos.model_bundle_repository_base import  ModelBundleRepositoryBase
 from services.dataframe_debug_service import DataFrameDebugExportService
@@ -111,11 +111,12 @@ class ExperimentRunner:
             trainingParams
         )
 
-        self.modelRepo.save(modelBundle, expDir)
+        self.modelRepo.save(modelBundle, expDir);
 
-        # testPredDate: datetime = datetime.now()
-        # predictionsResultDf = self.predictionService.run_prediction(modelBundle, testPredDate)
+        testPredDate: datetime = datetime.now();
+        predictionsResultDf = self.predictionService.run_prediction(modelBundle, testPredDate);
+        self.dataframeExportService.export(predictionsResultDf, "predictionsResultDf");
 
-        print(model.summary())
-        self.logger.info("run(): done expDir=%s", expDir)
+        print(model.summary());
+        self.logger.info("run(): done expDir=%s", expDir);
     #===================================================================================================#

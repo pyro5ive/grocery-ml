@@ -15,11 +15,10 @@ class NonTripNegativeSampleBuilder(SampleBuilderBase):
     sourceColName: str = "source"
     sourceColValue: str = "no trip neg sample"
 
-    def __init__(self, endDateStrategy: EndDateStrategyBase, itemEligibilityStrategy: ItemEligibilityStrategyBase,featureBuildRunDate: pd.Timestamp | None = None):
+    def __init__(self, endDateStrategy: EndDateStrategyBase, itemEligibilityStrategy: ItemEligibilityStrategyBase):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.endDateStrategy = endDateStrategy
         self.itemEligibilityStrategy = itemEligibilityStrategy
-        self.featureBuildRunDate = featureBuildRunDate
     #===================================================================================#
 
     def build_samples(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -34,23 +33,19 @@ class NonTripNegativeSampleBuilder(SampleBuilderBase):
         while currentDate in tripDates:
             currentDate = currentDate + pd.Timedelta(days=1)
 
-        negStartDate = currentDate
+        negStartDate = currentDate;
 
-        negEndDate = self.endDateStrategy.resolve_end_date(df, self.dateColName, self.featureBuildRunDate)
+        negEndDate = self.endDateStrategy.resolve_end_date(df, self.dateColName);
 
-        calendar = self.itemEligibilityStrategy.build_item_calendar(df, self.itemIdColName, self.itemNameColName, self.dateColName, negStartDate,negEndDate)
+        calendar = self.itemEligibilityStrategy.build_item_calendar(df, self.itemIdColName, self.itemNameColName, self.dateColName, negStartDate,negEndDate);
 
-        merged = calendar.merge(df,on=[self.itemIdColName, self.dateColName],how="left")
+        merged = calendar.merge(df,on=[self.itemIdColName, self.dateColName],how="left");
 
         merged[self.didBuyTargetColName] = (
             merged[self.didBuyTargetColName].fillna(False).astype(bool)
-        )
+        );
 
-        merged[self.sourceColName] = (
-            merged[self.sourceColName].fillna(self.sourceColValue)
-        )
+        merged[self.sourceColName] = ( merged[self.sourceColName].fillna(self.sourceColValue) );
 
-        return merged.sort_values(
-            [self.itemIdColName, self.dateColName]
-        ).reset_index(drop=True)
-    #===================================================================================#
+        return merged.sort_values([self.itemIdColName, self.dateColName] ).reset_index(drop=True)
+        #===================================================================================#

@@ -1,6 +1,7 @@
 import pandas as pd
 from abstractions.services.item_id_index_service_base import ItemIndexBuilderServiceBase
 
+import logging
 
 class ItemIndexBuilderService(ItemIndexBuilderServiceBase):
 
@@ -8,6 +9,7 @@ class ItemIndexBuilderService(ItemIndexBuilderServiceBase):
         self.item_to_index: dict[str, int] = {}
         self.index_to_item: dict[int, str] = {}
 
+        self.logger = logging.getLogger(self.__class__.__name__)
     # ------------------------------------------------------------ #
     def is_empty(self) -> bool:
         return len(self.item_to_index) == 0
@@ -33,7 +35,7 @@ class ItemIndexBuilderService(ItemIndexBuilderServiceBase):
         result = series.map(self.item_to_index)
         if result.isna().any():
             missing = series[result.isna()].unique().tolist()
-            raise ValueError(f"Unknown items: {missing[:10]}")
+            self.logger.warning(f"Unknown items: {missing[:10]}")
         return result.astype(int)
 
     # ------------------------------------------------------------ #
@@ -41,7 +43,7 @@ class ItemIndexBuilderService(ItemIndexBuilderServiceBase):
         result = series.map(self.index_to_item)
         if result.isna().any():
             missing = series[result.isna()].unique().tolist()
-            raise ValueError(f"Unknown indices: {missing[:10]}")
+            self.logger.warning(f"Unknown items: {missing[:10]}")
         return result
 
     # ------------------------------------------------------------ #

@@ -7,9 +7,10 @@ from typing import List, Optional
 
 from abstractions.event_df_builder_base import EventDfBuilderBase
 from abstractions.feature_builder_base import FeatureBuilderBase
+from abstractions.item_id_builder_base import ItemIdBuilderBase
 from abstractions.prediction_feature_builder_base import PredictionFeatureBuilderBase
 from models.datasource_paths_config import DataSourcePathsConfig
-
+from purchase_event_builders.prediction_date_events_df_builder import PredictionDateEventsDfBuilder
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -33,9 +34,9 @@ class PredictionInputDfBuilder:
     predictionDfFeatBuilders: List[PredictionFeatureBuilderBase]
     featureBuilders: List[FeatureBuilderBase]
 
-    itemIdFeatureBuilder: FeatureBuilderBase
+    itemIdFeatureBuilder: ItemIdBuilderBase
     weatherForcastFeatureBuilder: PredictionFeatureBuilderBase
-    predictionDateEventsDfBuilder: EventDfBuilderBase
+    predictionDateEventsDfBuilder: PredictionDateEventsDfBuilder
 
     # ---- configuration ----
     trainingPaths: dict[str, str]
@@ -54,9 +55,9 @@ class PredictionInputDfBuilder:
             eventsDfBuilders: list[EventDfBuilderBase],
             predictionDfFeatBuilders: list[PredictionFeatureBuilderBase],
             featureBuilders: list[FeatureBuilderBase],
-            itemIdFeatureBuilder: FeatureBuilderBase,
+            itemIdFeatureBuilder: ItemIdBuilderBase,
             weatherForcastFeatureBuilder: PredictionFeatureBuilderBase,
-            predictionDateEventsDfBuilder: EventDfBuilderBase,
+            predictionDateEventsDfBuilder: PredictionDateEventsDfBuilder,
             dataSourcePathConfig: DataSourcePathsConfig
     ):
         """
@@ -87,10 +88,7 @@ class PredictionInputDfBuilder:
         """
         Build the full prediction input DataFrame for a given prediction date.
         """
-        self.logger.info(
-            "Building the prediction input df. Prediction date is %s",
-            predDate
-        )
+        self.logger.info("Building the prediction input df. Prediction date is %s",predDate);
 
         # Build base event rows (no features yet)
         self._build_events_df(predDate)
@@ -99,14 +97,10 @@ class PredictionInputDfBuilder:
         self._build_target_col()
 
         # Item-id mapping must happen before other features
-        self.predInputDf = self.itemIdFeatureBuilder.build_feature(
-            self.predInputDf
-        )
+        self.predInputDf = self.itemIdFeatureBuilder.build(self.predInputDf);
 
         # Apply shared feature pipeline
-        self.predInputDf = self._apply_feature_pipeline(
-            self.predInputDf
-        )
+        self.predInputDf = self._apply_feature_pipeline(self.predInputDf)
 
         # Apply forecast-only features for the latest date
         latestDate: datetime = self.predInputDf["date"].max()
@@ -114,93 +108,72 @@ class PredictionInputDfBuilder:
             self.predInputDf["date"] == latestDate
         ]
 
-        self.weatherForcastFeatureBuilder.build_df(
-            latestRowsDf,
-            latestDate
-        )
+        self.weatherForcastFeatureBuilder.build_df(latestRowsDf,latestDate)
 
         return self.predInputDf
     #======================================================================#
     def _build_events_df(self, predDate: datetime) -> pd.DataFrame:
         """
-        Build and cache:
-        - historical events (training paths)
-        - live/new events (live paths)
-        - synthetic prediction-date events
+        Build and combine all event sources.
         """
-        eventDfs: list[pd.DataFrame] = []
 
-        # ---- historical events (cached) ----
-        if self.historicalEventsDfCache is None:
-            dfs: list[pd.DataFrame] = []
+        historicalDf = self._build_historical_events();
+        liveDf = self._build_live_events();
 
-            for builder in self.eventsDfBuilders:
-                df: pd.DataFrame = builder.build_df(
-                    self.trainingPaths
-                )
-                if df is not None and not df.empty:
-                    dfs.append(df)
+        itemList: list[str] = historicalDf["item"].dropna().unique().tolist()
 
-            if len(dfs) == 0:
-                raise RuntimeError(
-                    "No historical events produced"
-                )
+        predictionDatesDf = self.predictionDateEventsDfBuilder.build_df(predDate, itemList)
 
-            self.historicalEventsDfCache = pd.concat(
-                dfs,
-                ignore_index=True
-            )
-
-        # ---- live events (cached) ----
-        if self.newPurchaseEventsDfCache is None:
-            dfs: list[pd.DataFrame] = []
-
-            for builder in self.eventsDfBuilders:
-                df: pd.DataFrame = builder.build_df(
-                    self.livePaths
-                )
-                if df is not None and not df.empty:
-                    dfs.append(df)
-
-            self.newPurchaseEventsDfCache = (
-                pd.concat(dfs, ignore_index=True)
-                if len(dfs) > 0
-                else pd.DataFrame()
-            )
-
-        # ---- prediction-date events ----
-        itemList: list[str] = (
-            self.historicalEventsDfCache["item"]
-            .dropna()
-            .unique()
-            .tolist()
-        )
-
-        predictionDatesDf: pd.DataFrame = (
-            self.predictionDateEventsDfBuilder.build_df(
-                predDate,
-                itemList
-            )
-        )
-
-        # ---- combine all events ----
-        eventDfs.append(self.historicalEventsDfCache)
-        eventDfs.append(self.newPurchaseEventsDfCache)
-        eventDfs.append(predictionDatesDf)
-
-        self.predInputDf = pd.concat(
-            eventDfs,
-            ignore_index=True
-        )
+        eventDfs = [historicalDf, liveDf, predictionDatesDf]
 
         self.predInputDf = (
-            self.predInputDf
+            pd.concat(eventDfs, ignore_index=True)
             .sort_values(["item", "date"])
             .reset_index(drop=True)
         )
 
         return self.predInputDf
     #======================================================================#
+    def _build_historical_events(self) -> pd.DataFrame:
+
+        dfs  = []
+
+        if self.historicalEventsDfCache is not None:
+            return self.historicalEventsDfCache
+
+        for builder in self.eventsDfBuilders:
+            df = builder.build_df(self.trainingPaths)
+
+            if df is not None and not df.empty:
+                dfs.append(df)
+
+        if not dfs:
+            raise RuntimeError("No historical events produced")
+
+        self.historicalEventsDfCache = pd.concat(dfs, ignore_index=True)
+
+        return self.historicalEventsDfCache
+    # ======================================================================#
+    def _build_live_events(self) -> pd.DataFrame:
+
+        if self.newPurchaseEventsDfCache is not None:
+            return self.newPurchaseEventsDfCache
+
+        dfs: list[pd.DataFrame] = []
+
+        for builder in self.eventsDfBuilders:
+            df = builder.build_df(self.livePaths)
+
+            if df is not None and not df.empty:
+                dfs.append(df)
+
+        if dfs:
+            self.newPurchaseEventsDfCache = pd.concat(dfs, ignore_index=True)
+        else:
+            self.newPurchaseEventsDfCache = pd.DataFrame()
+
+        return self.newPurchaseEventsDfCache
+    # ======================================================================#
     def _build_target_col(self) -> None:
         """
         Prediction-time target column.
@@ -208,11 +181,9 @@ class PredictionInputDfBuilder:
         """
         self.logger.info("_build_target_col()")
 
-        self.predInputDf["didBuy_target"] = True
-        self.predInputDf["didBuy_target"] = (
-            self.predInputDf["didBuy_target"]
-            .astype(bool)
-        )
+        self.predInputDf["didBuy_target"] = True;
+        self.predInputDf["didBuy_target"] = self.predInputDf["didBuy_target"].astype(bool);
+
     #======================================================================#
     def _apply_feature_pipeline(self,df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -221,9 +192,9 @@ class PredictionInputDfBuilder:
         self.logger.info("_apply_feature_pipeline() start")
 
         for builder in self.featureBuilders:
-            builderName: str = builder.__class__.__name__
+            builderName = builder.__class__.__name__
             self.logger.info("Applying feature builder: %s", builderName)
-            df = builder.build_feature(df)
+            df = builder.build(df)
 
         self.logger.info("_apply_feature_pipeline() done")
         return df

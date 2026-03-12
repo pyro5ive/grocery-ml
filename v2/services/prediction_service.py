@@ -14,13 +14,7 @@ from datetime import datetime
 class PredictionService:
 
 
-    def __init__(
-            self,
-            predictionInputDfBuilder: PredictionInputDfBuilder,
-            normalizer: NormalizerBase,
-
-
-    ):
+    def __init__(self,predictionInputDfBuilder: PredictionInputDfBuilder,normalizer: NormalizerBase):
         self.logger = logging.getLogger(self.__class__.__name__);
         self.predictionInputEventsDfBuilder = predictionInputDfBuilder;
         self.continuousFeatureNormalizer = normalizer;
