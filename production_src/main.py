@@ -77,8 +77,6 @@ liveSources = {
     "weather": r"..\data\weather\VisualCrossing-70062 2000-01-01 to 2026-23-1.csv"
 }
 
-
-
 serviceProvider = punq.Container();
 serviceProvider.register(DataFrameDebugExportService);
 serviceProvider.register(ExperimentRunner)
@@ -103,12 +101,9 @@ serviceProvider.register(SampleBuilderBase, SameTripNegativeSampleBuilder)
 #
 serviceProvider.register(SampleBuilderBase, NonTripNegativeSampleBuilder)
 serviceProvider.register(EndDateStrategyBase, AssumeSilenceEndDateStrategy)
-
 serviceProvider.register(ItemEligibilityStrategyBase, GlobalItemEligibilityStrategy)
 # serviceProvider.register(EndDateStrategyBase, HardStopAtTruthEndDateStrategy)
 # serviceProvider.register(ItemEligibilityStrategyBase, ItemEffectiveDateEligibilityStrategy)
-
-
 #======================================================#
 # item id
 serviceProvider.register(ItemIndexBuilderServiceBase, ItemIndexBuilderService);

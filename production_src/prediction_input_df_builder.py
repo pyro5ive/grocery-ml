@@ -91,7 +91,7 @@ class PredictionInputDfBuilder:
         self.logger.info("Building the prediction input df. Prediction date is %s",predDate);
 
         # Build base event rows (no features yet)
-        self._build_events_df(predDate)
+        self._build_events_df(predDate);
 
         # Prediction-time target column (always true)
         self._build_target_col()
@@ -112,7 +112,7 @@ class PredictionInputDfBuilder:
 
         return self.predInputDf
     #======================================================================#
-    def _build_events_df(self, predDate: datetime) -> pd.DataFrame:
+    def _build_events_df(self, predDate: datetime):
         """
         Build and combine all event sources.
         """
@@ -132,7 +132,7 @@ class PredictionInputDfBuilder:
             .reset_index(drop=True)
         )
 
-        return self.predInputDf
+        # return self.predInputDf
     #======================================================================#
     def _build_historical_events(self) -> pd.DataFrame:
 
